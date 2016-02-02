@@ -1,0 +1,163 @@
+<form id="formNewOrder" action="#">
+	
+<legend>Información de Entrega</legend>
+<div class="row">
+	<div class="col-xs-12 col-md-3">
+		<label>Tipo de Pedido</label>
+		<select id="typeOrder" name="typeOrder" class="form-control" autofocus>
+			<option value="null">Seleccione una opción</option>
+		</select>
+	</div>
+	<div class="col-xs-6 col-md-3">
+		<label>Fecha Entrega</label>
+		<input id="deliveryDat" name="deliveryDate" type="date" class="form-control" required />
+	</div>
+	<div class="col-xs-12 col-md-3">
+		<label>Hora Entrega</label>
+		<input id="deliveryTim" name="deliveryTime" type="time" class="form-control" required/>
+	</div>
+	<div class="col-xs-12 col-md-3">
+		<label>Fecha Elaboración</label>
+		<input id="currentDate" name="currentDate" type="date" class="form-control" disabled/>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-3">
+		<label>Nombre del Evento</label>
+		<input id="nameEvent" name="nameEvent" type="text" class="form-control" maxlength="50" required/>
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<label>Direccion de Entrega</label>
+		<input id="address" ty" name="address" type="text" class="form-control" maxlength="150" required/>
+	</div>
+	<div class="col-xs-12 col-md-3">
+		<label>Observación</label>
+		<input id="comment" ty" name="comment" type="text" class="form-control" maxlength="150"/>
+	</div>
+</div>
+
+<br>
+<legend>Persona que Recibe</legend>
+<div class="row">
+	<div class="col-xs-12 col-md-3">
+		<label>Nombre</label>
+		<input id="nameReceive" name="nameReceive" type="text" class="form-control" maxlength="35" required />
+	</div>
+	<div class="col-xs-12 col-md-6">
+		<label>Teléfono Fijo</label>
+		<input id="telephone" name="telephone" type="text" class="form-control" maxlength="10" />
+	</div>
+	<div class="col-xs-12 col-md-3">
+		<label>Celular</label>
+		<input id="celphone" t" name="celphone" type="text" class="form-control" maxlength="10" required/>
+	</div>
+</div>
+
+<br>
+<legend>Detalle</legend>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<button id="addItems" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#products" style="display:none">
+			<span class="glyphicon glyphicon-plus-sign"></span> Agregar Item
+		</button>
+	</div>
+</div>
+
+<br>
+<hr>
+
+<div id="items"></div>
+<hr>
+
+<br>
+<legend>Presupuesto</legend>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
+		<select id="ppto" class="form-control" required>
+			<option value="null">Seleccione una opción</option>
+		</select>
+	</div>
+</div>
+
+<br>
+<br>
+<div class="row">
+	<div class="col-xs-12 col-md-3">
+		<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-send"></span> Enviar</button>
+		<button class="btn btn-default" type="reset">Cancelar</button>
+	</div>
+</div>
+
+</form>
+
+<!-- Modal -->
+<div id="products" class="modal " role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Items Disponibles</h4>
+      </div>
+      <div class="modal-body">
+        <div id="itemList"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ----------------------------------------------------------templates-->
+
+
+
+<!-- template item added-->
+<div id="templateItemAdded" class="item row  panel panel-info" style="display:none">
+	<div class="row panel-body">
+		<div class="col-xs-12 col-md-2">
+			<img class="thumbnail" src="img/items/2" width="100%"> 
+		</div>
+		<div class="col-xs-12 col-md-5">
+			<div class="row">
+				<div class="col-xs-12 col-md-12">
+					<strong class='nameItem'>2-Almojabana</strong>
+				</div>
+				<div class="col-xs-12 col-md-12">
+					<p class="text-justify text-muted description">Almojábana 50 grs (2 unidades): Acompañado de Jugo, malta o gaseosa en botella  de 300ml,o  caja tetra pack,o  bolsa pequeña de 250cc, ó  café con lecha, chocolate o  chocolate en leche,  12 onzas para s servir en sitio. </p>
+					Valor individual (IVA incluido): <strong class='individualValue' data-value="4772">$4.772</strong>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-3">
+			<div class="row">
+				<div class="col-xs-12 col-md-12">
+					<label>Cantidad: </label>
+					<input id="" type="number" class="quantity form-control" maxlength="10" min="1" required/>
+				</div><div class="col-xs-12 col-md-12">
+					<label>Valor Adicional (IVA Incluido):  </label>
+					<input id="" type="number" class="aditionalValue form-control" maxlength="10" min="0"/>
+				</div>
+				<div class="col-xs-12 col-md-12">
+					<p class="alert  text-center text-info">Valor Total con IVA: <strong class='totalValue'>$0</strong></p>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-2 text-center">
+			<br>
+			<span class="deletedItem btn btn-danger">
+				<span id="2" class=" glyphicon glyphicon-remove" title="Eliminar Item"></span> Eliminar Item
+			</span>
+		</div>
+	</div>
+</div>
+
+
+
+
+<script src="app/model/newOrder/newOrder.js" async='false'></script>
+<script src="app/controller/newOrder/newOrder.js" async='false'></script>
