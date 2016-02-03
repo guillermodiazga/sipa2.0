@@ -145,6 +145,8 @@ controller.newOrder.selectedItem = function(element){
 };
 
 controller.newOrder.save = function(jsonData){
+debugger
+	jsonData = JSON.stringify(jsonData);
 
 	model.newOrder.saveNewOrder(jsonData)
 	.then(function (data) {
@@ -187,7 +189,6 @@ controller.newOrder.initEvents = function(){
 
 	$("#formNewOrder").submit(function(e){
 		e.preventDefault();
-		
 		
 		var jsonData = controller.newOrder.getFormData(this);
 		controller.newOrder.save(jsonData);

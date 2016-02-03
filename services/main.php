@@ -78,8 +78,14 @@
 
 
     function saveOrder($arrData){
-        $type = $arrData["type"];
-        $user = $arrData["user"];
+        $string = $arrData["jsonData"];
+        $json = json_decode($string,true);
+        
+       $name = $json[0]["name"];
+
+
+        //var_dump(json_decode($data));
+        echo '[{"response", "name:'.$name.'"}]';
 
         $sql="
        INSERT INTO `pedido` (
