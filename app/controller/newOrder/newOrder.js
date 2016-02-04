@@ -146,7 +146,8 @@ controller.newOrder.selectedItem = function(element){
 
 controller.newOrder.save = function(jsonData){
 debugger
-	jsonData = JSON.stringify(jsonData);
+//http://127.0.0.1/sipa2.0/services/main.php?f=saveOrder&data=%22[{%22name%22:%22typeOrder%22,%22value%22:%222%22},{%22name%22:%22deliveryDate%22,%22value%22:%222016-02-02%22},{%22name%22:%22deliveryTime%22,%22value%22:%2221:16%22},{%22name%22:%22nameEvent%22,%22value%22:%221%22},{%22name%22:%22address%22,%22value%22:%221%22},{%22name%22:%22comment%22,%22value%22:%221%22},{%22name%22:%22nameReceive%22,%22value%22:%221%22},{%22name%22:%22telephone%22,%22value%22:%2211%22},{%22name%22:%22celphone%22,%22value%22:%221%22},{%22name%22:%22idItem%22,%22value%22:%222%22},{%22name%22:%22quantity%22}]%22
+	//jsonData = JSON.stringify(jsonData);
 
 	model.newOrder.saveNewOrder(jsonData)
 	.then(function (data) {

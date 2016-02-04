@@ -42,11 +42,14 @@ model.newOrder.getPptoUserToNewOrder = function(typeOrder, userId ) {
 model.newOrder.saveNewOrder = function(jsonData) {
     return $.ajax('services/main.php',
         {
-           type: "GET", async: true,
+           type: "POST", async: true,
            data:{f:'saveOrder', jsonData: jsonData} ,
            contentType: "application/json"
         })
         .then(function (data) {
             return data;
+        })
+        .fail(function(e){
+          return e;
         });
 };

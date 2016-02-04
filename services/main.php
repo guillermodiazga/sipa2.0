@@ -8,9 +8,10 @@
     //-----------------------------------Recibir funcion a ejecutar y datos
     $arrData = php_fix_raw_query();
     $function = $arrData['f'];
-   
+
     //Ejecutar funcion que ingresa por url
     call_user_func($function, $arrData);
+
 
     //----------------------------------------------funciones
 
@@ -78,10 +79,17 @@
 
 
     function saveOrder($arrData){
-        $string = $arrData["jsonData"];
-        $json = json_decode($string,true);
-        
-       $name = $json[0]["name"];
+        $jsonData = $arrData["jsonData"];
+        //$json = json_decode($string,true);
+
+        foreach ($jsonData as $value) {
+            foreach ($value as $val) {
+                error_log("-----------------------------".$val, 0);
+            }
+        }
+
+        $name = $jsonData["valorCaja1"];
+        //$name = $_POST['valorCaja1'];
 
 
         //var_dump(json_decode($data));
