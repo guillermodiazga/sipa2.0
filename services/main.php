@@ -9,6 +9,7 @@
     $arrData = php_fix_raw_query();
     $function = $arrData['f'];
 
+
     //Ejecutar funcion que ingresa por url
     call_user_func($function, $arrData);
 
@@ -82,13 +83,13 @@
         $jsonData = $arrData["jsonData"];
         //$json = json_decode($string,true);
 
-        foreach ($jsonData as $value) {
-            foreach ($value as $val) {
-                error_log("-----------------------------".$val, 0);
-            }
+        var_dump($arrData);
+        //echo $arrData['jsonData'][0]["name"]
+        /*foreach ($arrData as $value) {
+                error_log("-----------------------------".$value["name"], 0);
         }
-
-        $name = $jsonData["valorCaja1"];
+*/
+        $name = $arrData['jsonData'][0]["name"];
         //$name = $_POST['valorCaja1'];
 
 
