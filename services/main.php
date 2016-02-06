@@ -80,49 +80,70 @@
 
 
     function saveOrder($arrData){
-        $jsonData = $arrData["jsonData"];
-        //$json = json_decode($string,true);
 
-        var_dump($arrData);
-        //echo $arrData['jsonData'][0]["name"]
-        /*foreach ($arrData as $value) {
-                error_log("-----------------------------".$value["name"], 0);
+        foreach( $arrData as $key => $val){
+            $key = urldecode($key);
+            $val = urldecode($val);
+            $arrKeys = explode("[", $key);
+            $nameKey = str_replace("]", "", $arrKeys[2]);
+            $$nameKey = $val;
         }
-*/
-        $name = $arrData['jsonData'][0]["name"];
-        //$name = $_POST['valorCaja1'];
-
-
-        //var_dump(json_decode($data));
-        echo '[{"response", "name:'.$name.'"}]';
-
+         
         $sql="
-       INSERT INTO `pedido` (
-      `id` ,
-      `idsecretaria` ,
-      `idusuario` ,
-      `idppto` ,
-      `fchreg` ,
-      `fchentrega` ,
-      `hora` ,
-      `idtalimento` ,
-      `idalimento` ,
-      `comentario` ,
-      `personarecibe` ,
-      `telfjorecibe` ,
-      `movilrecibe` ,
-      `direccion` ,
-      `evento` ,
-      `cantidad` ,
-      `valorpedido` ,
-      `valoradic` ,
-      `iplog` ,
-      `bitactivo`,
-      `estado` 
-      )
-      VALUES (
-      NULL , '$secppto', '$iduser', '$ppto','$log',STR_TO_DATE('$fecha', '%d/%m/%Y'), '$horainicial', $tipoalimento,$alimento, '$comentario', '$personarecibe', '$telfjorecibe', '$movilrecibe',
-      '$direccion','$evento', $cantidad, $valorpedido, $vadic,'$ip','1',2);";
+        INSERT INTO `pedido` (
+            `id` ,
+            `idsecretaria` ,
+            `idusuario` ,
+            `idppto` ,
+            `fchreg` ,
+            `fchentrega` ,
+            `hora` ,
+            `idtalimento` ,
+            `idalimento` ,
+            `comentario` ,
+            `personarecibe` ,
+            `telfjorecibe` ,
+            `movilrecibe` ,
+            `direccion` ,
+            `evento` ,
+            `cantidad` ,
+            `valorpedido` ,
+            `valoradic` ,
+            `iplog` ,
+            `bitactivo`,
+            `estado` 
+          )
+          VALUES (
+            NULL , 
+            (SELECT idsecretaria  FROM `presupuesto` WHERE id = '$ppto'),
+            '$idUser',
+            '$ppto',
+            CURDATE(),
+            '$deliveryDate',
+            '$deliveryTime',
+            $typeOrder,
+            $idItem,
+            '$comment',
+            '$nameReceive',
+            '$telephone',
+            '$celphone',
+            '$address',
+            '$nameEvent',
+            $quantity,
+            (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
+            $aditionalValue,
+            '$REMOTE_ADDR',
+            '1',
+            2
+        );";
+
+
+        $conexion = new Conexion();
+        $conexion->open();
+        $result = mysql_query($sql) or die("Query Error");
+        echo "{msg: 'Registro Alamacenado'}";
+
+        $conexion->close($result);
 
     };
 

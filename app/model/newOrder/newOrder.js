@@ -43,7 +43,7 @@ model.newOrder.saveNewOrder = function(jsonData) {
     return $.ajax('services/main.php',
         {
            type: "POST", async: true,
-           data:{f:'saveOrder', jsonData: jsonData} ,
+           data:{f:'saveOrder', jsonData: jsonData},
            contentType: "application/json"
         })
         .then(function (data) {

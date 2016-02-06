@@ -145,10 +145,6 @@ controller.newOrder.selectedItem = function(element){
 };
 
 controller.newOrder.save = function(jsonData){
-debugger
-//http://127.0.0.1/sipa2.0/services/main.php?f=saveOrder&data=%22[{%22name%22:%22typeOrder%22,%22value%22:%222%22},{%22name%22:%22deliveryDate%22,%22value%22:%222016-02-02%22},{%22name%22:%22deliveryTime%22,%22value%22:%2221:16%22},{%22name%22:%22nameEvent%22,%22value%22:%221%22},{%22name%22:%22address%22,%22value%22:%221%22},{%22name%22:%22comment%22,%22value%22:%221%22},{%22name%22:%22nameReceive%22,%22value%22:%221%22},{%22name%22:%22telephone%22,%22value%22:%2211%22},{%22name%22:%22celphone%22,%22value%22:%221%22},{%22name%22:%22idItem%22,%22value%22:%222%22},{%22name%22:%22quantity%22}]%22
-	//jsonData = JSON.stringify(jsonData);
-
 	model.newOrder.saveNewOrder(jsonData)
 	.then(function (data) {
 	    if( data.length > 0){
@@ -167,14 +163,28 @@ debugger
 */
 controller.newOrder.getFormData = function(form){
 	var $form = $( form ),
-		jsonData = $form.serializeArray(),
-		idItem = $form.find("#items").find(".item").attr("id"),
-		quantity = $form.find("#items").find("#idItem").find(".quantity").attr("id");
-		
-		jsonData.push({name: "idItem", value: idItem});
-		jsonData.push({name: "quantity", value: quantity});
+		jsonData = [],
+		data = {};
+		data.typeOrder= $form.find("#typeOrder").val();
+		data.deliveryDate= $form.find("#deliveryDate").val();
+		data.deliveryTime= $form.find("#deliveryTime").val();
+		data.nameEvent= $form.find("#nameEvent").val();
+		data.address= $form.find("#address").val();
+		data.comment= $form.find("#comment").val();
+		data.nameReceive= $form.find("#nameReceive").val();
+		data.telephone= $form.find("#telephone").val();
+		data.celphone= $form.find("#celphone").val();
+		data.idItem= $form.find("#items").find(".item").attr("id");
+		data.quantity= $form.find("#items").find(".item").find(".quantity").val();
+		data.aditionalValue= $form.find("#items").find(".item").find(".aditionalValue").val() || 0;
+		data.ppto= $form.find("#ppto").val();
+
+		data.idUser = sessionStorage.id;
+
+	jsonData.push(data);
 
 	return jsonData;
+
 };
 
 //add all events
