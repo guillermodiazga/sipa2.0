@@ -46,7 +46,7 @@
 
           </ul>
           <ul class=" nav navbar-nav navbar-right menuPpal" style="display:none">
-              <li><a href="#perfil"><span class="glyphicon glyphicon-user"></span> Mis Datos</a></li>
+              <li><a href="#user"><span class="glyphicon glyphicon-user"></span> Mis Datos</a></li>
               <li><a href="#exit"><span class="glyphicon glyphicon-off"></span> Cerrar Sesion</a></li>
            </ul>
         </div><!--/.nav-collapse -->
@@ -71,6 +71,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="lib/vendor/bootstrap.min.js"></script>
 
+    <div id="stopUser">
+      <div><span class="glyphicon glyphicon-refresh spin"></span> Loading...</div>
+    </div>
 
 
     <!-- Modal confirm -->
@@ -122,4 +125,6 @@
 
 <!--App -->
 <script src="app/generic/navigation.js"></script>
+<script src="app/generic/session.js" ></script>
 <script src="app/generic/general.js"></script>
+<script src="app/generic/WebNotifications.js"></script>

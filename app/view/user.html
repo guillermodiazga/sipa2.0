@@ -1,0 +1,59 @@
+<form id="formUser" action="#">
+	<legend>Información de Usuario</legend>
+
+	<div class="row">
+		<div class="col-xs-12 col-md-4">
+			<label>Nro. Identificación</label>
+			<input id="id" name="id" type="number" class="form-control" maxlength="50" required autofocus/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Nombre</label>
+			<input id="name" name="name" type="text" class="form-control" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>e-mail</label>
+			<input id="mail" name="mail" type="text" class="form-control" maxlength="50" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Oficina</label>
+			<input id="office" name="office" type="text" class="form-control" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Teléfono Fijo</label>
+			<input id="telephone" name="telephone" type="number" class="form-control" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Celular</label>
+			<input id="celphone" name="celphone" type="number" class="form-control" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Contraseña</label>
+			<input id="password" name="password" type="password" class="form-control" minlength="4" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Repetir Contraseña</label>
+			<input id="password2" name="password2" type="password" class="form-control" minlength="4" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Dependencia</label>
+			<select id="dependence" name="dependence" class="form-control" >
+				<option value="null">Seleccione una opción</option>
+			</select>
+		</div>
+		
+	</div>
+
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-md-3">
+			<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+			<button class="btn btn-default" type="reset">Cancelar</button>
+		</div>
+	</div>
+
+</form>
+
+
+<script src="app/model/user/user.js" async='false'></script>
+<script src="app/controller/user/user.js" async='false'></script>

@@ -8,7 +8,7 @@
 			<option value="null">Seleccione una opción</option>
 		</select>
 	</div>
-	<div class="col-xs-6 col-md-3">
+	<div class="col-xs-12 col-md-3">
 		<label>Fecha Entrega</label>
 		<input id="deliveryDate" name="deliveryDate" type="date" class="form-control" required />
 	</div>
@@ -22,34 +22,36 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-xs-12 col-md-3">
+	<div class="col-xs-12 col-md-6">
 		<label>Nombre del Evento</label>
 		<input id="nameEvent" name="nameEvent" type="text" class="form-control" maxlength="50" required/>
 	</div>
 	<div class="col-xs-12 col-md-6">
 		<label>Direccion de Entrega</label>
-		<input id="address" ty" name="address" type="text" class="form-control" maxlength="150" required/>
+		<input id="address" type="text" name="address" type="text" class="form-control" maxlength="150" required/>
 	</div>
-	<div class="col-xs-12 col-md-3">
+</div>
+<div class="row">
+	<div class="col-xs-12 col-md-12">
 		<label>Observación</label>
-		<input id="comment" ty" name="comment" type="text" class="form-control" maxlength="150"/>
+		<input id="comment" type="text" name="comment" type="text" class="form-control" maxlength="150"/>
 	</div>
 </div>
 
 <br>
 <legend>Persona que Recibe</legend>
 <div class="row">
-	<div class="col-xs-12 col-md-3">
+	<div class="col-xs-12 col-md-6">
 		<label>Nombre</label>
 		<input id="nameReceive" name="nameReceive" type="text" class="form-control" maxlength="35" required />
 	</div>
-	<div class="col-xs-12 col-md-6">
+	<div class="col-xs-12 col-md-3">
 		<label>Teléfono Fijo</label>
 		<input id="telephone" name="telephone" type="text" class="form-control" maxlength="10" />
 	</div>
 	<div class="col-xs-12 col-md-3">
 		<label>Celular</label>
-		<input id="celphone" t" name="celphone" type="text" class="form-control" maxlength="10" required/>
+		<input id="celphone" name="celphone" type="text" class="form-control" maxlength="10" required/>
 	</div>
 </div>
 
@@ -57,7 +59,7 @@
 <legend>Detalle</legend>
 <div class="row">
 	<div class="col-xs-12 col-md-12">
-		<button id="addItems" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#products" style="display:none">
+		<button id="addItems" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#products" disabled>
 			<span class="glyphicon glyphicon-plus-sign"></span> Agregar Item
 		</button>
 	</div>

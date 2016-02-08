@@ -18,28 +18,34 @@ controller.navigation.loadViewOnReload = function () {
 
 
 controller.navigation.loadView = function (view) {
+    $("#stopUser").show();
     if(sessionStorage.name){
         $(".menuPpal").show();
     }else{
         view = 'login';
     }
     $.get('app/view/'+view+'.html?a='+Math.random())
-    //$.get('app/view/'+view+'.html')
        .done(function(data){
             $("#container").html(data);
+            $("#stopUser").hide();
        })
        .fail(function(e){
             $("#container").html("Error: "+e.status+" "+e.statusText);
+            $("#stopUser").hide();
        });
     
 }
 
+controller.navigation.closeSession = function () {
+    sessionStorage.clear();
+    controller.navigation.loadView('login');
+    $(".menuPpal").hide();
+};
+
 controller.navigation.exit = function () {
     $("#textConfirm").text("¿Seguro de cerrar sesion?")
     $("#okConfirm").off().click(function(){
-        sessionStorage.clear();
-        controller.navigation.loadView('login');
-        $(".menuPpal").hide();
+        controller.navigation.closeSession();
     });
     $('#modalConfirm').modal('show');
 }

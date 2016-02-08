@@ -4,7 +4,6 @@ var controller =  controller || {};
 controller.newOrder = {};
 
 controller.newOrder.loadDataToOrder = function() {
-	
 	controller.newOrder.loadOrderTypes();
 	controller.newOrder.showCurrentDate();
 };
@@ -21,13 +20,15 @@ controller.newOrder.loadOrderTypes = function (){
 		       });
 		       $("#typeOrder").append(items);
 		      
-		     }else{
-		        	alert("No se pudieron cargar los tipos de pedido")
-		        }
+		    }else{
+	        	alert("No se pudieron cargar los tipos de pedido");
+	        }
+
+	        $("#stopUser").hide();
 		 }).fail(function(e){
 		 	alert("Error: " + e.responseText);
 		});
-}
+};
 
 controller.newOrder.loadPptoUserToNewOrder = function (){
 	model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), sessionStorage.id)
@@ -44,14 +45,14 @@ controller.newOrder.loadPptoUserToNewOrder = function (){
 
 		     }else{
 		        	alert("No hay presupuesto para este tipo de pedido");
-		        	$("#addItems").hide();
+		        	$("#addItems").attr("disabled","disabled");
 		        }
 		 }).fail(function(e){
 		 	$("#ppto").append(items);
 		 	alert("Error: " + e.responseText);
-		 	$("#addItems").hide();
+		 	$("#addItems").attr("disabled","disabled");
 		});
-}
+};
 
 controller.newOrder.showCurrentDate = function (){
 	$("#currentDate").val(currentDate());
@@ -145,41 +146,51 @@ controller.newOrder.selectedItem = function(element){
 };
 
 controller.newOrder.save = function(jsonData){
+	$("#stopUser").show();
 	model.newOrder.saveNewOrder(jsonData)
 	.then(function (data) {
+		$("#stopUser").hide();
 	    if( data.length > 0){
 	        //load data in view
 	       alert("Pedido Guardado");
-	      
+	       controller.newOrder.resetForm();
 	    }else{
         	alert("No se pudo guardar")
         }
 	 })
 	.fail(function(e){
+		$("#stopUser").hide();
 	 	alert("Error: " + e.responseText);
 	});
 };
-/*
-*/
+
+controller.newOrder.resetForm = function(){
+	$('#formNewOrder')[0].reset();
+	$(".deletedItem:visible").click();
+	controller.newOrder.showCurrentDate();
+	$("#addItems").attr("disabled","disabled");
+};
+
 controller.newOrder.getFormData = function(form){
 	var $form = $( form ),
 		jsonData = [],
 		data = {};
-		data.typeOrder= $form.find("#typeOrder").val();
-		data.deliveryDate= $form.find("#deliveryDate").val();
-		data.deliveryTime= $form.find("#deliveryTime").val();
-		data.nameEvent= $form.find("#nameEvent").val();
-		data.address= $form.find("#address").val();
-		data.comment= $form.find("#comment").val();
-		data.nameReceive= $form.find("#nameReceive").val();
-		data.telephone= $form.find("#telephone").val();
-		data.celphone= $form.find("#celphone").val();
-		data.idItem= $form.find("#items").find(".item").attr("id");
-		data.quantity= $form.find("#items").find(".item").find(".quantity").val();
-		data.aditionalValue= $form.find("#items").find(".item").find(".aditionalValue").val() || 0;
-		data.ppto= $form.find("#ppto").val();
+		
+	data.typeOrder= $form.find("#typeOrder").val();
+	data.deliveryDate= $form.find("#deliveryDate").val();
+	data.deliveryTime= $form.find("#deliveryTime").val();
+	data.nameEvent= $form.find("#nameEvent").val();
+	data.address= $form.find("#address").val();
+	data.comment= $form.find("#comment").val();
+	data.nameReceive= $form.find("#nameReceive").val();
+	data.telephone= $form.find("#telephone").val();
+	data.celphone= $form.find("#celphone").val();
+	data.idItem= $form.find("#items").find(".item").attr("id");
+	data.quantity= $form.find("#items").find(".item").find(".quantity").val();
+	data.aditionalValue= $form.find("#items").find(".item").find(".aditionalValue").val() || 0;
+	data.ppto= $form.find("#ppto").val();
 
-		data.idUser = sessionStorage.id;
+	data.idUser = sessionStorage.id;
 
 	jsonData.push(data);
 
@@ -195,7 +206,7 @@ controller.newOrder.initEvents = function(){
 		controller.newOrder.loadPptoUserToNewOrder();
 		//Clear items selected
 		$("#items").html("");
-		$("#addItems").show();
+		$("#addItems").removeAttr("disabled");
 	});
 
 	$("#formNewOrder").submit(function(e){
@@ -203,15 +214,133 @@ controller.newOrder.initEvents = function(){
 		
 		var jsonData = controller.newOrder.getFormData(this);
 		controller.newOrder.save(jsonData);
-
 	});
-	
-
 
 };
 
-//Constructor
+//---------------------------------------Constructor
 controller.newOrder.loadDataToOrder();
 
 //add Events
 controller.newOrder.initEvents();
+
+
+//validar envio
+function validarform() {
+	var fecha= document.getElementById("deliveryDate").value;
+	var cantidad= $("#formNewOrder").find("#items").find(".item").find(".quantity").val();
+	var direccion= document.getElementById("address").value;
+	var comentario= document.getElementById("comment").value;
+	var hora= document.getElementById("deliveryTime").value;
+	var telfjorecibe= document.getElementById("telephone").value;
+	var evento= document.getElementById("nameEvent").value;
+	var movilrecibe= document.getElementById("celphone").value;
+	var personarecibe= document.getElementById("nameReceive").value;
+
+
+	if((vtexto(telfjorecibe))==false)
+		return false;
+	else
+
+	if((vtexto(personarecibe))==false)
+		return false;
+	else
+
+	if((vtexto(movilrecibe))==false)
+		return false;
+	else
+
+	if((vtexto(evento))==false)
+		return false;
+	else
+
+	if((vtexto(cantidad))==false)
+		return false;
+	else
+
+
+	if( comentario.length>250 ) {
+		alert('Comentario demasiado extenso');
+		return false;
+	}
+
+	if( direccion.length>150 ) {
+		alert('Direccion muy larga');
+		return false;
+	}
+
+	if( direccion == null || direccion.length < 5 || /^\s+$/.test(direccion ) ) {
+		alert('Direccion Obligatorio');
+		return false;
+	}
+
+	if( isNaN(cantidad) ) {
+		alert('Cantidad invalida');
+		return false;
+	}
+
+	if( cantidad<0 ) {
+		alert('Cantidad invalida');
+		return false;
+	}
+
+	if( cantidad.length>4 ) {
+		alert('Cantidad no disponible');
+		return false;
+	}
+
+	if( cantidad == null || isNaN(cantidad)|| cantidad.length < 1 || /^\s+$/.test(cantidad) ) {
+		alert('Cantidad Obligatorio');
+		return false;
+	}
+
+
+	if(hora=='00') {
+		alert('Hora No valida');
+		return false;
+	}
+
+	/*Validar Fecha de Enrega*/
+
+		 
+return true;
+
+}
+
+//Funcion para validar numero
+function vnumero(numero){
+  if( isNaN(numero) || numero==null || numero.length == 0 ||/^\s+$/.test(numero) ) {
+    return false;
+  } 
+  return true;
+}
+
+//Funcion para validar Texto
+function vtexto(texto){
+  if( texto==null || texto.length == 0 || /^\s+$/.test(texto) ) {
+    return false;
+  } 
+
+  return true;
+}
+function mensage (text,swNoCerrar) {
+
+  $("#dvMsg").show();
+  $("#dvMsgText").text(text);
+ 
+  var idFocus=$(document.activeElement).attr('id');
+  var x;
+  var left;
+  if(idFocus){
+    x=$("#"+idFocus).offset();
+    $("#dvMsg").animate({"top":x.top,'left':(x.left+100)});
+  }else{
+    $(window).scrollTop(0);
+     $("#dvMsg").animate({'left':'40%','top':'200px','position': 'absolute'});
+  }
+
+  if(!swNoCerrar)
+    setTimeout(function(){$("#dvMsg").animate({'left':'-500'});},3000);
+  
+  $("#closeMsg").click(function(){$("#dvMsg").hide(100);})
+}

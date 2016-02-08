@@ -28,3 +28,35 @@ function formatMoney (n, c, d, t){
  window.alert = function(text){
  	$('#modalAlert').find("#textAlert").text(text).end().modal('show');
  };
+
+
+//Desktop notifications
+/*
+ function AskForWebNotificationPermissions()
+{
+    if (Notification) {
+        Notification.requestPermission();
+    }
+}
+
+AskForWebNotificationPermissions();
+
+Notification.requestPermission( function(status) {
+    if (status == "granted"){
+
+    	setTimeout(function(){
+    		var options = {
+			    body: "Este es le cuerpo de la notificación",
+			    icon: "favicon.ico"
+			};
+	        var notif = new Notification("Mi primera notificación!", options);
+			notif.onclick = function(){alert("le click")};
+			notif.onclose = function(){alert("Se Cerro")};
+			notif.onshow = function(){alert("Se abrio")};
+	    },3000);
+
+	    setTimeout(notif.close, 6000);
+    }
+});
+*/
+
