@@ -28,11 +28,11 @@
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<label>Contraseña</label>
-			<input id="password" name="password" type="password" class="form-control" minlength="4" maxlength="50" required/>
+			<input id="password" name="password" type="password" class="form-control" minlength="4" maxlength="50" required autocomplete="off"/>
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<label>Repetir Contraseña</label>
-			<input id="password2" name="password2" type="password" class="form-control" minlength="4" maxlength="50" required/>
+			<input id="password2" name="password2" type="password" class="form-control" minlength="4" maxlength="50" required autocomplete="off"/>
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<label>Dependencia</label>
@@ -47,8 +47,10 @@
 	<br>
 	<div class="row">
 		<div class="col-xs-12 col-md-3">
-			<button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
-			<button class="btn btn-default" type="reset">Cancelar</button>
+			<button class="btn btn-primary" type="submit" disabled title="Complete el formulario para poder guardar">
+				<span class="glyphicon glyphicon-floppy-disk"></span> 
+				Guardar
+			</button>
 		</div>
 	</div>
 

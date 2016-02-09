@@ -51,7 +51,7 @@
 	</div>
 	<div class="col-xs-12 col-md-3">
 		<label>Celular</label>
-		<input id="celphone" name="celphone" type="text" class="form-control" maxlength="10" required/>
+		<input id="celphone" name="celphone" type="number" class="form-control" maxlength="10" required/>
 	</div>
 </div>
 
@@ -103,7 +103,7 @@
         <h4 class="modal-title">Items Disponibles</h4>
       </div>
       <div class="modal-body">
-        <div id="itemList"></div>
+        <div id="itemList" class=""></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -159,6 +159,43 @@
 </div>
 
 
+
+
+
+<!-- template item list-->
+
+<div id="itemListTemplate" class="item row" data-id="" data-value="" style="display:none">
+	<div class="row">
+		<div class="col-xs-12 col-md-12">
+				<strong>
+   				<span class="nameItem"></span> 
+				</strong>
+		</div>
+	</div>
+	<div class="col-xs-6 col-md-4">
+		<img class="thumbnail img" src="" width="100%"> 
+	</div>
+	<div class="col-xs-6 col-md-8">
+		<div class="row">
+			<div class="col-xs-12 col-md-12">
+				Vlr. sin IVA: <strong class="vlrSinIva"></strong>
+			</div>
+			<div class="col-xs-12 col-md-12">
+				Vlr. con IVA: <strong class="valor"></strong>
+			</div>
+			<br>
+			<div class="col-xs-12 col-md-12">
+				<span class="dtlle btn btn-info glyphicon glyphicon-eye-open" title="Ver Detalle Item" data-toggle="collapse" data-target=""></span>
+				<span class="selectItem btn btn-success glyphicon glyphicon-ok" title="Selecionar Item"></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-12 collapse out " id="" >
+			<strong>Detalle:</strong>
+			<p class="description text-justify text-muted"></p>
+	</div>
+	<hr>
+</div>
 
 
 <script src="app/model/newOrder/newOrder.js" async='false'></script>

@@ -19,7 +19,7 @@ model.user.getDataUser = function(idUser) {
     return $.ajax('services/main.php',
         {
            type: "GET", async: true,
-           data:{f:'getDataUser', type: idUser},
+           data:{f:'getDataUser', idUser: idUser},
            contentType: "application/json"
         })
         .then(function (data) {

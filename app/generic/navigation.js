@@ -8,8 +8,8 @@ controller.navigation.loadViewOnReload = function () {
 
     localStorage.page='main';
 
-    if(currentPage)
-        localStorage.page=currentPage;
+    if(currentPage && currentPage != "exit")
+        localStorage.page = currentPage;
 
     controller.navigation.loadView(localStorage.page)
     $("li[class=active]").removeClass("active");
@@ -19,7 +19,7 @@ controller.navigation.loadViewOnReload = function () {
 
 controller.navigation.loadView = function (view) {
     $("#stopUser").show();
-    if(sessionStorage.name){
+    if(sessionStorage.id){
         $(".menuPpal").show();
     }else{
         view = 'login';
@@ -40,6 +40,7 @@ controller.navigation.closeSession = function () {
     sessionStorage.clear();
     controller.navigation.loadView('login');
     $(".menuPpal").hide();
+    localStorage.remenberMe = "false";
 };
 
 controller.navigation.exit = function () {
@@ -53,7 +54,7 @@ controller.navigation.exit = function () {
 $(document).ready(function(){
     
     //on reload page with sesion active
-    if(!sessionStorage.name)
+    if(!sessionStorage.id)
         controller.navigation.loadView('login');
     else
        controller.navigation.loadViewOnReload();

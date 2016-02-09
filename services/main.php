@@ -6,6 +6,7 @@
     include("generales.php");
 
     //-----------------------------------Recibir funcion a ejecutar y datos
+
     $arrData = php_fix_raw_query();
     $function = $arrData['f'];
 
@@ -16,6 +17,12 @@
 
     //----------------------------------------------funciones
 
+    function response ($resp, $msg){
+        $jsondata = array();
+        $jsondata['success'] = $resp;
+        $jsondata['message'] = $msg;
+        echo json_encode($jsondata);
+    }
 
 
     function getRecibidos($arrData){
@@ -41,7 +48,8 @@
         
         return queryTojson($sql);
     }
-       
+
+/*----------------------------------------------------------Generic*/       
      function login($arrData){
         $id = $arrData["user"];
         $pass = $arrData["pass"];
@@ -49,6 +57,8 @@
         return queryTojson($sql);
     };
 
+
+/*----------------------------------------------------------New Order*/
     function getTypesOrders(){
         $sql = "SELECT id, talimento FROM `tipoalimento` where bitactivo=1";
         return queryTojson($sql);
@@ -138,16 +148,72 @@
         );";
 
 
-        $conexion = new Conexion();
-        $conexion->open();
-        $result = mysql_query($sql) or die("Query Error");
-        echo "{msg: 'Registro Alamacenado'}";
+    $conexion = new Conexion();
+    $conexion->open();
+    $result = mysql_query($sql) or die("Query Error");
 
-        $conexion->close($result);
+    response(true, "Pedido Guardado");
+
+    $conexion->close($result);
 
     };
 
 
+/*----------------------------------------------------------User*/
+function getListDependences(){
+    $sql = "SELECT id, secretaria FROM `secretaria` where bitactivo=1";
+    return queryTojson($sql);
+}
+
+
+function getDataUser($arrData){
+    $idUser = $arrData["idUser"];
+
+    $sql = "SELECT 
+    `id` ,
+    `nombre` ,
+    `idsecretaria` ,
+    `mail` ,
+    `oficina` ,
+    `telefono` ,
+    `movil` 
+    FROM `usuario` where bitactivo=1 and id = $idUser";
+
+    return queryTojson($sql);
+}
+
+function saveDataUser($arrData){
+    //Create vars with jsonData
+    foreach( $arrData as $key => $val){
+        $key = urldecode($key);
+        $val = urldecode($val);
+        $arrKeys = explode("[", $key);
+        $nameKey = str_replace("]", "", $arrKeys[2]);
+        $$nameKey = $val;
+    }
+         
+    if($password != "password")
+        $password = "`password` = '$password',";
+    else
+        $password = '';
+
+    $sql=("UPDATE `usuario` 
+        SET `nombre` = '$name',
+        movil='$celphone',
+        telefono='$telephone',
+        oficina='$office',
+        $password
+        `idsecretaria` = '$dependence',
+        `mail` = '$mail' 
+        WHERE `usuario`.`id` ='$id' ");
+
+    $conexion = new Conexion();
+    $conexion->open();
+    $result = mysql_query($sql) or die("Query Error");
+    response(true, "Datos Actualizados");
+
+    $conexion->close($result);
+}
 
 
 
@@ -159,9 +225,7 @@
 
 
 
-
-
-
+/*----------------------------------------------------------Varias*/
     function logVisitas(){
         $conexion = new Conexion();
 

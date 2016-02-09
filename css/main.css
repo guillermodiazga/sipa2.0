@@ -13,9 +13,12 @@ nav .icon-bar {
 }
 
 .item:hover{
-	background-color:  rgba(79,187,219,0.1);
+	background-color:  rgba(79,187,219,0.3);
 }
 
+.item{
+  padding: 1rem;
+}
 
 
 body{
@@ -32,7 +35,9 @@ body > div{
 }
 
 
-
+.error{
+  border-color: red;
+}
 
 #stopUser{
 	z-index: 1000;

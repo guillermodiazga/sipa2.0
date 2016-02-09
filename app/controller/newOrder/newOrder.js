@@ -11,7 +11,7 @@ controller.newOrder.loadDataToOrder = function() {
 controller.newOrder.loadOrderTypes = function (){
 
 	model.newOrder.getTypesOrders()
-		.then(function (data) {
+		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
 		       var items = "";
@@ -32,7 +32,7 @@ controller.newOrder.loadOrderTypes = function (){
 
 controller.newOrder.loadPptoUserToNewOrder = function (){
 	model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), sessionStorage.id)
-		.then(function (data) {
+		.done(function (data) {
 		    $("#ppto").html("");
 		    if( data.length > 0){
 		        //load data in view
@@ -62,45 +62,31 @@ controller.newOrder.showCurrentDate = function (){
 
 controller.newOrder.loadItemsToNewOrder = function (){
 	model.newOrder.getItemsToNewOrder($("#typeOrder").val())
-		.then(function (data) {
+		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		       var items = "";
+		       $("#itemList").html("")
+
 		       $.each(data, function(i, item){
-		       	items += 
-		       	"<div class='item row' data-id="+item.id+" data-value="+item.valor+">"+
-		       		"<div class='col-xs-6 col-md-4'>"+
-			       		"<img class='thumbnail' src='img/items/"+item.id+"' width='100%'> "+
-		       		"</div>"+
-		       		"<div class='col-xs-6 col-md-8'>"+
-		       			"<div class='row'>"+
-			       			"<div class='col-xs-12 col-md-11'>"+
-					       		"<strong class='nameItem'>"+item.id+"-"+item.nombre+"</strong>"+
-			       			"</div>"+
-			       		"</div>"+
-		       			"<div class='row'>"+
-			       			"<div class='col-xs-0 col-md-10'>"+
-					       		"<p class='description text-justify text-muted'>"+item.descripcion+"</p>"+
-			       			"</div>"+
-		       			"<div class='row'>"+
-			       		"</div>"+
-			       			"<div class='col-xs-12 col-md-10'>"+
-				       			"Valor sin IVA: <strong>$"+formatMoney(item.valor)+"</strong>"+
-			       			"</div>"+
-			       			"<div class='col-xs-9 col-md-9'>"+
-				       			"Valor con IVA: <strong>$"+formatMoney(Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1)))+"</strong>"+
-			       			"</div>"+
-			       			"<div class='col-xs-1 col-md-1'>"+
-				       			"<span id='"+item.id+"' class='selectItem btn btn-primary glyphicon glyphicon-ok' title='Selecionar Item'></span>"+
-			       			"</div>"+
-			       		"</div>"+
-		       		"</div>"+
-		       	"</div><hr>";
-		       });
-		       $("#itemList").html("").append(items);
+		       	$("#itemListTemplate")
+					.clone().show()
+					.attr("data-id", item.id)
+					.attr("data-value", item.valor)
+					.removeAttr("id")
+					.find(".img").attr("src", "img/items/" + item.id).end()
+					.find(".nameItem").text(item.id + "-" + item.nombre).end()
+					.find(".description").text(item.descripcion).end()
+					.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
+					.find(".valor").text("$"+formatMoney(Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1)))).end()
+					.find(".selectItem").attr("id", item.id).end()
+					.find(".collapse").attr("id", "dtlle"+i).end()
+					.find(".dtlle").attr("data-target", "#dtlle"+i).end()
+					.appendTo("#itemList");
+			    });
 
 		       $(".selectItem").click(function(){
 					//change items list
+					$(".deletedItem:visible").click();//delete other product selected
 					controller.newOrder.selectedItem(this);
 				});
 
@@ -130,12 +116,27 @@ controller.newOrder.selectedItem = function(element){
 		.text("$"+formatMoney($parent.parent().attr("data-value"))).end()
 		.attr("id",$parent.parent().attr("data-id"))
 		.appendTo("#items");
+
+		$(".quantity:visible").focus();
+
+		
 	//add events
 	$(".quantity").off().change(function(e){
+		//debugger
 		var element = e.target;
-		var quantity = element.value;
-		var individualValue = $(element).parent().parent().parent().parent().find(".individualValue").attr("data-value");
-		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(quantity*individualValue));
+		var quantity = parseInt(element.value) || 0;
+		var aditionalValue  = parseInt($(element).parent().parent().find(".aditionalValue").val()) || 0;
+		var individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value"));
+		$(element).parent().parent().find(".totalValue").text("$"+formatMoney((quantity*individualValue)+aditionalValue));
+
+	});
+
+	$(".aditionalValue").off().change(function(e){
+		var element = e.target;
+		var aditionalValue = parseInt(element.value) || 0;
+		var quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0;
+		var individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value"));
+		$(element).parent().parent().find(".totalValue").text("$"+formatMoney((quantity*individualValue)+aditionalValue));
 
 	});
 
@@ -148,19 +149,19 @@ controller.newOrder.selectedItem = function(element){
 controller.newOrder.save = function(jsonData){
 	$("#stopUser").show();
 	model.newOrder.saveNewOrder(jsonData)
-	.then(function (data) {
+	.done(function (data, textStatus, jqXHR) {
 		$("#stopUser").hide();
-	    if( data.length > 0){
+	    if( data.success ){
 	        //load data in view
-	       alert("Pedido Guardado");
+	       alert(data.message);
 	       controller.newOrder.resetForm();
 	    }else{
-        	alert("No se pudo guardar")
+        	alert("No se pudo guardar " + textStatus + " " + data.message)
         }
 	 })
-	.fail(function(e){
+	.fail(function(jqXHR, textStatus){
 		$("#stopUser").hide();
-	 	alert("Error: " + e.responseText);
+	 	alert("Error: " + jqXHR.responseText + ", " + textStatus);
 	});
 };
 

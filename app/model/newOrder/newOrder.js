@@ -10,7 +10,7 @@ model.newOrder.getTypesOrders = function() {
            data:{f:'getTypesOrders'} ,
            contentType: "application/json"
         })
-        .then(function (data) {
+        .done(function (data) {
             return data;
         });
 };
@@ -22,7 +22,7 @@ model.newOrder.getItemsToNewOrder = function(typeOrder ) {
            data:{f:'getItemsToNewOrder', type: typeOrder} ,
            contentType: "application/json"
         })
-        .then(function (data) {
+        .done(function (data) {
             return data;
         });
 };
@@ -34,7 +34,7 @@ model.newOrder.getPptoUserToNewOrder = function(typeOrder, userId ) {
            data:{f:'getPptoUserToNewOrder', type: typeOrder, user: userId} ,
            contentType: "application/json"
         })
-        .then(function (data) {
+        .done(function (data) {
             return data;
         });
 };
@@ -45,11 +45,5 @@ model.newOrder.saveNewOrder = function(jsonData) {
            type: "POST", async: true,
            data:{f:'saveOrder', jsonData: jsonData},
            contentType: "application/json"
-        })
-        .then(function (data) {
-            return data;
-        })
-        .fail(function(e){
-          return e;
         });
 };

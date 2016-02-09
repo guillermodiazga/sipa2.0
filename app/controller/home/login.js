@@ -3,7 +3,7 @@ var controller =  controller || {};
 // Constructor
 controller.login = {};
 
-controller.login.in = function() {
+controller.login.loginEvent = function() {
     $("#formLogin").submit(function(e){
     	e.preventDefault();
     	
@@ -13,11 +13,18 @@ controller.login.in = function() {
 	    model.login.in(user, pass)
 		    .then(function (data) {
 		        if( data.length > 0 && data[0].bitactivo == 1){
-		        	//load data in memory
-		        	controller.login.setDataUser(data);
+		        	//save data in memory
+		        	controller.login.setDataUser(data, sessionStorage);
 		        	//Load dashboard
 		        	controller.navigation.loadView('main');
 		        	$("#menuPpal").show();
+		        	
+		        	if(localStorage.remenberMe == "true"){
+						//save session from localStorage
+						controller.login.setDataUser(data, localStorage);
+					}else{
+						controller.session.checkSession();
+					}
 		        }else{
 		        	alert("Usuario o contraseña incorrecto!")
 		        }
@@ -27,18 +34,44 @@ controller.login.in = function() {
     });
 };
 
-controller.login.setDataUser = function(data) {
-	sessionStorage.id = data[0].id;
-	sessionStorage.name = data[0].nombre;
-	sessionStorage.idsecretaria = data[0].idsecretaria;
-	sessionStorage.mail = data[0].mail;
-	sessionStorage.office = data[0].oficina;
-	sessionStorage.phone = data[0].telefono;
-	sessionStorage.celphone = data[0].movil;
+controller.login.setDataUser = function(data, storage) {
+	storage.id = data[0].id;
+	storage.name = data[0].nombre;
+	storage.idsecretaria = data[0].idsecretaria;
+	storage.mail = data[0].mail;
+	storage.office = data[0].oficina;
+	storage.phone = data[0].telefono;
+	storage.celphone = data[0].movil;
 };
 
-$(document).ready(function(){
-	(function initEvents (){
-		controller.login.in();
-	})();
-});
+controller.login.initEvents =function (){
+	if(localStorage.remenberMe == "true"){
+		//load session from localStorage to sessionStorage
+		sessionStorage.id = localStorage.id;
+		sessionStorage.idsecretaria = localStorage.idsecretaria;
+		sessionStorage.mail = localStorage.mail;
+		sessionStorage.name = localStorage.name;
+		sessionStorage.office = localStorage.office;
+		sessionStorage.phone = localStorage.phone;
+		sessionStorage.celphone = localStorage.celphone;
+
+		controller.navigation.loadView('main');
+		$("#menuPpal").show();
+	}else{
+		controller.login.loginEvent();
+
+		$("#rememberMe").click(function(){
+			if($("#rememberMe:checked")){
+				localStorage.remenberMe = "true";
+			}else{
+				localStorage.remenberMe = "false";
+			}
+		});		
+	}
+
+
+};
+
+//---------------------------------------Constructor
+//add Events
+controller.login.initEvents();
