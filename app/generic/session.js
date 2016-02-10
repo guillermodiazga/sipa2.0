@@ -1,23 +1,9 @@
-$.ajaxSetup({
-    beforeSend: function() {
-        // show loading dialog // works
-    },
-    complete: function(xhr, stat) {
-        // hide dialog // works
-    },
-    success: function(result,status,xhr) {
-        // not showing the alert
-        //controller.session.timeout = 5000;//close session in 5 secouds
-        controller.session.timeout = 600000;//close session in 10 minutes
-    }
-});
-
 var controller =  controller || {};
 
 // Constructor
 controller.session = {};
 
-controller.session.timeout = 0;
+controller.session.timeout = 600000;
 controller.session.timeCheck = 60000; //check active session every 1 minute
 //controller.session.timeCheck = 1000;
 

@@ -31,27 +31,30 @@ controller.newOrder.loadOrderTypes = function (){
 };
 
 controller.newOrder.loadPptoUserToNewOrder = function (){
-	model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), sessionStorage.id)
-		.done(function (data) {
-		    $("#ppto").html("");
-		    if( data.length > 0){
-		        //load data in view
-		       var items = "";
-		       $.each(data, function(i, item){
-		       		items += "<option value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
-		       });
-		       $("#ppto").append(items);
-		       controller.newOrder.loadItemsToNewOrder();
+	var typeOrder = $("#typeOrder").val();
+	if(typeOrder){
+		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), sessionStorage.id)
+			.done(function (data) {
+			    $("#ppto").html("");
+			    if( data.length > 0){
+			        //load data in view
+			       var items = "";
+			       $.each(data, function(i, item){
+			       		items += "<option value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
+			       });
+			       $("#ppto").append(items);
+			       controller.newOrder.loadItemsToNewOrder();
 
-		     }else{
-		        	alert("No hay presupuesto para este tipo de pedido");
-		        	$("#addItems").attr("disabled","disabled");
-		        }
-		 }).fail(function(e){
-		 	$("#ppto").append(items);
-		 	alert("Error: " + e.responseText);
-		 	$("#addItems").attr("disabled","disabled");
-		});
+			     }else{
+			        	alert("No hay presupuesto para este tipo de pedido");
+			        	$("#addItems").attr("disabled","disabled");
+			        }
+			 }).fail(function(e){
+			 	$("#ppto").append(items);
+			 	alert("Error: " + e.responseText);
+			 	$("#addItems").attr("disabled","disabled");
+			});
+	}
 };
 
 controller.newOrder.showCurrentDate = function (){
@@ -61,41 +64,45 @@ controller.newOrder.showCurrentDate = function (){
 }
 
 controller.newOrder.loadItemsToNewOrder = function (){
-	model.newOrder.getItemsToNewOrder($("#typeOrder").val())
-		.done(function (data) {
-		    if( data.length > 0){
-		        //load data in view
-		       $("#itemList").html("")
+	var typeOrder = $("#typeOrder").val();
 
-		       $.each(data, function(i, item){
-		       	$("#itemListTemplate")
-					.clone().show()
-					.attr("data-id", item.id)
-					.attr("data-value", item.valor)
-					.removeAttr("id")
-					.find(".img").attr("src", "img/items/" + item.id).end()
-					.find(".nameItem").text(item.id + "-" + item.nombre).end()
-					.find(".description").text(item.descripcion).end()
-					.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
-					.find(".valor").text("$"+formatMoney(Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1)))).end()
-					.find(".selectItem").attr("id", item.id).end()
-					.find(".collapse").attr("id", "dtlle"+i).end()
-					.find(".dtlle").attr("data-target", "#dtlle"+i).end()
-					.appendTo("#itemList");
-			    });
+	if(typeOrder){
+		model.newOrder.getItemsToNewOrder(typeOrder)
+			.done(function (data) {
+			    if( data.length > 0){
+			        //load data in view
+			       $("#itemList").html("")
 
-		       $(".selectItem").click(function(){
-					//change items list
-					$(".deletedItem:visible").click();//delete other product selected
-					controller.newOrder.selectedItem(this);
-				});
+			       $.each(data, function(i, item){
+			       	$("#itemListTemplate")
+						.clone().show()
+						.attr("data-id", item.id)
+						.attr("data-value", item.valor)
+						.removeAttr("id")
+						.find(".img").attr("src", "img/items/" + item.id).end()
+						.find(".nameItem").text(item.id + "-" + item.nombre).end()
+						.find(".description").text(item.descripcion).end()
+						.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
+						.find(".valor").text("$"+formatMoney(Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1)))).end()
+						.find(".selectItem").attr("id", item.id).end()
+						.find(".collapse").attr("id", "dtlle"+i).end()
+						.find(".dtlle").attr("data-target", "#dtlle"+i).end()
+						.appendTo("#itemList");
+				    });
 
-		     }else{
-		        	alert("No se pudieron cargar los items")
-		        }
-		 }).fail(function(e){
-		 	alert("Error: " + e.responseText);
-		});
+			       $(".selectItem").click(function(){
+						//change items list
+						$(".deletedItem:visible").click();//delete other product selected
+						controller.newOrder.selectedItem(this);
+					});
+
+			     }else{
+			        	alert("No se pudieron cargar los items")
+			        }
+			 }).fail(function(e){
+			 	alert("Error: " + e.responseText);
+			});
+	}
 	
 }
 
@@ -202,6 +209,7 @@ controller.newOrder.getFormData = function(form){
 //add all events
 controller.newOrder.initEvents = function(){
 	$("#typeOrder").change(function(){
+		$("#stopUser").show();
 		//change items list
 		controller.newOrder.loadItemsToNewOrder();
 		controller.newOrder.loadPptoUserToNewOrder();

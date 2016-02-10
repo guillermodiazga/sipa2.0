@@ -18,7 +18,8 @@ controller.login.loginEvent = function() {
 		        	//Load dashboard
 		        	controller.navigation.loadView('main');
 		        	$("#menuPpal").show();
-		        	
+		        	$("#userName").text(data[0].nombre);
+
 		        	if(localStorage.remenberMe == "true"){
 						//save session from localStorage
 						controller.login.setDataUser(data, localStorage);

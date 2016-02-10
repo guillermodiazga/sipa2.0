@@ -1,3 +1,24 @@
+
+$.ajaxSetup({
+    beforeSend: function() {
+        // show loading dialog // works
+        $("#stopUser").show();
+    },
+    complete: function(xhr, stat) {
+        // hide dialog // works
+        $("#stopUser").hide();
+    },
+    success: function(result,status,xhr) {
+        // not showing the alert
+        $("#stopUser").hide();
+        controller.session.timeout = 600000;
+    },
+    fail: function(result,status,xhr) {
+        // not showing the alert
+        $("#stopUser").hide();
+    }
+});
+
 function currentDate () {
 	var now = new Date();
 
