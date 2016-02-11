@@ -3,25 +3,6 @@ var controller =  controller || {};
 // Constructor
 controller.login = {};
 
-controller.login.showMainMenu = function () {
-	
-	$("#menuPpal").slideDown();
-
-	//allow desktop notifications
-	if( getWebNotificationsSupported() &&  getWebNotificationPermissionStatus() != 2){
-
-		$("#activNotifications")
-			.show()
-			.click( function () {
-				askForWebNotificationPermissions();
-			});
-
-		if( getWebNotificationPermissionStatus() == 2 ){
-			$("#activNotifications").hide();
-		}
-	}
-};
-
 controller.login.loginEvent = function() {
     $("#formLogin").submit(function(e){
     	e.preventDefault();
@@ -36,7 +17,7 @@ controller.login.loginEvent = function() {
 		        	controller.login.setDataUser(data, sessionStorage);
 		        	//Load dashboard
 		        	controller.navigation.loadView('main');
-		        	controller.login.showMainMenu();
+		        	controller.navigation.showMainMenu();
 		        	$("#userName").text(data[0].nombre);
 
 		        	if(localStorage.remenberMe == "true"){
@@ -76,7 +57,7 @@ controller.login.initEvents = function (){
 		sessionStorage.celphone = localStorage.celphone;
 
 		controller.navigation.loadView('main');
-		controller.login.showMainMenu();
+		controller.navigation.showMainMenu();
 	}else{
 		controller.login.loginEvent();
 

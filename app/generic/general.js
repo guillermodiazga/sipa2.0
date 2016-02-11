@@ -11,7 +11,7 @@ $.ajaxSetup({
     success: function(result,status,xhr) {
         // not showing the alert
         $("#stopUser").hide();
-        controller.session.timeout = 600000;
+        controller.session.timeout = controller.session.timeToClose;
     },
     fail: function(result,status,xhr) {
         // not showing the alert

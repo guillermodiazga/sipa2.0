@@ -56,6 +56,11 @@ body > div{
 	font-weight: bold;
 }
 
+#reportHead{
+  display: inline-table;
+
+}
+
 .squareList li{
   display: inline-table;
   background-color: rgba(51,122,183,0.8)!important;

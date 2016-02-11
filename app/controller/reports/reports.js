@@ -12,31 +12,37 @@ controller.reports.initEvents = function(){
 	});
 
 	$(".squareList li").click(function(){
-		var $this = $(this)
+		var $this = $(this),
 		nameReport = $this.find(".nameReport").text(),
-		html = $this.attr("data-html"),
+		html = $this.attr("data-html");
 
-		//clone tab
-		$("#tabMain")
-			.clone()
-			.text(nameReport)
-			.attr("id", "tab"+html)
-			.appendTo("#"+$("#tabMain").parent().attr("id"));
+		if( $("#tab"+html).size() <= 0){
 
-		//load report template
-		$(".tabBody").hide();
+			//clone tab
+			$("#tabMain")
+				.clone()
+				.text(nameReport)
+				.attr("id", "tab"+html)
+				.appendTo("#"+$("#tabMain").parent().attr("id"));
 
-		$("#tabBodyTemplate")
-			.clone()
-			.show()
-			.attr("id", "tabBody"+html)
-			.appendTo("#tabSet");
-		controller.navigation.loadView(html, "tabBody"+html);
+			//load report template
+			$(".tabBody").hide();
 
-		$("#tab"+html).click(function(){
+			$("#tabBodyTemplate")
+				.clone()
+				.show()
+				.attr("id", "tabBody"+html)
+				.appendTo("#tabSet");
+			controller.navigation.loadView(html, "tabBody"+html);
+
+			$("#tab"+html).click(function(){
+				$(".tabBody").hide();
+				$("#tabBody"+html).show();
+			});
+		}else{
 			$(".tabBody").hide();
 			$("#tabBody"+html).show();
-		});
+		}
 	});
 };
 

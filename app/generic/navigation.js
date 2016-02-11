@@ -17,11 +17,35 @@ controller.navigation.loadViewOnReload = function () {
 }
 
 
+controller.navigation.showMainMenu = function () {
+    
+    $(".menuPpal").fadeIn();
+
+    //allow desktop notifications
+    if( getWebNotificationsSupported() &&  getWebNotificationPermissionStatus() != 2){
+
+        $("#activNotifications")
+            .slideDown()
+            .click( function () {
+                askForWebNotificationPermissions();
+            });
+
+        if( getWebNotificationPermissionStatus() == 2 ){
+            $("#activNotifications").hide();
+        }
+    }
+};
+
+controller.navigation.hideMainMenu = function () {
+    $(".menuPpal").hide();
+    $("#activNotifications").hide();
+}
+
 controller.navigation.loadView = function (view, idElementToShow) {
     var idElementToShow = idElementToShow || "container";
     $("#stopUser").show();
     if(sessionStorage.id){
-        $(".menuPpal").show();
+        controller.navigation.showMainMenu();
     }else{
         view = 'login';
     }
@@ -40,7 +64,7 @@ controller.navigation.loadView = function (view, idElementToShow) {
 controller.navigation.closeSession = function () {
     sessionStorage.clear();
     controller.navigation.loadView('login');
-    $(".menuPpal").hide();
+    controller.navigation.hideMainMenu();
     localStorage.remenberMe = "false";
 };
 
@@ -55,10 +79,12 @@ controller.navigation.exit = function () {
 $(document).ready(function(){
     
     //on reload page with sesion active
-    if(!sessionStorage.id)
+    if(!sessionStorage.id){
         controller.navigation.loadView('login');
-    else
+    }else{
        controller.navigation.loadViewOnReload();
+       controller.session.checkSession();
+    }
 
    //click on ppal menu
     $(".navbar-nav a").click(function(e){
