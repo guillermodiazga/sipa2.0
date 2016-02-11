@@ -17,7 +17,8 @@ controller.navigation.loadViewOnReload = function () {
 }
 
 
-controller.navigation.loadView = function (view) {
+controller.navigation.loadView = function (view, idElementToShow) {
+    var idElementToShow = idElementToShow || "container";
     $("#stopUser").show();
     if(sessionStorage.id){
         $(".menuPpal").show();
@@ -26,7 +27,7 @@ controller.navigation.loadView = function (view) {
     }
     $.get('app/view/'+view+'.html?a='+Math.random())
        .done(function(data){
-            $("#container").html(data);
+            $("#"+idElementToShow).html(data);
             $("#stopUser").hide();
        })
        .fail(function(e){

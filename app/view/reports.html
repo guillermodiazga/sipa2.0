@@ -1,16 +1,53 @@
 <form id="formNewOrder" action="#">
 	
-<legend>Reportes</legend>
-<ul class="squareList">
-	<li><span class="fa fa-bar-chart"></span> 1. Item: <div>Reporte de Consumo por Secretaría</div></li>
-	<li><span class="fa fa-bar-chart"></span> 2. Mensual</li>
-	<li><span class="fa fa-bar-chart"></span> 3. Presupuesto
-	<li><span class="fa fa-bar-chart"></span> 4. Por Proyectos</li>
-	<li><span class="fa fa-bar-chart"></span> 5. Saldo Por Proy</li>
-	<li><span class="fa fa-bar-chart"></span> 6. Por Secretarías</li>
-</ul>
+<legend id="reportHead">
+	<span>Reportes</span>
+	<span id="tabMain" class="tab btn btn-default pull-right" title="1">All reports</span>
+</legend>
+<div id="tabSet">
+	<div id="tabBodyMain" class="tabBody">
+		<ul class="squareList">
+			<li data-html="report1">
+				<span class="fa fa-bar-chart" ></span> 
+				<span class="nameReport"> 1. Item: </span>
+				<div>Reporte de Consumo por Secretaría</div>
+			</li>
+			<li data-html="report2">
+				<span class="fa fa-bar-chart" ></span> 
+				<span class="nameReport"> 2. Mensual</span>
+				<div>Reporte de Consumo por Secretaría</div>
+			</li>
+			<li data-html="report3">
+				<span class="fa fa-bar-chart" ></span> 
+				<span class="nameReport"> 3. Presupuesto</span>
+				<div>Reporte de Consumo por Secretaría</div>
+			</li>
+			<li data-html="report1">
+				<span class="fa fa-bar-chart" ></span> 
+				<span class="nameReport"> 4. Por Proyectos</span>
+				<div>Reporte de Consumo por Secretaría</div>
+			</li>
+			<li data-html="report1">
+				<span class="fa fa-bar-chart" ></span> 
+				<span class="nameReport"> 5. Saldo Por Proy</span>
+				<div>Reporte de Consumo por Secretaría</div>
+			</li>
+			<li data-html="report1">
+				<span class="fa fa-bar-chart" ></span> 
+				<span class="nameReport"> 6. Por Secretarías</span>
+				<div>Reporte de Consumo por Secretaría</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<!----------------templates-->
+
+<div id="tabBodyTemplate" class="tabBody" style="display:none">
+	
+</div>
 
 <!--
 <script src="app/model/reports/reports.js" async='false'></script>
-<script src="app/controller/reports/reports.js" async='false'></script>
 -->
+<script src="app/controller/reports/reports.js" async='false'></script>

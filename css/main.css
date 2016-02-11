@@ -64,10 +64,10 @@ body > div{
   border-radius: 3px;
   font-weight: bold;
   color: #ffffff;
-  min-width: 15rem;
-  min-height: 10rem;
-  max-width: 15rem;
-  max-height: 10rem;
+  min-width: 20rem;
+  min-height: 15rem;
+  max-width: 20rem;
+  max-height: 15rem;
 }
 
 .squareList li:hover{

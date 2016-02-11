@@ -1,6 +1,5 @@
 var controller =  controller || {};
 
-// Constructor
 controller.user = {};
 
 controller.user.loadDataUser = function() {
