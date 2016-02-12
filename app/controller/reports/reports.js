@@ -16,6 +16,8 @@ controller.reports.initEvents = function(){
 		nameReport = $this.find(".nameReport").text(),
 		html = $this.attr("data-html");
 
+		$("#tabMain").show();
+		
 		if( $("#tab"+html).size() <= 0){
 
 			//clone tab

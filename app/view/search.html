@@ -1,0 +1,54 @@
+<form id="formUser" action="#">
+	<legend>Consulta General de Pedidos</legend>
+
+	<div class="row">
+		<div class="col-xs-12 col-md-2">
+			<input id="number" placeholder="Nro. de Pedido Desde" type="number" class="form-control" maxlength="50" autofocus/>
+			<input id="number" placeholder="Nro. de Pedido Hasta" type="number" class="form-control" maxlength="50" autofocus/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Fecha Desde</label>
+			<input id="name" name="name" type="date" class="form-control" maxlength="50" required/>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Fecha Hasta</label>
+			<input id="name" name="name" type="date" class="form-control" maxlength="50" required/>
+		</div>
+
+		<div class="col-xs-12 col-md-4">
+			<label>Dependencia</label>
+			<select id="dependence" name="dependence" class="form-control" >
+				<option value="null">Seleccione una opción</option>
+			</select>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Presupuesto</label>
+			<select id="dependence" name="dependence" class="form-control" >
+				<option value="null">Seleccione una opción</option>
+			</select>
+		</div>
+		<div class="col-xs-12 col-md-4">
+			<label>Estado</label>
+			<select id="dependence" name="dependence" class="form-control" >
+				<option value="null">Seleccione una opción</option>
+			</select>
+		</div>
+		
+	</div>
+
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-md-3">
+			<button class="btn btn-primary pull-right" type="submit" title="">
+				<span class="fa fa-search"></span> 
+				Buscar
+			</button>
+		</div>
+	</div>
+
+</form>
+
+
+<script src="app/model/search/search.js" async='false'></script>
+<script src="app/controller/search/search.js" async='false'></script>

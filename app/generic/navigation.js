@@ -34,6 +34,8 @@ controller.navigation.showMainMenu = function () {
             $("#activNotifications").hide();
         }
     }
+
+    controller.session.warningShowed = false;
 };
 
 controller.navigation.hideMainMenu = function () {
