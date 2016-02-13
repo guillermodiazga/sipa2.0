@@ -46,7 +46,8 @@ controller.login.setDataUser = function(data, storage) {
 };
 
 controller.login.initEvents = function (){
-	if(localStorage.remenberMe == "true"){
+	
+	if(localStorage.remenberMe == "true" && sessionStorage.id){
 		//load session from localStorage to sessionStorage
 		sessionStorage.id = localStorage.id;
 		sessionStorage.idsecretaria = localStorage.idsecretaria;

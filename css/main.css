@@ -13,7 +13,7 @@ nav .icon-bar {
 }
 
 .item:hover{
-	background-color:  rgba(79,187,219,0.3);
+	background-color: rgba(51,122,183,0.5)!important;
 }
 
 .item{
@@ -22,7 +22,7 @@ nav .icon-bar {
 
 
 body{
-  background-color:  rgba(51,122,183,1)!important;//blue
+  background-color:  rgba(51,122,183,1)!important;/*blue*/
 }
 body > .container{
   padding: 60px 15px 20px !important;
@@ -61,10 +61,12 @@ body > div{
 
 }
 
+/*----------------------------------------------------reports css*/
+
 .squareList li{
   display: inline-table;
-  background-color: rgba(51,122,183,0.8)!important;
-  padding: 2rem;
+  background-color: rgba(51,122,183, 1)!important;
+  padding: 2rem; 
   margin: 0.5rem;
   border-radius: 3px;
   font-weight: bold;
@@ -76,7 +78,7 @@ body > div{
 }
 
 .squareList li:hover{
-  background-color: rgba(51,122,183,0.6)!important;
+  background-color: rgba(51,122,183,0.5)!important;
   cursor: pointer;
 }
 
@@ -84,3 +86,19 @@ body > div{
   font-weight: normal;
 }
 
+.tab{
+  border-radius: 5px 5px 0px 0px !important;
+  border-radius: 5px 5px 0px 0px !important;
+  border-color: gray  !important;
+  background-color: #DDDDDD;
+  margin: 0.1rem;
+}
+
+.tab:hover{
+  background-color: rgba(51,122,183,0.5)!important;
+  color: #ffffff !important;
+}
+.open-tab{
+  border-bottom-width: 0px !important;
+  background-color: #FFFFFF;
+}

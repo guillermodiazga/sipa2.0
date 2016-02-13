@@ -9,6 +9,8 @@ controller.reports.initEvents = function(){
 	$("#tabMain").click(function(){
 		$(".tabBody").hide();
 		$("#tabBodyMain").show();
+		$(".tab").removeClass("open-tab");
+		$(this).addClass("open-tab");
 	});
 
 	$(".squareList li").click(function(){
@@ -16,16 +18,19 @@ controller.reports.initEvents = function(){
 		nameReport = $this.find(".nameReport").text(),
 		html = $this.attr("data-html");
 
-		$("#tabMain").show();
 		
-		if( $("#tab"+html).size() <= 0){
+		if( $("#tab"+html).size() <= 0){//if is a new tab to open
 
 			//clone tab
 			$("#tabMain")
 				.clone()
-				.text(nameReport)
+				.hide()
+				.find(".name").text(nameReport+" ").end()
 				.attr("id", "tab"+html)
-				.appendTo("#"+$("#tabMain").parent().attr("id"));
+				.appendTo("#"+$("#tabMain").parent().attr("id"))
+				.slideDown()
+				.find(".close").show();
+
 
 			//load report template
 			$(".tabBody").hide();
@@ -40,11 +45,27 @@ controller.reports.initEvents = function(){
 			$("#tab"+html).click(function(){
 				$(".tabBody").hide();
 				$("#tabBody"+html).show();
+				$(".tab").removeClass("open-tab");
+				$("#tab"+html).addClass("open-tab");
+
+				$(this).find(".close").click(function(){
+					$("#tab"+html).remove();
+					$("#tabBody"+html).remove();
+					$(".tabBody").show();
+
+					if($(".tab").size() == 1){
+						$(".tab").hide();
+					}
+				});
 			});
-		}else{
+		}else{//if the tab already exists
 			$(".tabBody").hide();
 			$("#tabBody"+html).show();
 		}
+
+		$("#tabMain").show().find(".close").hide();
+		$(".tab").removeClass("open-tab");
+		$("#tab"+html).addClass("open-tab");
 	});
 };
 

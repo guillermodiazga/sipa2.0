@@ -4,6 +4,7 @@ var controller =  controller || {};
 controller.session = {};
 
 controller.session.timeToClose = 600000;
+//controller.session.timeToClose = 60000;
 
 controller.session.timeout = controller.session.timeToClose;
 
@@ -19,7 +20,7 @@ controller.session.checkSession = function(){
         controller.session.timeout -= controller.session.timeCheck;
         if (controller.session.timeout < 1 && sessionStorage.id) {
             controller.navigation.closeSession();
-            createNewWebNotification("SIPA, Session expirada", "Su session ha expirado.", "favicon.ico", "session", 10000);
+            createNewWebNotification("SIPA, Session expirada", "Su session ha expirado.", "icon.ico", "session", 10000);
             alert("Su session ha expirado");
         };
 
@@ -28,8 +29,8 @@ controller.session.checkSession = function(){
             if(getWebNotificationPermissionStatus() != 2){
                 alert("Su session esta  a punto de expirar.");
             }else{
-                createNewWebNotification("SIPA", "Su session esta  a punto de expirar.", "favicon.ico", "session", 10000);
+                createNewWebNotification("SIPA", "Su session esta  a punto de expirar.", "icon.ico", "session", 10000);
             }
-        };
+        }
     },controller.session.timeCheck);
 };

@@ -18,7 +18,7 @@ controller.navigation.loadViewOnReload = function () {
 
 
 controller.navigation.showMainMenu = function () {
-    
+    $(".navbar-toggle[aria-expanded='true']").click();
     $(".menuPpal").fadeIn();
 
     //allow desktop notifications
@@ -34,8 +34,7 @@ controller.navigation.showMainMenu = function () {
             $("#activNotifications").hide();
         }
     }
-
-    controller.session.warningShowed = false;
+    
 };
 
 controller.navigation.hideMainMenu = function () {

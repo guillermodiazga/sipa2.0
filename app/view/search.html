@@ -1,45 +1,76 @@
-<form id="formUser" action="#">
-	<legend>Consulta General de Pedidos</legend>
+<form id="formSearch" action="#" class="">
+	<legend><i class="fa fa-search"></i> Consulta General de Pedidos</legend>
 
 	<div class="row">
 		<div class="col-xs-12 col-md-2">
-			<input id="number" placeholder="Nro. de Pedido Desde" type="number" class="form-control" maxlength="50" autofocus/>
-			<input id="number" placeholder="Nro. de Pedido Hasta" type="number" class="form-control" maxlength="50" autofocus/>
+			<label>Nro. Pedido <br class="hidden-xs"><span class="text-muted">(Desde-Hasta)</span></label>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<input id="numberOrderFrom" placeholder="Desde" type="number" class="form-control" maxlength="50" autofocus/>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<input id="numberOrderTo" placeholder="Hasta" type="number" class="form-control" maxlength="50" />
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<label>Tipo de Pedido</label>
 		</div>
 		<div class="col-xs-12 col-md-4">
-			<label>Fecha Desde</label>
-			<input id="name" name="name" type="date" class="form-control" maxlength="50" required/>
+			<select id="typeOrder" class="form-control" >
+				<option value="null">Seleccione una opción</option>
+			</select>
 		</div>
-		<div class="col-xs-12 col-md-4">
-			<label>Fecha Hasta</label>
-			<input id="name" name="name" type="date" class="form-control" maxlength="50" required/>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-md-2">
+			<label>Fechas de Elaboración <span class="text-muted">(Desde-Hasta)</span></label>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<input id="creationDateFrom" placeholder="Desde" type="date" class="form-control" maxlength="50" title="Desde" />
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<input id="creationDateTo" placeholder="Hasta" type="date" class="form-control" maxlength="50" title="Hasta"/>
 		</div>
 
+		<div class="col-xs-12 col-md-2">
+			<label>Fechas de Entrega <span class="text-muted">(Desde-Hasta)</span></label>
+		</div>
+		<div class="col-xs-12 col-md-2">
+			<input id="deliveryDateFrom" placeholder="Desde" type="date" class="form-control" maxlength="50" title="Desde" />
+		</div>		
+		<div class="col-xs-12 col-md-2">
+			<input id="deliveryDateTo" placeholder="Hasta" type="date" class="form-control" maxlength="50" title="Hasta"/>
+		</div>
+	</div>
+	<hr class="hidden-xs">
+	<div class="row">
 		<div class="col-xs-12 col-md-4">
 			<label>Dependencia</label>
-			<select id="dependence" name="dependence" class="form-control" >
+			<select id="dependence" class="form-control" multiple="multiple" >
+				<option value="null">Seleccione una opción</option>
+				<option value="null">Seleccione una opción</option>
 				<option value="null">Seleccione una opción</option>
 			</select>
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<label>Presupuesto</label>
-			<select id="dependence" name="dependence" class="form-control" >
+			<select id="budget" class="form-control" >
 				<option value="null">Seleccione una opción</option>
 			</select>
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<label>Estado</label>
-			<select id="dependence" name="dependence" class="form-control" >
+			<select id="stateOrder" class="form-control" >
 				<option value="null">Seleccione una opción</option>
 			</select>
 		</div>
-		
 	</div>
 
 	<br>
 	<br>
+	<br>
 	<div class="row">
-		<div class="col-xs-12 col-md-3">
+		<div class="col-xs-12 col-md-12">
 			<button class="btn btn-primary pull-right" type="submit" title="">
 				<span class="fa fa-search"></span> 
 				Buscar
@@ -49,6 +80,3 @@
 
 </form>
 
-
-<script src="app/model/search/search.js" async='false'></script>
-<script src="app/controller/search/search.js" async='false'></script>

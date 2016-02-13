@@ -12,6 +12,7 @@ $.ajaxSetup({
         // not showing the alert
         $("#stopUser").hide();
         controller.session.timeout = controller.session.timeToClose;
+        controller.session.warningShowed = false;
     },
     fail: function(result,status,xhr) {
         // not showing the alert
