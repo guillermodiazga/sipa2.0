@@ -56,12 +56,19 @@ body > div{
 	font-weight: bold;
 }
 
+
+/*----------------------------------------------------search  css*/
+
+
+
+
+
+/*----------------------------------------------------reports css*/
+
 #reportHead{
   display: inline-table;
 
 }
-
-/*----------------------------------------------------reports css*/
 
 .squareList li{
   display: inline-table;
@@ -102,3 +109,4 @@ body > div{
   border-bottom-width: 0px !important;
   background-color: #FFFFFF;
 }
+

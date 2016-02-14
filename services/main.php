@@ -86,8 +86,7 @@
                 ppto.idtalimento=$type ";
 
         return queryTojson($sql);
-    };
-
+    }; 
 
     function saveOrder($arrData){
 
@@ -218,10 +217,44 @@ function saveDataUser($arrData){
 
 
 
+       
+/*----------------------------------------------------------Search*/
 
 
+    
+    function getStatusOrders(){
+        $sql = "SELECT id, estado as name FROM `estados` where bitactivo=1";
+        return queryTojson($sql);
+    }
 
 
+    function getPptoUserSearch($arrData){
+        $type = $arrData["type"];
+        $user = $arrData["user"];
+
+        if( $type != ""){
+            $tipoalimentoPpto = " ppto.idtalimento = $type and";
+        }else{
+           $tipoalimentoPpto = " ";
+        }
+
+        $sql = "SELECT  ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido 
+                FROM `persona-ppto` as rel, presupuesto as ppto
+                WHERE
+                `idusuario` = $user 
+                and ppto.id = rel.idppto and 
+                ppto.bitactivo=1 and
+                $tipoalimentoPpto 
+                rel.bitactivo=1 ";
+
+        return queryTojson($sql);
+    };
+
+
+    function getGeneralSearch(){
+        $sql = "SELECT * FROM `pedido` where bitactivo=1";
+        return queryTojson($sql);
+    }
 
 
 

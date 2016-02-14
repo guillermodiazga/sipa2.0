@@ -84,7 +84,10 @@ $(document).ready(function(){
         controller.navigation.loadView('login');
     }else{
        controller.navigation.loadViewOnReload();
-       controller.session.checkSession();
+       $("#userName").text(localStorage.name);
+       
+       if(localStorage.remenberMe != "true")
+            controller.session.checkSession();
     }
 
    //click on ppal menu

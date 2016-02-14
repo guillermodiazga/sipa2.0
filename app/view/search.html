@@ -60,7 +60,7 @@
 		</div>
 		<div class="col-xs-12 col-md-4">
 			<label>Estado</label>
-			<select id="stateOrder" class="form-control" >
+			<select id="statusOrder" class="form-control" >
 				<option value="null">Seleccione una opción</option>
 			</select>
 		</div>
@@ -79,4 +79,34 @@
 	</div>
 
 </form>
+<hr>
 
+
+<table id="results" class="table table-striped table-hover" style="display: none">
+  <thead>
+    <tr>
+      <th>Acción</th>
+      <th>Estado</th>
+      <th>Nro. Pedido</th>
+      <th>Secretaria</th>
+      <th>Persona</th>
+      <th>Tipo</th>
+      <th>Item</th>
+      <th>Cantidad</th>
+      <th>Valor Pedido</th>
+      <th>Fecha Entrega</th>
+      <th>Hora Entrega</th>
+      <th>Dirección</th>
+      <th>Presupuesto</th>
+      <th>Fecha de Pedido</th>
+      <th>Observación</th>
+      <th>Remisión</th>
+      <th>Factura</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+
+<script src="app/model/search/search.js" async='false'></script>
+<script src="app/controller/search/search.js" async='false'></script>
