@@ -95,11 +95,20 @@ controller.search.getQuery = function(jsonData) {
 		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		       var items = "";
-		       $.each(data, function(i, item){
-		       		items += "<option value='"+item.id+"'>"+item.name+"</option>";
+		       var result = "";
+		       $.each(data, function(i, resp){
+		       		result += "<tr><td>"+resp.id+"<td></tr>";
 		       });
-		       $("#results").append(items);
+
+		       $("#resultsTemplate")
+		       .clone()
+		       .show()
+		       .find("tbody")
+		       .append(result).end()
+		       .appendTo("#container-xl");
+
+		       $("#container-xl").show();
+
 		      
 		    }else{
 	        	alert("No se pudieron cargar los estados de pedido");
