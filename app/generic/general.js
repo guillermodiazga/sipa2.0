@@ -47,6 +47,13 @@ function formatMoney (n, c, d, t){
    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
  };
 
+ function formatDate(date) {
+     var arDate = date.split("-");
+
+     date = arDate[2] + "/" + arDate[1] + "/" + arDate[0];
+     return date;
+ }
+
  window.alert = function(text){
  	$('#modalAlert').find("#textAlert").text(text).end().modal('show');
  };

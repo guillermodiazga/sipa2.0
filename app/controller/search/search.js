@@ -108,7 +108,7 @@ controller.search.getQuery = function(jsonData) {
 		       					'<td>'+resp.idalimento+'</td>'+
 		       					'<td>'+resp.cantidad+'</td>'+
 		       					'<td> $'+formatMoney(resp.valorpedido)+'</td>'+
-		       					'<td>'+resp.fchentrega+'</td>'+
+		       					'<td>'+formatDate(resp.fchentrega)+'</td>'+
 		       					'<td>'+resp.hora+'</td>'+
 		       					'<td>'+resp.direccion+'</td>'+
 		       					'<td>'+resp.idppto+'</td>'+
