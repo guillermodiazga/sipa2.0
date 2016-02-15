@@ -97,7 +97,24 @@ controller.search.getQuery = function(jsonData) {
 		        //load data in view
 		       var result = "";
 		       $.each(data, function(i, resp){
-		       		result += "<tr><td>"+resp.id+"<td></tr>";
+		       		result += '<tr>'+
+		       					'<td><i class="btn fa fa-eye" title="Ver historico de estados del Pedido"></i>'+
+		       					'<i class="btn fa fa-print" title="Imprimir Pedido"></i></td>'+
+		       					'<td>'+resp.estado+'</td>'+
+		       					'<td>'+resp.id+'</td>'+
+		       					'<td>'+resp.idsecretaria+'</td>'+
+		       					'<td>'+resp.personarecibe+'</td>'+
+		       					'<td>'+resp.idtalimento+'</td>'+
+		       					'<td>'+resp.idalimento+'</td>'+
+		       					'<td>'+resp.cantidad+'</td>'+
+		       					'<td> $'+formatMoney(resp.valorpedido)+'</td>'+
+		       					'<td>'+resp.fchentrega+'</td>'+
+		       					'<td>'+resp.hora+'</td>'+
+		       					'<td>'+resp.direccion+'</td>'+
+		       					'<td>'+resp.idppto+'</td>'+
+		       					'<td>'+resp.fchreg+'</td>'+
+		       					'<td>'+resp.comentario+'</td>'+
+		       					'</tr>';
 		       });
 
 		       $("#resultsTemplate")
