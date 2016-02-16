@@ -45,6 +45,7 @@ controller.navigation.hideMainMenu = function () {
 controller.navigation.loadView = function (view, idElementToShow) {
     var idElementToShow = idElementToShow || "container";
     $("#stopUser").show();
+    $("#container-xl").html("").hide();
     if(sessionStorage.id){
         controller.navigation.showMainMenu();
     }else{

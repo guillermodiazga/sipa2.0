@@ -40,7 +40,6 @@ model.search.getPptoUser = function(typeOrder, userId ) {
 };
 
 model.search.getQuery = function(jsonData) {
-  console.log(jsonData)
     return $.ajax('services/main.php',
         {
            type: "GET", async: true,

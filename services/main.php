@@ -251,8 +251,70 @@ function saveDataUser($arrData){
     };
 
 
-    function getGeneralSearch(){
-        $sql = "SELECT * FROM `pedido` where bitactivo=1";
+    function getGeneralSearch($arrData){
+
+        $order = " ped.id";
+        $fchdesde = "2016-02-07";
+        $fchhasta = "2016-02-07";
+
+        if($estado != '')
+            $estadov="and ped.estado=$estado";
+
+        if($ppto!='')
+            $pptov="and ped.idppto='$ppto'";
+
+        if($secretaria!='')
+            $secretariav="and ppto.idsecretaria =$secretaria";
+
+        $sql = "
+            SELECT  
+                    ped.idppto,
+                    ped.idalimento,
+                    ped.estado,
+                    est.estado as nomestado,
+                    sec.secretaria,
+                    ped.id,
+                    ped.idusuario,
+                    us.nombre as usnam,
+                    ppto.idsecretaria,
+                    tali.talimento,
+                    ped.fchentrega,
+                    ped.hora,
+                    ali.nombre as alimento,
+                    ped.cantidad,
+                    ped.valorpedido,
+                    ped.direccion,
+                    ped.comentario,
+                    ped.fchreg,
+                    ppto.nombre
+
+            FROM secretaria as sec,
+                 estados as est,
+                 pedido as ped,
+                 usuario as us,
+                 tipoalimento as tali,
+                 alimento as ali,
+                 presupuesto as ppto
+
+            WHERE  
+                ped.fchentrega Between '$fchdesde' and '$fchhasta' and
+                ped.idtalimento = tali.id and
+                ped.idalimento = ali.id and
+                ped.idppto = ppto.id and
+                ped.idusuario = us.id and
+                ped.estado = est.id and
+                ppto.idsecretaria = sec.id    
+
+                $estadov
+
+                $secretariav
+
+                $pptov
+
+                ORDER BY $order";
+
+            error_log($sql);
+
         return queryTojson($sql);
     }
 

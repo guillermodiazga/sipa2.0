@@ -95,6 +95,7 @@ controller.search.getQuery = function(jsonData) {
 		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
+		       $("#container-xl").html("").show();
 		       var result = "";
 		       $.each(data, function(i, resp){
 		       		result += '<tr>'+
@@ -102,10 +103,10 @@ controller.search.getQuery = function(jsonData) {
 		       					'<i class="btn fa fa-print" title="Imprimir Pedido"></i></td>'+
 		       					'<td>'+resp.estado+'</td>'+
 		       					'<td>'+resp.id+'</td>'+
-		       					'<td>'+resp.idsecretaria+'</td>'+
-		       					'<td>'+resp.personarecibe+'</td>'+
-		       					'<td>'+resp.idtalimento+'</td>'+
-		       					'<td>'+resp.idalimento+'</td>'+
+		       					'<td>'+resp.idsecretaria+'-'+resp.secretaria+'</td>'+
+		       					'<td>'+resp.usnam+'</td>'+
+		       					'<td>'+resp.talimento+'</td>'+
+		       					'<td><img class="thumbnail zoomImg" width="50" src="img/items/'+resp.idalimento+'.png"></td><td>'+resp.idalimento+'-'+resp.alimento+'</td>'+
 		       					'<td>'+resp.cantidad+'</td>'+
 		       					'<td> $'+formatMoney(resp.valorpedido)+'</td>'+
 		       					'<td>'+formatDate(resp.fchentrega)+'</td>'+
@@ -124,15 +125,15 @@ controller.search.getQuery = function(jsonData) {
 		       .append(result).end()
 		       .appendTo("#container-xl");
 
-		       $("#container-xl").show();
-
+		       zoomImg();
 		      
 		    }else{
-	        	alert("No se pudieron cargar los estados de pedido");
+	        	$("#container-xl").show().text("No hay resultados para esta busqueda");
 	        }
 
 	        $("#stopUser").hide();
 		 }).fail(function(e){
+
 		 	alert("Error: " + e.responseText);
 		});
 };

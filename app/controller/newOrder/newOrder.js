@@ -89,7 +89,9 @@ controller.newOrder.loadItemsToNewOrder = function (){
 						.find(".dtlle").attr("data-target", "#dtlle"+i).end()
 						.appendTo("#itemList");
 				    });
-
+			      debugger
+			       zoomImg();
+			       
 			       $(".selectItem").click(function(){
 						//change items list
 						$(".deletedItem:visible").click();//delete other product selected

@@ -52,7 +52,42 @@ function formatMoney (n, c, d, t){
 
      date = arDate[2] + "/" + arDate[1] + "/" + arDate[0];
      return date;
- }
+ };
+
+function zoomImg(){
+    $(".zoomImg")
+        .addClass("btn")
+        .attr("title", "Ver Imagen")
+        .click(function(){
+            $(this)
+                .clone()
+                .hide()
+                .removeClass("zoomImg")
+                .addClass("imgZoomInContainer")
+                .addClass("img-responsive")
+                .attr("width", "")
+                .fadeIn()
+                .appendTo("body");
+
+               $("#stopUser")
+                .show()
+                .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
+                .find(".close")
+                .click(function(){
+                    $(this)
+                        .parent()
+                        .hide()
+                        .end()
+                        .remove();
+                    
+                    $(".imgZoomInContainer").remove();
+
+                })
+                
+
+        });
+ 
+};
 
  window.alert = function(text){
  	$('#modalAlert').find("#textAlert").text(text).end().modal('show');
