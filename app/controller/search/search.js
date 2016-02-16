@@ -119,11 +119,11 @@ controller.search.getQuery = function(jsonData) {
 		       });
 
 		       $("#resultsTemplate")
-		       .clone()
-		       .show()
-		       .find("tbody")
-		       .append(result).end()
-		       .appendTo("#container-xl");
+			       .clone()
+			       .show()
+			       .find("tbody")
+			       .append(result).end()
+			       .appendTo("#container-xl");
 
 		       zoomImg();
 		      
@@ -138,16 +138,9 @@ controller.search.getQuery = function(jsonData) {
 		});
 };
 
-controller.search.initTable = function(){
-	//clone template 
-	
-	container-xl
-
-
-};
-
-
 controller.search.loadDataInList = function() {
+	$("#creationDateFrom").val(currentDate());
+	$("#creationDateTo").val(currentDate());
 	controller.search.loadOrderTypes();
 	controller.search.loadPptoUserToSearch();
 	controller.search.orderStatusList();

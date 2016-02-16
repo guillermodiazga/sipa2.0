@@ -254,7 +254,7 @@ function saveDataUser($arrData){
     function getGeneralSearch($arrData){
 
         $order = " ped.id";
-        $fchdesde = "2016-02-07";
+        $fchdesde = "2015-02-07";
         $fchhasta = "2016-02-07";
 
         if($estado != '')
@@ -298,6 +298,7 @@ function saveDataUser($arrData){
 
             WHERE  
                 ped.fchentrega Between '$fchdesde' and '$fchhasta' and
+                STR_TO_DATE( SUBSTRING( fchreg, 1, 10 ) ,  '%d/%m/%Y' ) Between '$fchdesde' and '$fchhasta' and
                 ped.idtalimento = tali.id and
                 ped.idalimento = ali.id and
                 ped.idppto = ppto.id and
