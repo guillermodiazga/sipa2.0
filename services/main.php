@@ -254,17 +254,27 @@ function saveDataUser($arrData){
     function getGeneralSearch($arrData){
 
         $order = " ped.id";
-        $fchdesde = "2016-02-07";
+        $fchdesde = "2015-02-07";
         $fchhasta = "2016-02-07";
+        $init = 1;
+        $resultsPage = 10;
 
-        if($estado != '')
-            $estadov="and ped.estado=$estado";
+        foreach( $arrData as $key => $val){
+            $key = urldecode($key);
+            $val = urldecode($val);
+            $arrKeys = explode("[", $key);
+            $nameKey = str_replace("]", "", $arrKeys[2]);
+            $$nameKey = $val;
+        }
 
-        if($ppto!='')
-            $pptov="and ped.idppto='$ppto'";
+        if($statusOrder != '*')
+            $estadov="and ped.estado = $statusOrder";
 
-        if($secretaria!='')
-            $secretariav="and ppto.idsecretaria =$secretaria";
+        if($budget!='')
+            $pptov="and ped.idppto = '$ppto'";
+
+        if($dependence!='*')
+            $secretariav="and ppto.idsecretaria =$dependence";
 
         $sql = "
             SELECT  
@@ -297,7 +307,9 @@ function saveDataUser($arrData){
                  presupuesto as ppto
 
             WHERE  
-                ped.fchentrega Between '$fchdesde' and '$fchhasta' and
+                ped.fchentrega Between '$deliveryDateFrom' and '$deliveryDateTo' and
+                STR_TO_DATE( SUBSTRING( fchreg, 1, 10 ) ,  '%d/%m/%Y' ) 
+                    Between '$creationDateFrom' and '$creationDateTo' and
                 ped.idtalimento = tali.id and
                 ped.idalimento = ali.id and
                 ped.idppto = ppto.id and
@@ -311,7 +323,10 @@ function saveDataUser($arrData){
 
                 $pptov
 
-                ORDER BY $order";
+                ORDER BY $order
+
+                limit $init, $resultsPage
+                ";
 
             error_log($sql);
 

@@ -39,6 +39,18 @@ model.search.getPptoUser = function(typeOrder, userId ) {
         });
 };
 
+model.search.getListDependences = function() {
+    return $.ajax('services/main.php',
+        {
+           type: "GET", async: true,
+           data:{f:'getListDependences'},
+           contentType: "application/json"
+        })
+        .then(function (data) {
+            return data;
+        });
+};
+
 model.search.getQuery = function(jsonData) {
     return $.ajax('services/main.php',
         {

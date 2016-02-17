@@ -28,6 +28,7 @@ controller.navigation.showMainMenu = function () {
             .slideDown()
             .click( function () {
                 askForWebNotificationPermissions();
+                $(this).slideUp();
             });
 
         if( getWebNotificationPermissionStatus() == 2 ){
