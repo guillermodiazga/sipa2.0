@@ -2,11 +2,11 @@
 $.ajaxSetup({
     beforeSend: function() {
         // show loading dialog // works
-        $("#stopUser").show();
+        //$("#stopUser").show();
     },
     complete: function(xhr, stat) {
         // hide dialog // works
-        $("#stopUser").hide();
+        //$("#stopUser").hide();
     },
     success: function(result,status,xhr) {
         // not showing the alert

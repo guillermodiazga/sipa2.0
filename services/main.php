@@ -233,17 +233,24 @@ function saveDataUser($arrData){
         $type = $arrData["type"];
         $user = $arrData["user"];
 
-        if( $type != ""){
-            $tipoalimentoPpto = " ppto.idtalimento = $type and";
+        if( $type == "*" ){
+            $tipoalimentoPpto = " ";
         }else{
-           $tipoalimentoPpto = " ";
+            $tipoalimentoPpto = " ppto.idtalimento = $type and";
+        }
+
+        if( $user == "*" ){
+            $user = " ";
+            $tipoalimentoPpto = " ";
+        }else{
+           $user = " `idusuario` = $user and ";
         }
 
         $sql = "SELECT  ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido 
                 FROM `persona-ppto` as rel, presupuesto as ppto
                 WHERE
-                `idusuario` = $user 
-                and ppto.id = rel.idppto and 
+                $user
+                ppto.id = rel.idppto and 
                 ppto.bitactivo=1 and
                 $tipoalimentoPpto 
                 rel.bitactivo=1 ";
@@ -254,8 +261,6 @@ function saveDataUser($arrData){
 
     function getGeneralSearch($arrData){
 
-        $init = 0;
-        $resultsPage = 10;
 
         foreach( $arrData as $key => $val){
             $key = urldecode($key);
@@ -264,6 +269,9 @@ function saveDataUser($arrData){
             $nameKey = str_replace("]", "", $arrKeys[2]);
             $$nameKey = $val;
         }
+
+        $resultsPage = 10;
+        $page = $page * $resultsPage;
         
         if ( $orderBy == "") {
             $orderBy = " ped.id ";
@@ -357,7 +365,7 @@ function saveDataUser($arrData){
 
                 ORDER BY $orderBy $asc
 
-                limit $init, $resultsPage
+                limit $page, $resultsPage
                 ";
 
             error_log($sql);

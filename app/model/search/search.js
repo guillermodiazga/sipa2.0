@@ -31,7 +31,7 @@ model.search.getPptoUser = function(typeOrder, userId ) {
     return $.ajax('services/main.php',
         {
            type: "GET", async: true,
-           data:{f:'getPptoUserSearch', type: typeOrder, user: userId} ,
+           data:{f:'getPptoUserSearch', type: typeOrder, user: "*"} ,
            contentType: "application/json"
         })
         .done(function (data) {

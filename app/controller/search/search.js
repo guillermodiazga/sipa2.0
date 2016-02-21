@@ -20,7 +20,8 @@ controller.search.getFormData = function(form){
 	data.statusOrder = $form.find("#statusOrder").val();
 
 	data.orderBy = $("#resultsTable th[data-order-this = true]").attr("data-order-by") || "";
-	data.orderAsc = $("#resultsTable th[data-order-this = true]").attr("data-order-asc") || "";
+	data.orderAsc = $("#resultsTable th[data-order-this = true]").attr("data-order-asc") || "true";
+	data.page = $("#pagination").find("li[class=active]").find("a").attr("data-page") || "0";
 
 	jsonData.push(data);
 
@@ -65,44 +66,44 @@ controller.search.getQuery = function(jsonData) {
 			   		$("#resultsTable tbody tr").remove();
 			   }
 	       
-
 			   $("#resultsTable").find("tbody")
 			       .append(result);
 
-			   //add pagination
-		      /* 
-		      $("#paginationTemplate")
-			       .clone()
-			       .show()
-			       .appendTo("#container-xl");
-*/
+			   //add eventgs pagination
+		      
+		      $("#pagination").find("li").off().click(function () {
+		      		$this = $(this);
+
+		      		$this
+		      			.siblings().removeClass("active").end()
+		      			.addClass("active");
+
+		      		$("#formSearch").submit();
+		      });
+			       
+
 
 			   //add events to zoom images
 		       zoomImg();
 
 		       //Add events to order results
-		       $("#resultsTable th").click(function () {
+		       $("#resultsTable th").off().click(function () {
 		       		$this = $(this);
 		       		$this.siblings().attr("data-order-this", "false");
 
 		       		$this.attr("data-order-this", "true");
 
 			   		$("#formSearch").submit();
-			   		
-		       		if($this.attr("data-order-asc") == true)
-		       			$this.attr("data-order-asc", "false");
-		       		else
-		       			$this.attr("data-order-asc", "true");
-
 		       });
 		      
 		    }else{
-	        	$("#container-xl").show().text("No hay resultados para esta busqueda");
+	        	alert("No hay resultados para esta busqueda");
 	        }
 
 	        $("#stopUser").hide();
 		 }).fail(function(e){
 
+	        $("#stopUser").hide();
 		 	alert("Error: " + e.responseText);
 		});
 };
@@ -211,11 +212,13 @@ controller.search.initEvents = function(){
 	$("#typeOrder").change(function(){
 		controller.search.loadPptoUserToSearch();
 	});
-	$("#formSearch")
+
+	$("#formSearch").off("submit")
 		.submit(function(e){
 			e.preventDefault();
+			$("#stopUser").show();
 			var jsonData = controller.search.getFormData(this);
-			console.log(jsonData)
+			console.log(jsonData);
 			controller.search.getQuery(jsonData);
 		});
 
