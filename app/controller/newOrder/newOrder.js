@@ -223,7 +223,8 @@ controller.newOrder.initEvents = function(){
 		e.preventDefault();
 		
 		var jsonData = controller.newOrder.getFormData(this);
-		controller.newOrder.save(jsonData);
+		if( controller.newOrder.validateForm(jsonData))
+			controller.newOrder.save(jsonData);
 	});
 
 };
@@ -234,123 +235,92 @@ controller.newOrder.loadDataToOrder();
 //add Events
 controller.newOrder.initEvents();
 
-
 //validar envio
-function validarform() {
-	var fecha= document.getElementById("deliveryDate").value;
-	var cantidad= $("#formNewOrder").find("#items").find(".item").find(".quantity").val();
-	var direccion= document.getElementById("address").value;
-	var comentario= document.getElementById("comment").value;
-	var hora= document.getElementById("deliveryTime").value;
-	var telfjorecibe= document.getElementById("telephone").value;
-	var evento= document.getElementById("nameEvent").value;
-	var movilrecibe= document.getElementById("celphone").value;
-	var personarecibe= document.getElementById("nameReceive").value;
+controller.newOrder.validateForm = function(jsonData) {
+	var fecha = jsonData[0]["deliveryDate"],
+		cantidad = jsonData[0]["quantity"],
+		direccion = jsonData[0]["address"],
+		comentario = jsonData[0]["comment"],
+		hora = jsonData[0]["deliveryTime"],
+		telfjorecibe = jsonData[0]["telephone"],
+		evento = jsonData[0]["nameEvent"],
+		movilrecibe = jsonData[0]["celphone"],
+		personarecibe = jsonData[0]["nameReceive"],
+		msg = "",
+		isValid = true;
 
 
-	if((vtexto(telfjorecibe))==false)
-		return false;
-	else
+	if((validateText(telfjorecibe))==false){
+		msg = "Dato invalido";
+		isValid = false;
+	}
 
-	if((vtexto(personarecibe))==false)
-		return false;
-	else
+	if((validateText(personarecibe))==false){
+		msg = "Dato invalido";
+		isValid = false;
+	}
 
-	if((vtexto(movilrecibe))==false)
-		return false;
-	else
+	if((validateText(movilrecibe))==false){
+		msg = "Dato invalido";
+		isValid = false;
+	}
 
-	if((vtexto(evento))==false)
-		return false;
-	else
+	if((validateText(evento))==false){
+		msg = "Dato invalido";
+		isValid = false;
+	}
 
-	if((vtexto(cantidad))==false)
-		return false;
-	else
+	if((validateText(cantidad))==false){
+		msg = "Dato invalido";
+		isValid = false;
+	}
 
 
 	if( comentario.length>250 ) {
-		alert('Comentario demasiado extenso');
-		return false;
+		msg = ('Comentario demasiado extenso');
+		isValid = false;
 	}
 
 	if( direccion.length>150 ) {
-		alert('Direccion muy larga');
-		return false;
+		msg = ('Direccion muy larga');
+		isValid = false;
 	}
 
 	if( direccion == null || direccion.length < 5 || /^\s+$/.test(direccion ) ) {
-		alert('Direccion Obligatorio');
-		return false;
+		msg = ('Direccion Obligatorio');
+		isValid = false;
 	}
 
-	if( isNaN(cantidad) ) {
-		alert('Cantidad invalida');
-		return false;
+	if( validateNum(cantidad) ) {
+		msg = ('Cantidad invalida');
+		isValid = false;
 	}
 
 	if( cantidad<0 ) {
-		alert('Cantidad invalida');
-		return false;
+		msg = ('Cantidad invalida');
+		isValid = false;
 	}
 
-	if( cantidad.length>4 ) {
-		alert('Cantidad no disponible');
-		return false;
+	if( cantidad.length > 4 ) {
+		msg = ('Cantidad no disponible');
+		isValid = false;
 	}
-
-	if( cantidad == null || isNaN(cantidad)|| cantidad.length < 1 || /^\s+$/.test(cantidad) ) {
-		alert('Cantidad Obligatorio');
-		return false;
-	}
-
 
 	if(hora=='00') {
-		alert('Hora No valida');
-		return false;
+		msg = ('Hora No valida');
+		isValid = false;
 	}
 
-	/*Validar Fecha de Enrega*/
+	/*Validar Fecha de Entrega*/
+	var deliveryDate = moment(fecha);
+	var diference = moment().format("Y-MM-D");
+	deliveryDate.from(diference);	
 
-		 
-return true;
+	if(msg != "")
+		alert(msg);
+
+	return isValid;
 
 }
 
-//Funcion para validar numero
-function vnumero(numero){
-  if( isNaN(numero) || numero==null || numero.length == 0 ||/^\s+$/.test(numero) ) {
-    return false;
-  } 
-  return true;
-}
-
-//Funcion para validar Texto
-function vtexto(texto){
-  if( texto==null || texto.length == 0 || /^\s+$/.test(texto) ) {
-    return false;
-  } 
-
-  return true;
-}
-function mensage (text,swNoCerrar) {
-
-  $("#dvMsg").show();
-  $("#dvMsgText").text(text);
- 
-  var idFocus=$(document.activeElement).attr('id');
-  var x;
-  var left;
-  if(idFocus){
-    x=$("#"+idFocus).offset();
-    $("#dvMsg").animate({"top":x.top,'left':(x.left+100)});
-  }else{
-    $(window).scrollTop(0);
-     $("#dvMsg").animate({'left':'40%','top':'200px','position': 'absolute'});
-  }
-
-  if(!swNoCerrar)
-    setTimeout(function(){$("#dvMsg").animate({'left':'-500'});},3000);
-  
-  $("#closeMsg").click(function(){$("#dvMsg").hide(100);})
-}
+moment.lang("es");

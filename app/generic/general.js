@@ -94,6 +94,45 @@ function zoomImg(){
  };
 
 
+//Funcion para validar numero
+function validateNum(numero){
+  if( isNaN(numero) || numero==null || numero.length == 0 ||/^\s+$/.test(numero) ) {
+    return false;
+  } 
+  return true;
+}
+
+//Funcion para validar Texto
+function validateText(texto){
+  if( texto==null || texto.length == 0 || /^\s+$/.test(texto) ) {
+    return false;
+  } 
+
+  return true;
+}
+
+function mensage (text,swNoCerrar) {
+
+  $("#dvMsg").show();
+  $("#dvMsgText").text(text);
+ 
+  var idFocus=$(document.activeElement).attr('id');
+  var x;
+  var left;
+  if(idFocus){
+    x=$("#"+idFocus).offset();
+    $("#dvMsg").animate({"top":x.top,'left':(x.left+100)});
+  }else{
+    $(window).scrollTop(0);
+     $("#dvMsg").animate({'left':'40%','top':'200px','position': 'absolute'});
+  }
+
+  if(!swNoCerrar)
+    setTimeout(function(){$("#dvMsg").animate({'left':'-500'});},3000);
+  
+  $("#closeMsg").click(function(){$("#dvMsg").hide(100);})
+}
+
 //Desktop notifications
 /*
  function AskForWebNotificationPermissions()
