@@ -33,7 +33,7 @@ controller.search.getQuery = function(jsonData) {
 		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		       $("#container-xl").show();
+		       $("#container-xl").html("").show();
 		       var result = "";
 		       $.each(data, function(i, resp){
 		       		result += '<tr>'+
@@ -56,45 +56,43 @@ controller.search.getQuery = function(jsonData) {
 		       					'</tr>';
 		       });
 
-		       if( $("#resultsTable").size() == 0){
-			       	$("#resultsTemplate")
-				       .clone()
-				       .attr("id", "resultsTable")
-				       .show()
-				       .appendTo("#container-xl");
-			   }else{
-			   		$("#resultsTable tbody tr").remove();
-			   }
-	       
-			   $("#resultsTable").find("tbody")
-			       .append(result);
-
-			   //add eventgs pagination
-		      
-		      $("#pagination").find("li").off().click(function () {
-		      		$this = $(this);
-
-		      		$this
-		      			.siblings().removeClass("active").end()
-		      			.addClass("active");
-
-		      		$("#formSearch").submit();
-		      });
-			       
-
+		       
+		       	$("#resultsTemplate")
+			       .clone()
+			       .attr("id", "resultsTable")
+			       .show()
+			       .appendTo("#container-xl")
+			       .find("tbody")
+			       .append(result).end()
+			       .DataTable(
+					    {
+							"sProcessing":     "Procesando...",
+							"sLengthMenu":     "Mostrar _MENU_ registros",
+							"sZeroRecords":    "No se encontraron resultados",
+							"sEmptyTable":     "NingÃºn dato disponible en esta tabla",
+							"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+							"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+							"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+							"sInfoPostFix":    "",
+							"sSearch":         "Buscar:",
+							"sUrl":            "",
+							"sInfoThousands":  ",",
+							"sLoadingRecords": "Cargando...",
+							"oPaginate": {
+								"sFirst":    "Primero",
+								"sLast":     "Ãšltimo",
+								"sNext":     "Siguiente",
+								"sPrevious": "Anterior"
+							},
+							"oAria": {
+								"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+								"sSortDescending": ": Activar para ordenar la columna de manera descendente"
+							}
+						}
+			       	);
 
 			   //add events to zoom images
 		       zoomImg();
-
-		       //Add events to order results
-		       $("#resultsTable th").off().click(function () {
-		       		$this = $(this);
-		       		$this.siblings().attr("data-order-this", "false");
-
-		       		$this.attr("data-order-this", "true");
-
-			   		$("#formSearch").submit();
-		       });
 		      
 		    }else{
 	        	alert("No hay resultados para esta busqueda");

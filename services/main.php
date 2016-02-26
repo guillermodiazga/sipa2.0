@@ -364,8 +364,6 @@ function saveDataUser($arrData){
                 $pptov
 
                 ORDER BY $orderBy $asc
-
-                limit $page, $resultsPage
                 ";
 
             error_log($sql);
