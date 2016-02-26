@@ -19,6 +19,9 @@ controller.search.getFormData = function(form){
 	data.budget = $form.find("#budget").val();
 	data.statusOrder = $form.find("#statusOrder").val();
 
+	data.orderBy = $("#resultsTable th[data-order-this = true]").attr("data-order-by") || "";
+	data.orderAsc = $("#resultsTable th[data-order-this = true]").attr("data-order-asc") || "";
+
 	jsonData.push(data);
 
 	return jsonData;
@@ -29,7 +32,7 @@ controller.search.getQuery = function(jsonData) {
 		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		       $("#container-xl").html("").show();
+		       $("#container-xl").show();
 		       var result = "";
 		       $.each(data, function(i, resp){
 		       		result += '<tr>'+
@@ -52,19 +55,46 @@ controller.search.getQuery = function(jsonData) {
 		       					'</tr>';
 		       });
 
-		       $("#resultsTemplate")
+		       if( $("#resultsTable").size() == 0){
+			       	$("#resultsTemplate")
+				       .clone()
+				       .attr("id", "resultsTable")
+				       .show()
+				       .appendTo("#container-xl");
+			   }else{
+			   		$("#resultsTable tbody tr").remove();
+			   }
+	       
+
+			   $("#resultsTable").find("tbody")
+			       .append(result);
+
+			   //add pagination
+		      /* 
+		      $("#paginationTemplate")
 			       .clone()
 			       .show()
-			       .find("tbody")
-			       .append(result).end()
 			       .appendTo("#container-xl");
+*/
 
-		       $("#paginationTemplate")
-			       .clone()
-			       .show()
-			       .appendTo("#container-xl");
-
+			   //add events to zoom images
 		       zoomImg();
+
+		       //Add events to order results
+		       $("#resultsTable th").click(function () {
+		       		$this = $(this);
+		       		$this.siblings().attr("data-order-this", "false");
+
+		       		$this.attr("data-order-this", "true");
+
+			   		$("#formSearch").submit();
+			   		
+		       		if($this.attr("data-order-asc") == true)
+		       			$this.attr("data-order-asc", "false");
+		       		else
+		       			$this.attr("data-order-asc", "true");
+
+		       });
 		      
 		    }else{
 	        	$("#container-xl").show().text("No hay resultados para esta busqueda");
@@ -92,7 +122,7 @@ controller.search.orderStatusList = function () {
 		    if( data.length > 0){
 		        //load data in view
 		       var items = "";
-		       items += "<option value='*'>Todos</option>";
+		       items += "<option value='*' selected>Todos</option>";
 		       $.each(data, function(i, item){
 		       		items += "<option value='"+item.id+"'>"+item.name+"</option>";
 		       });
@@ -115,7 +145,7 @@ controller.search.loadDependencesList = function (){
 		    if( data.length > 0){
 		        //load data in view
 		       var items = "";
-		       items += "<option value='*'>Todos</option>";
+		       items += "<option value='*' selected>Todos</option>";
 		       $.each(data, function(i, item){
 		       		items += "<option value='"+item.id+"'>"+item.secretaria+"</option>";
 		       });
@@ -138,7 +168,7 @@ controller.search.loadOrderTypes = function (){
 		    if( data.length > 0){
 		        //load data in view
 		       var items = "";
-		       items += "<option value='*'>Todos</option>";
+		       items += "<option value='*' selected>Todos</option>";
 		       $.each(data, function(i, item){
 		       		items += "<option value='"+item.id+"'>"+item.talimento+"</option>";
 		       });
@@ -162,7 +192,7 @@ controller.search.loadPptoUserToSearch = function (){
 		    $("#budget").html("");
 		    if( data.length > 0){
 		        //load data in view
-		       items += "<option value='*'>Todos</option>";
+		       items += "<option value='*' selected>Todos</option>";
 		       $.each(data, function(i, item){
 		       		items += "<option value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
 		       });

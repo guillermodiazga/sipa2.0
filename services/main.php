@@ -97,8 +97,10 @@
             $nameKey = str_replace("]", "", $arrKeys[2]);
             $$nameKey = $val;
         }
+
+        $log = date("d/m/Y - G:i");
          
-        $sql="
+        $sql = "
         INSERT INTO `pedido` (
             `id` ,
             `idsecretaria` ,
@@ -127,7 +129,7 @@
             (SELECT idsecretaria  FROM `presupuesto` WHERE id = '$ppto'),
             '$idUser',
             '$ppto',
-            CURDATE(),
+            '$log',
             '$deliveryDate',
             '$deliveryTime',
             $typeOrder,
@@ -227,7 +229,6 @@ function saveDataUser($arrData){
         return queryTojson($sql);
     }
 
-
     function getPptoUserSearch($arrData){
         $type = $arrData["type"];
         $user = $arrData["user"];
@@ -253,10 +254,7 @@ function saveDataUser($arrData){
 
     function getGeneralSearch($arrData){
 
-        $order = " ped.id";
-        $fchdesde = "2015-02-07";
-        $fchhasta = "2016-02-07";
-        $init = 1;
+        $init = 0;
         $resultsPage = 10;
 
         foreach( $arrData as $key => $val){
@@ -266,56 +264,90 @@ function saveDataUser($arrData){
             $nameKey = str_replace("]", "", $arrKeys[2]);
             $$nameKey = $val;
         }
+        
+        if ( $orderBy == "") {
+            $orderBy = " ped.id ";
+        }
 
-        if($statusOrder != '*')
-            $estadov="and ped.estado = $statusOrder";
+        if ( $orderAsc == "true") {
+            $asc = " ASC ";
+        }else{
+            $asc = " DESC ";
+        }
 
-        if($budget!='')
-            $pptov="and ped.idppto = '$ppto'";
 
-        if($dependence!='*')
-            $secretariav="and ppto.idsecretaria =$dependence";
+        if($numberOrderFrom != '')
+            $orderId = " and ped.id = $numberOrderFrom ";
+
+        if($numberOrderFrom != '' && $numberOrderTo != '')
+            $orderId = " and ped.id between $numberOrderFrom and $numberOrderTo ";
+
+        if ( $statusOrder != '*' )
+            $estadov =" and ped.estado = $statusOrder ";
+
+        if ( $budget != '*' )
+            $pptov = " and ped.idppto = '$budget' ";
+
+        if ( $dependence != '*' )
+            $secretariav=" and ppto.idsecretaria = $dependence ";
+
+        if ( $creationDateFrom != '' )
+            $creationDate = " and STR_TO_DATE( SUBSTRING( fchreg, 1, 10 ) ,  '%d/%m/%Y' ) = '$creationDateFrom' ";
+
+        if ( $creationDateFrom != '' && $creationDateTo != '' )
+            $creationDate = " and STR_TO_DATE( SUBSTRING( fchreg, 1, 10 ) ,  '%d/%m/%Y' ) Between '$creationDateFrom' and '$creationDateTo' ";
+        
+        if ( $deliveryDateFrom != '' )
+            $deliveryDate = " and  ped.fchentrega = '$deliveryDateFrom' ";
+
+        if ( $deliveryDateFrom != '' && $deliveryDateTo != '' )
+            $deliveryDate = " and  ped.fchentrega Between '$deliveryDateFrom' and '$deliveryDateTo' ";
 
         $sql = "
             SELECT  
-                    ped.idppto,
-                    ped.idalimento,
-                    ped.estado,
-                    est.estado as nomestado,
-                    sec.secretaria,
-                    ped.id,
-                    ped.idusuario,
-                    us.nombre as usnam,
-                    ppto.idsecretaria,
-                    tali.talimento,
-                    ped.fchentrega,
-                    ped.hora,
-                    ali.nombre as alimento,
-                    ped.cantidad,
-                    ped.valorpedido,
-                    ped.direccion,
-                    ped.comentario,
-                    ped.fchreg,
-                    ppto.nombre
+                ped.idppto,
+                ped.idalimento,
+                ped.estado,
+                est.estado as nomestado,
+                sec.secretaria,
+                ped.id,
+                ped.idusuario,
+                us.nombre as usnam,
+                ppto.idsecretaria,
+                tali.talimento,
+                ped.fchentrega,
+                ped.hora,
+                ali.nombre as alimento,
+                ped.cantidad,
+                ped.valorpedido,
+                ped.direccion,
+                ped.comentario,
+                ped.fchreg,
+                ppto.nombre
 
-            FROM secretaria as sec,
-                 estados as est,
-                 pedido as ped,
-                 usuario as us,
-                 tipoalimento as tali,
-                 alimento as ali,
-                 presupuesto as ppto
+            FROM
+                secretaria as sec,
+                estados as est,
+                pedido as ped,
+                usuario as us,
+                tipoalimento as tali,
+                alimento as ali,
+                presupuesto as ppto
 
             WHERE  
-                ped.fchentrega Between '$deliveryDateFrom' and '$deliveryDateTo' and
-                STR_TO_DATE( SUBSTRING( fchreg, 1, 10 ) ,  '%d/%m/%Y' ) 
-                    Between '$creationDateFrom' and '$creationDateTo' and
+
                 ped.idtalimento = tali.id and
                 ped.idalimento = ali.id and
                 ped.idppto = ppto.id and
                 ped.idusuario = us.id and
                 ped.estado = est.id and
-                ppto.idsecretaria = sec.id    
+                ppto.idsecretaria = sec.id 
+
+                $orderId
+
+                $deliveryDate
+
+                $creationDate
 
                 $estadov
 
@@ -323,7 +355,7 @@ function saveDataUser($arrData){
 
                 $pptov
 
-                ORDER BY $order
+                ORDER BY $orderBy $asc
 
                 limit $init, $resultsPage
                 ";
