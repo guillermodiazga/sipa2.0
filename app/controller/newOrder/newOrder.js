@@ -33,7 +33,7 @@ controller.newOrder.loadOrderTypes = function (){
 controller.newOrder.loadPptoUserToNewOrder = function (){
 	var typeOrder = $("#typeOrder").val();
 	if(typeOrder){
-		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), sessionStorage.id)
+		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), localStorage.id)
 			.done(function (data) {
 			    $("#ppto").html("");
 			    if( data.length > 0){
@@ -199,7 +199,7 @@ controller.newOrder.getFormData = function(form){
 	data.aditionalValue= $form.find("#items").find(".item").find(".aditionalValue").val() || 0;
 	data.ppto= $form.find("#ppto").val();
 
-	data.idUser = sessionStorage.id;
+	data.idUser = localStorage.id;
 
 	jsonData.push(data);
 

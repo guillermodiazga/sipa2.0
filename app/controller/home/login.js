@@ -14,7 +14,7 @@ controller.login.loginEvent = function() {
 		    .then(function (data) {
 		        if( data.length > 0 && data[0].bitactivo == 1){
 		        	//save data in memory
-		        	controller.login.setDataUser(data, sessionStorage);
+		        	controller.login.setDataUser(data, localStorage);
 		        	//Load dashboard
 		        	controller.navigation.loadView('main');
 		        	controller.navigation.showMainMenu();
@@ -47,15 +47,15 @@ controller.login.setDataUser = function(data, storage) {
 
 controller.login.initEvents = function (){
 	
-	if(localStorage.remenberMe == "true" && sessionStorage.id){
-		//load session from localStorage to sessionStorage
-		sessionStorage.id = localStorage.id;
-		sessionStorage.idsecretaria = localStorage.idsecretaria;
-		sessionStorage.mail = localStorage.mail;
-		sessionStorage.name = localStorage.name;
-		sessionStorage.office = localStorage.office;
-		sessionStorage.phone = localStorage.phone;
-		sessionStorage.celphone = localStorage.celphone;
+	if(localStorage.remenberMe == "true" && localStorage.id){
+		//load session from localStorage to localStorage
+		localStorage.id = localStorage.id;
+		localStorage.idsecretaria = localStorage.idsecretaria;
+		localStorage.mail = localStorage.mail;
+		localStorage.name = localStorage.name;
+		localStorage.office = localStorage.office;
+		localStorage.phone = localStorage.phone;
+		localStorage.celphone = localStorage.celphone;
 
 		controller.navigation.loadView('main');
 		controller.navigation.showMainMenu();

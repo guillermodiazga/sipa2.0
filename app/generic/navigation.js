@@ -47,7 +47,7 @@ controller.navigation.loadView = function (view, idElementToShow) {
     var idElementToShow = idElementToShow || "container";
     $("#stopUser").show();
     $("#container-xl").html("").hide();
-    if(sessionStorage.id){
+    if(localStorage.id){
         controller.navigation.showMainMenu();
     }else{
         view = 'login';
@@ -65,24 +65,28 @@ controller.navigation.loadView = function (view, idElementToShow) {
 }
 
 controller.navigation.closeSession = function () {
-    sessionStorage.clear();
-    controller.navigation.loadView('login');
-    controller.navigation.hideMainMenu();
+    var _this = this;
+
+    localStorage.clear();
+    _this.loadView('login');
+    _this.hideMainMenu();
     localStorage.remenberMe = "false";
 };
 
 controller.navigation.exit = function () {
+    var _this = this;
     $("#textConfirm").text("¿Seguro de cerrar sesion?")
     $("#okConfirm").off().click(function(){
-        controller.navigation.closeSession();
+        _this.closeSession();
     });
     $('#modalConfirm').modal('show');
 }
 
-$(document).ready(function(){
-    
-    //on reload page with sesion active
-    if(!sessionStorage.id){
+controller.navigation.init = function (){
+    var _this = this;
+
+     //on reload page with sesion active
+    if(!localStorage.id){
         controller.navigation.loadView('login');
     }else{
        controller.navigation.loadViewOnReload();
@@ -98,7 +102,7 @@ $(document).ready(function(){
         if(view != 'exit'){
             $("li[class=active]").removeClass("active");
             $(this).parent().addClass("active");
-            controller.navigation.loadView(view);
+            _this.loadView(view);
 
             //close menu desplegable on mobile
             if($(window).width()<768){
@@ -106,7 +110,11 @@ $(document).ready(function(){
             }
             
         }else{
-            controller.navigation.exit();
+            _this.exit();
         }
     });
+};
+
+$(document).ready(function(){
+    controller.navigation.init();
 });

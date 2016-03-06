@@ -18,13 +18,13 @@ controller.session.checkSession = function(){
 
     setInterval(function(){
         controller.session.timeout -= controller.session.timeCheck;
-        if (controller.session.timeout < 1 && sessionStorage.id) {
+        if (controller.session.timeout < 1 && localStorage.id) {
             controller.navigation.closeSession();
             createNewWebNotification("SIPA, Session expirada", "Su session ha expirado.", "icon.ico", "session", 10000);
             alert("Su session ha expirado");
         };
 
-        if (controller.session.timeout < 60000 && sessionStorage.id && controller.session.warningShowed == false) {
+        if (controller.session.timeout < 60000 && localStorage.id && controller.session.warningShowed == false) {
             controller.session.warningShowed = true;
             if(getWebNotificationPermissionStatus() != 2){
                 alert("Su session esta  a punto de expirar.");

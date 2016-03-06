@@ -33,7 +33,7 @@ controller.search.getQuery = function(jsonData) {
 		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		       $("#container-xl").html("").show();
+		       $("#results").html("").show();
 		       var result = "";
 		       $.each(data, function(i, resp){
 		       		result += '<tr>'+
@@ -61,38 +61,19 @@ controller.search.getQuery = function(jsonData) {
 			       .clone()
 			       .attr("id", "resultsTable")
 			       .show()
-			       .appendTo("#container-xl")
+			       .appendTo("#results")
 			       .find("tbody")
 			       .append(result).end()
 			       .DataTable(
 					    {
-							"sProcessing":     "Procesando...",
-							"sLengthMenu":     "Mostrar _MENU_ registros",
-							"sZeroRecords":    "No se encontraron resultados",
-							"sEmptyTable":     "NingÃºn dato disponible en esta tabla",
-							"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-							"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-							"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-							"sInfoPostFix":    "",
-							"sSearch":         "Buscar:",
-							"sUrl":            "",
-							"sInfoThousands":  ",",
-							"sLoadingRecords": "Cargando...",
-							"oPaginate": {
-								"sFirst":    "Primero",
-								"sLast":     "Ãšltimo",
-								"sNext":     "Siguiente",
-								"sPrevious": "Anterior"
-							},
-							"oAria": {
-								"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-								"sSortDescending": ": Activar para ordenar la columna de manera descendente"
-							}
+							"initComplete": function( settings ) {
+							   //add events to zoom images
+							   alert("df");
+						       zoomImg();
+						    }
 						}
 			       	);
 
-			   //add events to zoom images
-		       zoomImg();
 		      
 		    }else{
 	        	alert("No hay resultados para esta busqueda");
@@ -186,7 +167,7 @@ controller.search.loadOrderTypes = function (){
 controller.search.loadPptoUserToSearch = function (){
 	var typeOrder = ( $("#typeOrder").val() == "null") ? "": $("#typeOrder").val(),
 		items = "";
-	model.search.getPptoUser( typeOrder, sessionStorage.id)
+	model.search.getPptoUser( typeOrder, localStorage.id)
 		.done(function (data) {
 		    $("#budget").html("");
 		    if( data.length > 0){

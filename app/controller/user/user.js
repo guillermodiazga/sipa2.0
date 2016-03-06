@@ -25,7 +25,7 @@ controller.user.loadDataUser = function() {
 };
 
 controller.user.getDataUser = function() {
-	model.user.getDataUser(sessionStorage.id)
+	model.user.getDataUser(localStorage.id)
 		.then(function (data) {
 		    if( data.length > 0){
 		        //load data in view
