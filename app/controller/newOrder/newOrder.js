@@ -32,6 +32,7 @@ controller.newOrder.loadOrderTypes = function (){
 
 controller.newOrder.loadPptoUserToNewOrder = function (){
 	var typeOrder = $("#typeOrder").val();
+	statusBar.show("Cargando presupuesto...");
 	if(typeOrder){
 		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), localStorage.id)
 			.done(function (data) {
@@ -46,13 +47,15 @@ controller.newOrder.loadPptoUserToNewOrder = function (){
 			       controller.newOrder.loadItemsToNewOrder();
 
 			     }else{
-			        	alert("No hay presupuesto para este tipo de pedido");
-			        	$("#addItems").attr("disabled","disabled");
-			        }
+		        	alert("No hay presupuesto para este tipo de pedido");
+		        	$("#addItems").attr("disabled","disabled");
+		        }
+		        statusBar.hide();
 			 }).fail(function(e){
 			 	$("#ppto").append(items);
 			 	alert("Error: " + e.responseText);
 			 	$("#addItems").attr("disabled","disabled");
+			 	statusBar.hide();
 			});
 	}
 };
@@ -65,7 +68,7 @@ controller.newOrder.showCurrentDate = function (){
 
 controller.newOrder.loadItemsToNewOrder = function (){
 	var typeOrder = $("#typeOrder").val();
-
+	statusBar.show("Cargando Productos...");
 	if(typeOrder){
 		model.newOrder.getItemsToNewOrder(typeOrder)
 			.done(function (data) {
@@ -98,10 +101,12 @@ controller.newOrder.loadItemsToNewOrder = function (){
 					});
 
 			     }else{
-			        	alert("No se pudieron cargar los items")
-			        }
+		        	alert("No se pudieron cargar los items")
+		        }
+		        statusBar.hide();
 			 }).fail(function(e){
 			 	alert("Error: " + e.responseText);
+			 	statusBar.hide();
 			});
 	}
 	
@@ -210,7 +215,7 @@ controller.newOrder.getFormData = function(form){
 //add all events
 controller.newOrder.initEvents = function(){
 	$("#typeOrder").change(function(){
-		$("#stopUser").show();
+		statusBar.show("Cargando...");
 		//change items list
 		controller.newOrder.loadItemsToNewOrder();
 		controller.newOrder.loadPptoUserToNewOrder();
@@ -323,4 +328,3 @@ controller.newOrder.validateForm = function(jsonData) {
 
 }
 
-moment.lang("es");

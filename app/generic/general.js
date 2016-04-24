@@ -133,6 +133,21 @@ function mensage (text,swNoCerrar) {
   $("#closeMsg").click(function(){$("#dvMsg").hide(100);})
 }
 
+statusBar = {
+    $div : $("#statusBar"),
+    show: function(text){
+        this.$div.show().text(text);
+    },
+    hide: function(delay){
+        if(!isNaN(delay)){
+            setTimeout(function(){
+                this.$div.hide();
+            },delay);
+        }else{
+            this.$div.hide();
+        }
+    }
+};
 //Desktop notifications
 /*
  function AskForWebNotificationPermissions()
