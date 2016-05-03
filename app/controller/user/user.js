@@ -113,11 +113,7 @@ controller.user.initEvents = function(){
 		.keyup(function(){enableSave()});
 
 	var enableSave = function (){
-		if($("#formUser").is(":valid"))
-			$("#formUser").find("button[type='submit']").removeAttr("disabled");
-		else
-			$("#formUser").find("button[type='submit']").attr("disabled","disabled");
-
+		$("#formUser").find("button[type='submit']").removeAttr("disabled");
 	};
 
 };

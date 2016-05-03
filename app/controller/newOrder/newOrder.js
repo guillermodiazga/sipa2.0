@@ -256,30 +256,29 @@ controller.newOrder.validateForm = function(jsonData) {
 
 
 	if((validateText(telfjorecibe))==false){
-		msg = "Dato invalido";
+		msg = "Telefono invalido";
 		isValid = false;
 	}
 
 	if((validateText(personarecibe))==false){
-		msg = "Dato invalido";
+		msg = "Persona que recibe invalido";
 		isValid = false;
 	}
 
 	if((validateText(movilrecibe))==false){
-		msg = "Dato invalido";
+		msg = "Celular persona que recibe invalido";
 		isValid = false;
 	}
 
 	if((validateText(evento))==false){
-		msg = "Dato invalido";
+		msg = "Nombre evento invalido";
 		isValid = false;
 	}
 
 	if((validateText(cantidad))==false){
-		msg = "Dato invalido";
+		msg = "Cantidad invalido";
 		isValid = false;
 	}
-
 
 	if( comentario.length>250 ) {
 		msg = ('Comentario demasiado extenso');
@@ -295,13 +294,8 @@ controller.newOrder.validateForm = function(jsonData) {
 		msg = ('Direccion Obligatorio');
 		isValid = false;
 	}
-
-	if( validateNum(cantidad) ) {
-		msg = ('Cantidad invalida');
-		isValid = false;
-	}
-
-	if( cantidad<0 ) {
+debugger
+	if( validateNum(cantidad) || cantidad < 1 ) {
 		msg = ('Cantidad invalida');
 		isValid = false;
 	}
