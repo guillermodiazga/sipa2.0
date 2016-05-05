@@ -165,10 +165,10 @@ controller.newOrder.save = function(jsonData, swSaveDirect){
 
 	if(!swSaveDirect){
 
-		var msg = "El pedido se entragara el día: " +
-				  formatDate(jsonData[0]["deliveryDate"]) +" a las "+jsonData[0]["deliveryTime"] +"\n<b> ¿Desea Continuar?</b>";
+		var msg = "El pedido se entragara el día: <b>" +
+				  formatDate(jsonData[0]["deliveryDate"]) +"</b> a las "+jsonData[0]["deliveryTime"] +"\n<b> ¿Desea Continuar?</b>";
 
-		$("#textConfirm").text(msg)
+		$("#textConfirm").html(msg)
 	    $("#okConfirm").off().click(function(){
 	        _this.save(jsonData, true);
 	    });
@@ -271,7 +271,6 @@ controller.newOrder.validateForm = function(jsonData) {
 		msg = "",
 		isValid = true;
 
-debugger
 	if((validateText(telfjorecibe))==false){
 		msg = "Telefono invalido";
 		isValid = false;
