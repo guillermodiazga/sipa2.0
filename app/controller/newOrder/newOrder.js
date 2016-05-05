@@ -135,7 +135,6 @@ controller.newOrder.selectedItem = function(element){
 		
 	//add events
 	$(".quantity").off().change(function(e){
-		//debugger
 		var element = e.target;
 		var quantity = parseInt(element.value) || 0;
 		var aditionalValue  = parseInt($(element).parent().parent().find(".aditionalValue").val()) || 0;
@@ -162,11 +161,14 @@ controller.newOrder.selectedItem = function(element){
 controller.newOrder.save = function(jsonData, swSaveDirect){
 	
 	var _this = this;
-
+console.log(jsonData[0]["deliveryTime"])
 	if(!swSaveDirect){
-
-		var msg = "El pedido se entragara el día: <b>" +
-				  formatDate(jsonData[0]["deliveryDate"]) +"</b> a las "+jsonData[0]["deliveryTime"] +"\n<b> ¿Desea Continuar?</b>";
+		var deliveryDate = moment(jsonData[0]["deliveryDate"], "YYYY-MM-DD"),
+		    deliveryTime = moment(jsonData[0]["deliveryTime"], "hh:mm"),
+		    msg = "El pedido se entregara el día: <b>" +
+				   deliveryDate.format("LL") +
+				   "</b> a las <b>"+ deliveryTime.format("hh:mm A") +
+				   ".<br><br> ¿Desea Continuar?</b>";
 
 		$("#textConfirm").html(msg)
 	    $("#okConfirm").off().click(function(){
@@ -259,11 +261,11 @@ controller.newOrder.initEvents();
 //validar envio
 controller.newOrder.validateForm = function(jsonData) {
 	var fecha = jsonData[0]["deliveryDate"],
+		hora = jsonData[0]["deliveryTime"],
 		cantidad = jsonData[0]["quantity"],
 		idItem = jsonData[0]["idItem"],
 		direccion = jsonData[0]["address"],
 		comentario = jsonData[0]["comment"],
-		hora = jsonData[0]["deliveryTime"],
 		telfjorecibe = jsonData[0]["telephone"],
 		evento = jsonData[0]["nameEvent"],
 		movilrecibe = jsonData[0]["celphone"],
@@ -333,11 +335,11 @@ controller.newOrder.validateForm = function(jsonData) {
 		isValid = false;
 	}
 
-
 	/*Validar Fecha de Entrega*/
-	var deliveryDate = moment(fecha);
-	var diference = moment().format("Y-MM-D");
-	deliveryDate.from(diference);	
+	if( !controller.newOrder.validateDeliveryDate(fecha, hora) ) {
+		msg = ('El pedido debe hacer con mínimo 24 horas de anticipación');
+		isValid = false;
+	}
 
 	if(msg != "")
 		alert(msg);
@@ -346,3 +348,18 @@ controller.newOrder.validateForm = function(jsonData) {
 
 }
 
+controller.newOrder.validateDeliveryDate = function (date, hour){
+debugger
+
+	var deliveryDate = moment(date+" "+hour, "YYYY-MM-DD H:m");
+
+	var hoy = moment();
+ 
+	var diferencia = deliveryDate.diff(hoy,"hours");	
+
+	if(diferencia < 24)
+		return false;
+	else
+		return true;
+	
+};
