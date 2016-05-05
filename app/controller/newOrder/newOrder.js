@@ -159,23 +159,39 @@ controller.newOrder.selectedItem = function(element){
 	});
 };
 
-controller.newOrder.save = function(jsonData){
+controller.newOrder.save = function(jsonData, swSaveDirect){
+	
+	var _this = this;
+
+	if(!swSaveDirect){
+
+		var msg = "El pedido se entragara el día: " +
+				  formatDate(jsonData[0]["deliveryDate"]) +" a las "+jsonData[0]["deliveryTime"] +"\n<b> ¿Desea Continuar?</b>";
+
+		$("#textConfirm").text(msg)
+	    $("#okConfirm").off().click(function(){
+	        _this.save(jsonData, true);
+	    });
+	    $('#modalConfirm').modal('show');
+	    return;
+	}
+
 	$("#stopUser").show();
 	model.newOrder.saveNewOrder(jsonData)
-	.done(function (data, textStatus, jqXHR) {
-		$("#stopUser").hide();
-	    if( data.success ){
-	        //load data in view
-	       alert(data.message);
-	       controller.newOrder.resetForm();
-	    }else{
-        	alert("No se pudo guardar " + textStatus + " " + data.message)
-        }
-	 })
-	.fail(function(jqXHR, textStatus){
-		$("#stopUser").hide();
-	 	alert("Error: " + jqXHR.responseText + ", " + textStatus);
-	});
+		.done(function (data, textStatus, jqXHR) {
+			$("#stopUser").hide();
+		    if( data.success ){
+		        //load data in view
+		       alert(data.message);
+		       controller.newOrder.resetForm();
+		    }else{
+	        	alert("No se pudo guardar " + textStatus + " " + data.message)
+	        }
+		 })
+		.fail(function(jqXHR, textStatus){
+			$("#stopUser").hide();
+		 	alert("Error: " + jqXHR.responseText + ", " + textStatus);
+		});
 };
 
 controller.newOrder.resetForm = function(){
@@ -244,6 +260,7 @@ controller.newOrder.initEvents();
 controller.newOrder.validateForm = function(jsonData) {
 	var fecha = jsonData[0]["deliveryDate"],
 		cantidad = jsonData[0]["quantity"],
+		idItem = jsonData[0]["idItem"],
 		direccion = jsonData[0]["address"],
 		comentario = jsonData[0]["comment"],
 		hora = jsonData[0]["deliveryTime"],
@@ -254,7 +271,7 @@ controller.newOrder.validateForm = function(jsonData) {
 		msg = "",
 		isValid = true;
 
-
+debugger
 	if((validateText(telfjorecibe))==false){
 		msg = "Telefono invalido";
 		isValid = false;
@@ -294,21 +311,29 @@ controller.newOrder.validateForm = function(jsonData) {
 		msg = ('Direccion Obligatorio');
 		isValid = false;
 	}
-debugger
-	if( validateNum(cantidad) || cantidad < 1 ) {
-		msg = ('Cantidad invalida');
-		isValid = false;
-	}
 
-	if( cantidad.length > 4 ) {
-		msg = ('Cantidad no disponible');
-		isValid = false;
-	}
 
 	if(hora=='00') {
 		msg = ('Hora No valida');
 		isValid = false;
 	}
+
+	/*Validate if exist products added*/
+
+	if( !validateNum(cantidad) || cantidad < 1 ) {
+		msg = ('Cantidad invalida');
+		isValid = false;
+	}
+
+	if( cantidad && cantidad.length > 4 ) {
+		msg = ('Cantidad no disponible');
+		isValid = false;
+	}
+	if( !idItem ) {
+		msg = ('Debe seleccionar el producto');
+		isValid = false;
+	}
+
 
 	/*Validar Fecha de Entrega*/
 	var deliveryDate = moment(fecha);

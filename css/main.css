@@ -13,10 +13,11 @@ nav .icon-bar {
 }
 
 .item:hover{
-	background-color: rgba(51,122,183,0.5)!important;
+	background-color: rgba(51,122,183,0.3)!important;
 }
 
 .item{
+  background-color: rgba(51,122,183,0.2)!important;
   padding: 1rem;
 }
 
