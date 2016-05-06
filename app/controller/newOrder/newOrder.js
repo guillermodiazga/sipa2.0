@@ -74,8 +74,8 @@ controller.newOrder.loadItemsToNewOrder = function (){
 			.done(function (data) {
 			    if( data.length > 0){
 			        //load data in view
-			       $("#itemList").html("")
-
+			       $("#itemList").html("");
+			       $("#txtToSearch").keydown(function(){controller.newOrder.searchItem()}).focusin();
 			       $.each(data, function(i, item){
 			       	$("#itemListTemplate")
 						.clone().show()
@@ -88,7 +88,7 @@ controller.newOrder.loadItemsToNewOrder = function (){
 						.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
 						.find(".valor").text("$"+formatMoney(Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1)))).end()
 						.find(".selectItem").attr("id", item.id).end()
-						.find(".collapse").attr("id", "dtlle"+i).end()
+						.find(".collapse").attr("id", "dtlle"+i).end()	
 						.find(".dtlle").attr("data-target", "#dtlle"+i).end()
 						.appendTo("#itemList");
 				    });
@@ -115,23 +115,22 @@ controller.newOrder.loadItemsToNewOrder = function (){
 controller.newOrder.selectedItem = function(element){
 
 	var $parent = $(element).parent().parent().parent();
-
-	//close modal
-	$('#products').modal('hide');
-
+debugger
 	//clone template
 	$("#templateItemAdded")
 		.clone().show()
-		.find(".nameItem").text($parent.find(".nameItem").text()).end()
-		.find(".description").text($parent.find(".description").text()).end()
+		.find(".nameItem").text($parent.parent().find(".nameItem").text()).end()
+		.find(".description").text($parent.parent().find(".description").text()).end()
 		.find("img").attr("src",$parent.parent().find("img").attr("src")).end()
 		.find(".individualValue").attr("data-value",$parent.parent().attr("data-value"))
 		.text("$"+formatMoney($parent.parent().attr("data-value"))).end()
 		.attr("id",$parent.parent().attr("data-id"))
-		.appendTo("#items");
+		.appendTo("#items").show();
 
-		$(".quantity:visible").focus();
+	$(".quantity:visible").focus();
 
+	//close modal
+	$('#products').modal('hide');
 		
 	//add events
 	$(".quantity").off().change(function(e){
@@ -245,9 +244,13 @@ controller.newOrder.initEvents = function(){
 	$("#formNewOrder").submit(function(e){
 		e.preventDefault();
 		
-		var jsonData = controller.newOrder.getFormData(this);
-		if( controller.newOrder.validateForm(jsonData))
+		var jsonData = controller.newOrder.getFormData(this),
+			isDataValid = controller.newOrder.validateForm(jsonData);
+		if( isDataValid === true) {
 			controller.newOrder.save(jsonData);
+		}else{
+			alert(isDataValid);
+		}
 	});
 
 };
@@ -270,96 +273,82 @@ controller.newOrder.validateForm = function(jsonData) {
 		evento = jsonData[0]["nameEvent"],
 		movilrecibe = jsonData[0]["celphone"],
 		personarecibe = jsonData[0]["nameReceive"],
-		msg = "",
-		isValid = true;
-
-	if((validateText(telfjorecibe))==false){
-		msg = "Telefono invalido";
-		isValid = false;
-	}
+		msg = true;
 
 	if((validateText(personarecibe))==false){
-		msg = "Persona que recibe invalido";
-		isValid = false;
+		return msg = "Persona que recibe invalido";
 	}
 
 	if((validateText(movilrecibe))==false){
-		msg = "Celular persona que recibe invalido";
-		isValid = false;
+		return msg = "Celular persona que recibe invalido";
 	}
 
 	if((validateText(evento))==false){
-		msg = "Nombre evento invalido";
-		isValid = false;
+		return msg = "Nombre evento invalido";
 	}
 
 	if((validateText(cantidad))==false){
-		msg = "Cantidad invalido";
-		isValid = false;
+		return msg = "Cantidad invalido";
 	}
 
 	if( comentario.length>250 ) {
-		msg = ('Comentario demasiado extenso');
-		isValid = false;
+		return msg = ('Comentario demasiado extenso');
 	}
 
 	if( direccion.length>150 ) {
-		msg = ('Direccion muy larga');
-		isValid = false;
+		return msg = ('Direccion muy larga');
 	}
 
 	if( direccion == null || direccion.length < 5 || /^\s+$/.test(direccion ) ) {
-		msg = ('Direccion Obligatorio');
-		isValid = false;
+		return msg = ('Direccion Obligatorio');
 	}
 
 
 	if(hora=='00') {
-		msg = ('Hora No valida');
-		isValid = false;
+		return msg = ('Hora No valida');
 	}
 
 	/*Validate if exist products added*/
 
-	if( !validateNum(cantidad) || cantidad < 1 ) {
-		msg = ('Cantidad invalida');
-		isValid = false;
+	if( !idItem ) {
+		return msg = ('Debe seleccionar el producto');
 	}
 
-	if( cantidad && cantidad.length > 4 ) {
-		msg = ('Cantidad no disponible');
-		isValid = false;
-	}
-	if( !idItem ) {
-		msg = ('Debe seleccionar el producto');
-		isValid = false;
+	if( !validateNum(cantidad) || cantidad < 1 ) {
+		return msg = ('Ingresa la cantidad');
 	}
 
 	/*Validar Fecha de Entrega*/
 	if( !controller.newOrder.validateDeliveryDate(fecha, hora) ) {
-		msg = ('El pedido debe hacer con mínimo 24 horas de anticipación');
-		isValid = false;
+		return msg = ('El pedido se debe hacer con mínimo 24 horas de anticipación');
 	}
-
-	if(msg != "")
-		alert(msg);
-
-	return isValid;
 
 }
 
 controller.newOrder.validateDeliveryDate = function (date, hour){
-debugger
-
-	var deliveryDate = moment(date+" "+hour, "YYYY-MM-DD H:m");
-
-	var hoy = moment();
- 
-	var diferencia = deliveryDate.diff(hoy,"hours");	
-
-	if(diferencia < 24)
+	var deliveryDate = moment(date+" "+hour, "YYYY-MM-DD H:m"),
+	    today = moment(),
+	    diferencia = deliveryDate.diff(today,"hours"),
+	    dayNumber = deliveryDate.format("d"),
+	    minHoursToRelease = (dayNumber == 6 || dayNumber ==7) ? 48 : 24;
+	if(diferencia < minHoursToRelease)
 		return false;
 	else
 		return true;
 	
 };
+
+controller.newOrder.searchItem = function(){
+	var items = $(".nameItem"),
+	    texto = $("#txtToSearch").val().toLowerCase();
+
+	items.parent().parent().parent().parent().show();
+	for(var i=0; i< items.size(); i++){
+		var contenido = items.eq(i).text();
+		contenido     = contenido.toLowerCase();
+		var index     = contenido.indexOf(texto);
+		if(index == -1){
+			items.eq(i).parent().parent().parent().parent().hide();
+		}		
+	}
+}
