@@ -115,17 +115,20 @@ controller.newOrder.loadItemsToNewOrder = function (){
 controller.newOrder.selectedItem = function(element){
 
 	var $parent = $(element).parent().parent().parent();
-debugger
-	//clone template
+	$("#items").html("");
+    
+    //clone and fill template 
 	$("#templateItemAdded")
-		.clone().show()
+		.clone()
 		.find(".nameItem").text($parent.parent().find(".nameItem").text()).end()
 		.find(".description").text($parent.parent().find(".description").text()).end()
 		.find("img").attr("src",$parent.parent().find("img").attr("src")).end()
 		.find(".individualValue").attr("data-value",$parent.parent().attr("data-value"))
 		.text("$"+formatMoney($parent.parent().attr("data-value"))).end()
 		.attr("id",$parent.parent().attr("data-id"))
-		.appendTo("#items").show();
+		.appendTo("#items");
+	
+	$("#items .row").show()
 
 	$(".quantity:visible").focus();
 
