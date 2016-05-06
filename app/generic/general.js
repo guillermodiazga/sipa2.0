@@ -65,7 +65,7 @@ function zoomImg(){
                 .removeClass("zoomImg")
                 .addClass("imgZoomInContainer")
                 .addClass("img-responsive")
-                .attr("width", "")
+                .attr("width", "60%")
                 .fadeIn()
                 .appendTo("body");
 

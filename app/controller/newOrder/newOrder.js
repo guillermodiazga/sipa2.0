@@ -75,7 +75,7 @@ controller.newOrder.loadItemsToNewOrder = function (){
 			    if( data.length > 0){
 			        //load data in view
 			       $("#itemList").html("");
-			       $("#txtToSearch").keydown(function(){controller.newOrder.searchItem()}).focusin();
+			       $("#txtToSearch").keyup(function(){controller.newOrder.searchItem()}).focusin();
 			       $.each(data, function(i, item){
 			       	$("#itemListTemplate")
 						.clone().show()
@@ -128,6 +128,7 @@ controller.newOrder.selectedItem = function(element){
 		.attr("id",$parent.parent().attr("data-id"))
 		.appendTo("#items");
 	
+	$("#items").find(".itemTemplate").addClass("item").removeClass("itemTemplate").end()
 	$("#items .row").show()
 
 	$(".quantity:visible").focus();
@@ -136,7 +137,7 @@ controller.newOrder.selectedItem = function(element){
 	$('#products').modal('hide');
 		
 	//add events
-	$(".quantity").off().change(function(e){
+	$(".quantity").off().keyup(function(e){
 		var element = e.target;
 		var quantity = parseInt(element.value) || 0;
 		var aditionalValue  = parseInt($(element).parent().parent().find(".aditionalValue").val()) || 0;
@@ -145,7 +146,7 @@ controller.newOrder.selectedItem = function(element){
 
 	});
 
-	$(".aditionalValue").off().change(function(e){
+	$(".aditionalValue").off().keyup(function(e){
 		var element = e.target;
 		var aditionalValue = parseInt(element.value) || 0;
 		var quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0;
@@ -158,6 +159,8 @@ controller.newOrder.selectedItem = function(element){
 		var $element = $(e.target);
 		$element.parent().parent().parent().remove();
 	});
+
+	zoomImg();
 };
 
 controller.newOrder.save = function(jsonData, swSaveDirect){
@@ -209,7 +212,7 @@ controller.newOrder.getFormData = function(form){
 	var $form = $( form ),
 		jsonData = [],
 		data = {};
-		
+
 	data.typeOrder= $form.find("#typeOrder").val();
 	data.deliveryDate= $form.find("#deliveryDate").val();
 	data.deliveryTime= $form.find("#deliveryTime").val();
@@ -256,6 +259,10 @@ controller.newOrder.initEvents = function(){
 		}
 	});
 
+	$("#addItems").click(function(){
+
+	});
+
 };
 
 //---------------------------------------Constructor
@@ -290,8 +297,8 @@ controller.newOrder.validateForm = function(jsonData) {
 		return msg = "Nombre evento invalido";
 	}
 
-	if((validateText(cantidad))==false){
-		return msg = "Cantidad invalido";
+	if( (validateNum(cantidad)) == false ){
+		return msg = "Cantidad invalida";
 	}
 
 	if( comentario.length>250 ) {
@@ -332,12 +339,27 @@ controller.newOrder.validateDeliveryDate = function (date, hour){
 	var deliveryDate = moment(date+" "+hour, "YYYY-MM-DD H:m"),
 	    today = moment(),
 	    diferencia = deliveryDate.diff(today,"hours"),
-	    dayNumber = deliveryDate.format("d"),
-	    minHoursToRelease = (dayNumber == 6 || dayNumber ==7) ? 48 : 24;
+	    numberDayDelivery = deliveryDate.format("d"),
+	    numberDayToday = today.format("d"),
+	    minHoursToRelease = 24;
+
+	//pedido el sabdo para dia lunes
+	if(numberDayToday == 6 && numberDayDelivery == 1)
+		minHoursToRelease = 48+8;
+
+	//pedido el sabdo para dia lunes
+	if(numberDayToday == 7 && numberDayDelivery == 1)
+		minHoursToRelease = 24+8;
+
+	//Si es hecho el viernes paar entregar el lunes
+	if(numberDayToday == 5 && numberDayDelivery == 1)
+		minHoursToRelease = 72+8;
+
+	//Pedido con menos de 24 horas de anticipacion
 	if(diferencia < minHoursToRelease)
 		return false;
-	else
-		return true;
+
+	return true;
 	
 };
 
@@ -347,8 +369,7 @@ controller.newOrder.searchItem = function(){
 
 	items.parent().parent().parent().parent().show();
 	for(var i=0; i< items.size(); i++){
-		var contenido = items.eq(i).text();
-		contenido     = contenido.toLowerCase();
+		var contenido = items.eq(i).text().toLowerCase();
 		var index     = contenido.indexOf(texto);
 		if(index == -1){
 			items.eq(i).parent().parent().parent().parent().hide();
