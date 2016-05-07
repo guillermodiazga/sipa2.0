@@ -148,10 +148,15 @@
             2
         );";
 
+    $sql2 = "
+            UPDATE  `presupuesto` 
+            SET  `valorpedido` =  valorpedido + (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue 
+            WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
 
     $conexion = new Conexion();
     $conexion->open();
     $result = mysql_query($sql) or die("Query Error");
+    $result = mysql_query($sql2) or die("Query Error");
 
     response(true, "Pedido Guardado");
 

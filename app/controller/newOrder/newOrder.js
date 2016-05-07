@@ -49,6 +49,9 @@ controller.newOrder.loadPptoUserToNewOrder = function (){
 			     }else{
 		        	alert("No hay presupuesto para este tipo de pedido");
 		        	$("#addItems").attr("disabled","disabled");
+		        	$(".deletedItem:visible").click();
+					$("#ppto").html("").val("");
+					controller.newOrder.showCurrentDate();
 		        }
 		        statusBar.hide();
 			 }).fail(function(e){
@@ -75,23 +78,25 @@ controller.newOrder.loadItemsToNewOrder = function (){
 			    if( data.length > 0){
 			        //load data in view
 			       $("#itemList").html("");
-			       $("#txtToSearch").keyup(function(){controller.newOrder.searchItem()}).focusin();
+			       $("#txtToSearch").on("keyup change", function(){controller.newOrder.searchItem()}).focusin();
 			       $.each(data, function(i, item){
+			       	var vlrConIva = Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1));
 			       	$("#itemListTemplate")
 						.clone().show()
 						.attr("data-id", item.id)
-						.attr("data-value", item.valor)
+						.attr("data-value", vlrConIva)
 						.removeAttr("id")
 						.find(".img").attr("src", "img/items/" + item.id).end()
 						.find(".nameItem").text(item.id + "-" + item.nombre).end()
 						.find(".description").text(item.descripcion).end()
 						.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
-						.find(".valor").text("$"+formatMoney(Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1)))).end()
+						.find(".valor").text("$"+formatMoney(vlrConIva)).end()
 						.find(".selectItem").attr("id", item.id).end()
 						.find(".collapse").attr("id", "dtlle"+i).end()	
 						.find(".dtlle").attr("data-target", "#dtlle"+i).end()
 						.appendTo("#itemList");
 				    });
+			       
 			       zoomImg();
 			       
 			       $(".selectItem").click(function(){
@@ -137,7 +142,7 @@ controller.newOrder.selectedItem = function(element){
 	$('#products').modal('hide');
 		
 	//add events
-	$(".quantity").off().keyup(function(e){
+	$(".quantity").off().on("keyup change", function(e){
 		var element = e.target;
 		var quantity = parseInt(element.value) || 0;
 		var aditionalValue  = parseInt($(element).parent().parent().find(".aditionalValue").val()) || 0;
@@ -146,7 +151,7 @@ controller.newOrder.selectedItem = function(element){
 
 	});
 
-	$(".aditionalValue").off().keyup(function(e){
+	$(".aditionalValue").off().on("keyup change", function(e){
 		var element = e.target;
 		var aditionalValue = parseInt(element.value) || 0;
 		var quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0;
@@ -166,7 +171,6 @@ controller.newOrder.selectedItem = function(element){
 controller.newOrder.save = function(jsonData, swSaveDirect){
 	
 	var _this = this;
-console.log(jsonData[0]["deliveryTime"])
 	if(!swSaveDirect){
 		var deliveryDate = moment(jsonData[0]["deliveryDate"], "YYYY-MM-DD"),
 		    deliveryTime = moment(jsonData[0]["deliveryTime"], "hh:mm"),
@@ -204,6 +208,7 @@ console.log(jsonData[0]["deliveryTime"])
 controller.newOrder.resetForm = function(){
 	$('#formNewOrder')[0].reset();
 	$(".deletedItem:visible").click();
+	$("#ppto").html("").val("");
 	controller.newOrder.showCurrentDate();
 	$("#addItems").attr("disabled","disabled");
 };
@@ -333,6 +338,8 @@ controller.newOrder.validateForm = function(jsonData) {
 		return msg = ('El pedido se debe hacer con mínimo 24 horas de anticipación');
 	}
 
+	return msg;
+
 }
 
 controller.newOrder.validateDeliveryDate = function (date, hour){
@@ -364,7 +371,7 @@ controller.newOrder.validateDeliveryDate = function (date, hour){
 };
 
 controller.newOrder.searchItem = function(){
-	var items = $(".nameItem"),
+	var items = $("#itemList").find(".nameItem"),
 	    texto = $("#txtToSearch").val().toLowerCase();
 
 	items.parent().parent().parent().parent().show();

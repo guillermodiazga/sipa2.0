@@ -1,15 +1,16 @@
-<div class="">
-    <h1>Recibidos</h1>
+<legend><i class="glyphicon glyphicon-inbox"></i> Entrada</legend>
 
-    <div>
-        <span class='btn btn-default'>
-            <i class="fa fa-refresh ">Actualizar</i>
-        </span>
-        <span>
-            <span id="countPend">0</span> Pedidos Pendientes por Aprobar
-        </span>
-    </div>
-    <table align="center" border="0" rules="" class="table table-striped">
+
+
+<div class="container">
+    <h4>
+        Pedidos Pendientes por Aprobar: <span id="countPend">0</span> 
+    </h4>
+    <span class='btn btn-default pull-right' title="Actualizar Resultados" id="updateResults">
+        <i class="fa fa-refresh " ></i>
+    </span>
+</div>
+<table align="center" border="0" rules="" class="table table-striped">
     <thead>
         
         <tr>
@@ -30,8 +31,8 @@
     </thead>
     <tbody>
     </tbody>
-    </table>
-</div>
+</table>
+
 
 <script src="app/model/home/main.js" async='false'></script>
 <script src="app/controller/home/main.js" async='false'></script>

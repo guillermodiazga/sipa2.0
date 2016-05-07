@@ -45,18 +45,18 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav menuPpal" style="display:none">
-            <li class="active"><a href="#main"><span class="glyphicon glyphicon-inbox"></span> Entrada</a></li>
-            <li><a href="#newOrder"><span class="glyphicon glyphicon-shopping-cart"></span> Crear Pedido</a></li>
-            <li><a href="#search"><span class="fa fa-search"></span> Consultar</a></li>
-            <li><a href="#reports"><span class="fa fa-bar-chart"></span> Reportes</a></li>
-            <li><a href="#config"><span class="fa fa-cogs"></span> Configuración</a></li>
+            <li data-container="false" class="active"><a href="#main"><span class="glyphicon glyphicon-inbox"></span> Entrada</a></li>
+            <li data-container="true"><a href="#newOrder"><span class="glyphicon glyphicon-shopping-cart"></span> Crear Pedido</a></li>
+            <li data-container="false"><a href="#search"><span class="fa fa-search"></span> Consultar</a></li>
+            <li data-container="true"><a href="#reports"><span class="fa fa-bar-chart"></span> Reportes</a></li>
+            <li data-container="true"><a href="#config"><span class="fa fa-cogs"></span> Configuración</a></li>
             
-            <li>
+            <li data-container="true">
 
           </ul>
           <ul class=" nav navbar-nav navbar-right menuPpal" style="display:none">
-              <li><a href="#user"><span class="glyphicon glyphicon-user"></span> <span id="userName">Mis Datos</span></a></li>
-              <li><a href="#exit"><span class="glyphicon glyphicon-off"></span> Salir</a></li>
+              <li data-container="true"><a href="#user"><span class="glyphicon glyphicon-user"></span> <span id="userName">Mis Datos</span></a></li>
+              <li data-container="true"><a href="#exit"><span class="glyphicon glyphicon-off"></span> Salir</a></li>
            </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -118,7 +118,6 @@
      <!-- Modal alert -->
      <div id="modalAlert" class="modal fade" role="dialog">
       <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-header">

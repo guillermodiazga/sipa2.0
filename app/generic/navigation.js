@@ -3,8 +3,8 @@ var controller = controller || {};
 controller.navigation = {};
 
 controller.navigation.loadViewOnReload = function () {
- var currentPage=location.href.split( '#' );
-    currentPage=currentPage[1];
+    var currentPage=location.href.split( '#' );
+        currentPage=currentPage[1];
 
     localStorage.page='main';
 
@@ -56,6 +56,14 @@ controller.navigation.loadView = function (view, idElementToShow) {
        .done(function(data){
             $("#"+idElementToShow).html(data);
             $("#stopUser").hide();
+
+            var container = $(".menuPpal .active").attr("data-container");
+            
+            if(container === "true")
+                $("#container").parent().addClass("container");
+            else
+                $("#container").parent().removeClass("container");
+
        })
        .fail(function(e){
             $("#container").html("Error: "+e.status+" "+e.statusText);
