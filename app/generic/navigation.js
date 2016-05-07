@@ -19,6 +19,16 @@ controller.navigation.loadViewOnReload = function () {
 
 controller.navigation.showMainMenu = function () {
     $(".navbar-toggle[aria-expanded='true']").click();
+    
+    //ocultar menu de configuracion
+    if(localStorage.idrol != 1){
+        $(".menuPpal").find("a[href='#config']").parent().remove();
+    }
+
+    if(localStorage.idrol == 3){
+        $(".menuPpal").find("a[href='#newOrder']").parent().remove();
+    }
+
     $(".menuPpal").fadeIn();
 
     //allow desktop notifications

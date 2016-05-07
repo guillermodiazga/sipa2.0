@@ -1,3 +1,27 @@
+var generic = {};
+
+generic.confirm = function(msg, task){
+    $("#textConfirm").html(msg)
+    $("#okConfirm").off().click(function(){
+         task()
+    });
+    $('#modalConfirm').modal('show');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 $.ajaxSetup({
     beforeSend: function() {
@@ -110,7 +134,7 @@ function validateText(texto){
 
   return true;
 }
-
+/*
 function mensage (text,swNoCerrar) {
 
   $("#dvMsg").show();
@@ -132,6 +156,7 @@ function mensage (text,swNoCerrar) {
   
   $("#closeMsg").click(function(){$("#dvMsg").hide(100);})
 }
+*/
 
 statusBar = {
     $div : $("#statusBar"),
@@ -148,6 +173,9 @@ statusBar = {
         }
     }
 };
+
+
+
 //Desktop notifications
 /*
  function AskForWebNotificationPermissions()

@@ -43,6 +43,7 @@ controller.login.setDataUser = function(data, storage) {
 	storage.office = data[0].oficina;
 	storage.phone = data[0].telefono;
 	storage.celphone = data[0].movil;
+	storage.idrol = data[0].idrol;
 };
 
 controller.login.initEvents = function (){
@@ -56,6 +57,7 @@ controller.login.initEvents = function (){
 		localStorage.office = localStorage.office;
 		localStorage.phone = localStorage.phone;
 		localStorage.celphone = localStorage.celphone;
+		localStorage.idrol = localStorage.idrol;
 
 		controller.navigation.loadView('main');
 		controller.navigation.showMainMenu();

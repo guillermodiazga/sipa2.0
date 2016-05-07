@@ -29,6 +29,9 @@ controller.user.getDataUser = function() {
 		.then(function (data) {
 		    if( data.length > 0){
 		        //load data in view
+		        if(localStorage.idrol == 1){
+		        	$("#dependence").removeAttr("disabled")
+		        }
 
 		        var $form = $("#formUser");
 				$.each(data, function(i, resp){

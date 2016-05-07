@@ -270,12 +270,6 @@ controller.newOrder.initEvents = function(){
 
 };
 
-//---------------------------------------Constructor
-controller.newOrder.loadDataToOrder();
-
-//add Events
-controller.newOrder.initEvents();
-
 //validar envio
 controller.newOrder.validateForm = function(jsonData) {
 	var fecha = jsonData[0]["deliveryDate"],
@@ -383,3 +377,9 @@ controller.newOrder.searchItem = function(){
 		}		
 	}
 }
+
+//---------------------------------------Constructor
+controller.newOrder.loadDataToOrder();
+
+//add Events
+controller.newOrder.initEvents();
