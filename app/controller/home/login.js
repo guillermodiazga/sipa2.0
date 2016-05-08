@@ -17,6 +17,9 @@ controller.login.loginEvent = function() {
 		        	controller.login.setDataUser(data, localStorage);
 		        	//Load dashboard
 		        	controller.navigation.loadView('main');
+		        	$("li[class=active]").removeClass("active");
+				    $("a[href='#"+localStorage.page+"'").parent().addClass("active");
+    				localStorage.page='main';
 		        	controller.navigation.showMainMenu();
 		        	$("#userName").text(data[0].nombre);
 

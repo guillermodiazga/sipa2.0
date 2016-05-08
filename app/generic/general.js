@@ -1,17 +1,71 @@
-var generic = {};
+var general = {};
 
-generic.confirm = function(msg, task){
+general.confirm = function(msg, task){
     $("#textConfirm").html(msg)
     $("#okConfirm").off().click(function(){
          task()
     });
     $('#modalConfirm').modal('show');
-}
+};
 
+general.notification = function(number){
+  //show desktop notification
+  if(number > parseInt($("#notification").text()) ) {
+      var execute = function(){
+        controller.navigation.loadView("main");
+        //var b = window.open("http://google.com","_blank");
+        var windowAux = window.open("http://"+window.location.host+window.location.pathname+"app/view/exit.html","_blank");
+        windowAux.close();
+        closeNoti();
+      };
 
+      var notif = createNewWebNotification("SIPA", "Tine pedidos por aprobar", "icon.ico", "session", null, execute);
 
+      function closeNoti(){closeNotification(notif)};
+  }
 
+  if(number)
+    $("#notification").show().text(number);
+  else
+   $("#notification").hide().text("");
 
+};
+
+//refrescar pedidos pendientes
+setInterval(function(){
+  if(!controller.main){
+    $.getScript("app/model/home/main.js",function(){
+        $.getScript("app/controller/home/main.js", function(){
+          controller.main.getOrdersPend();
+        });
+    });
+  }else{
+    controller.main.getOrdersPend();
+  }
+
+}, 30000);
+
+statusBar = {
+    $div : $("#statusBar"),
+    show: function(text){
+        this.$div.slideDown().text(text);
+        return this;
+    },
+    hide: function(delay){
+        var _this = this;
+        if(!isNaN(delay)){
+            setTimeout(function(){
+              _this.$div.slideUp();
+            },delay);
+        }else{
+            this.$div.slideUp();
+        }
+    }
+};
+
+window.alert = function(text){
+  $('#modalAlert').find("#textAlert").html(text).end().modal('show');
+};
 
 
 
@@ -113,9 +167,7 @@ function zoomImg(){
  
 };
 
- window.alert = function(text){
- 	$('#modalAlert').find("#textAlert").text(text).end().modal('show');
- };
+
 
 
 //Funcion para validar numero
@@ -158,21 +210,6 @@ function mensage (text,swNoCerrar) {
 }
 */
 
-statusBar = {
-    $div : $("#statusBar"),
-    show: function(text){
-        this.$div.show().text(text);
-    },
-    hide: function(delay){
-        if(!isNaN(delay)){
-            setTimeout(function(){
-                this.$div.hide();
-            },delay);
-        }else{
-            this.$div.hide();
-        }
-    }
-};
 
 
 

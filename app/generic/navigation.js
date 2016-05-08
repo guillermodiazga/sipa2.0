@@ -5,9 +5,7 @@ controller.navigation = {};
 controller.navigation.loadViewOnReload = function () {
     var currentPage=location.href.split( '#' );
         currentPage=currentPage[1];
-
     localStorage.page='main';
-
     if(currentPage && currentPage != "exit")
         localStorage.page = currentPage;
 
@@ -20,14 +18,8 @@ controller.navigation.loadViewOnReload = function () {
 controller.navigation.showMainMenu = function () {
     $(".navbar-toggle[aria-expanded='true']").click();
     
-    //ocultar menu de configuracion
-    if(localStorage.idrol != 1){
-        $(".menuPpal").find("a[href='#config']").parent().remove();
-    }
-
-    if(localStorage.idrol == 3){
-        $(".menuPpal").find("a[href='#newOrder']").parent().remove();
-    }
+    controller.navigation.hideOptionsMainMenuByRol();
+    
 
     $(".menuPpal").fadeIn();
 
@@ -48,6 +40,17 @@ controller.navigation.showMainMenu = function () {
     
 };
 
+controller.navigation.hideOptionsMainMenuByRol = function () {
+    //ocultar menu de configuracion
+    if(localStorage.idrol != 2){
+        $(".menuPpal").find("a[href='#config']").parent().remove();
+    }
+
+    if(localStorage.idrol != 1){
+        $(".menuPpal").find("a[href='#newOrder']").parent().remove();
+    }
+};
+
 controller.navigation.hideMainMenu = function () {
     $(".menuPpal").hide();
     $("#activNotifications").hide();
@@ -59,21 +62,21 @@ controller.navigation.loadView = function (view, idElementToShow) {
     $("#container-xl").html("").hide();
     if(localStorage.id){
         controller.navigation.showMainMenu();
+        var container = $(".menuPpal .active").attr("data-container");
+        if(container === "true")
+            $("#container").parent().addClass("container");
+        else
+            $("#container").parent().removeClass("container");
     }else{
         view = 'login';
     }
+    localStorage.page = view;
+    $("li[class=active]").removeClass("active");
+    $("a[href='#"+localStorage.page+"'").parent().addClass("active");
     $.get('app/view/'+view+'.html?a='+Math.random())
        .done(function(data){
             $("#"+idElementToShow).html(data);
             $("#stopUser").hide();
-
-            var container = $(".menuPpal .active").attr("data-container");
-            
-            if(container === "true")
-                $("#container").parent().addClass("container");
-            else
-                $("#container").parent().removeClass("container");
-
        })
        .fail(function(e){
             $("#container").html("Error: "+e.status+" "+e.statusText);
@@ -89,6 +92,10 @@ controller.navigation.closeSession = function () {
     _this.loadView('login');
     _this.hideMainMenu();
     localStorage.remenberMe = "false";
+    $("#container").parent().addClass("container");
+    $("li[class=active]").removeClass("active");
+    $("a[href='#"+localStorage.page+"'").parent().addClass("active");
+    localStorage.page='main';
 };
 
 controller.navigation.exit = function () {

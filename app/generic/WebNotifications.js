@@ -53,7 +53,7 @@ function askForWebNotificationPermissions()
 //icon: the icon to show along with the notification
 //tag: an unique tag to prevent showing messages about the sime issue more than once
 //timeout: auto-close the notification
-function createNewWebNotification(title, msg, icon, tag, timeout) {
+function createNewWebNotification(title, msg, icon, tag, timeout, event) {
 	var options = { body: msg };
 	if (icon)
 		options.icon = icon;
@@ -62,7 +62,7 @@ function createNewWebNotification(title, msg, icon, tag, timeout) {
 
 	//Show the notification
 	var notif = new Notification(title, options);
-
+	notif.onclick = event;
 	//Autohide notification if specified
 	if (timeout && typeof (timeout) == "number")
 		setTimeout(closeNotification, timeout, notif);

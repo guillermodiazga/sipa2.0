@@ -41,6 +41,21 @@
         return queryTojson($sql);
     }
 
+    function updateStatusOrder($arrData){
+        $id = $arrData["idOrder"];
+        $newStatus = $arrData["newStatus"];
+
+        $sql = "UPDATE  pedido SET  estado =  $newStatus WHERE  pedido.id = $id";
+
+        $conexion = new Conexion();
+        $conexion->open();
+        $result = mysql_query($sql) or die("Query Error");
+
+        response(true, "Pedido Guardado");
+
+        $conexion->close($result);
+    }
+
 /*----------------------------------------------------------Generic*/       
      function login($arrData){
         $id = $arrData["user"];

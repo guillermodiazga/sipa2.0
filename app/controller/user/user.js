@@ -29,7 +29,7 @@ controller.user.getDataUser = function() {
 		.then(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		        if(localStorage.idrol == 1){
+		        if(localStorage.idrol == 2){
 		        	$("#dependence").removeAttr("disabled")
 		        }
 

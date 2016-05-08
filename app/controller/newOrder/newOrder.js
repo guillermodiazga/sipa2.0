@@ -190,13 +190,14 @@ controller.newOrder.save = function(jsonData, swSaveDirect){
 	$("#stopUser").show();
 	model.newOrder.saveNewOrder(jsonData)
 		.done(function (data, textStatus, jqXHR) {
-			$("#stopUser").hide();
 		    if( data.success ){
-		        //load data in view
-		       alert(data.message);
-		       controller.newOrder.resetForm();
+		    	//load data in view
+		    	alert(data.message);
+		    	controller.newOrder.resetForm();
+				$("#stopUser").hide();
 		    }else{
 	        	alert("No se pudo guardar " + textStatus + " " + data.message)
+				$("#stopUser").hide();
 	        }
 		 })
 		.fail(function(jqXHR, textStatus){

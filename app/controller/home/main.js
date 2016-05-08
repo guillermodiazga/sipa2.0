@@ -5,7 +5,11 @@ controller.main = {};
 
 controller.main.getOrdersPend = function () {
 	model.main.getOrdersPend().then(function(data){
-		controller.main.showDataInTable(data);
+		general.notification(data.length);
+		
+		if(localStorage.page == "main"){
+			controller.main.showDataInTable(data);
+		}
 	});
 };
 
@@ -13,7 +17,7 @@ controller.main.showDataInTable = function (data) {
 	var result = "",
 		approveOrders = "";
 
-	if(localStorage.idrol == 1){
+	if(localStorage.idrol == 2){
 		approveOrders = "<i class='okOrder btn btn-default fa fa-check ' title='Aprobar'></i>"+
 		      "<i class='rejectOrder btn btn-default fa fa-times ' title='Rechazar Pedido'></i><br>";
 	}
@@ -43,19 +47,61 @@ controller.main.showDataInTable = function (data) {
 
     $('#mainTable tbody').html("").append(result);
 
-    controller.main.addEvents();
+    controller.main.addEventsTable();
 };
 
 controller.main.addEvents = function (){
+	$("#refreshResults").click(function(){
+		$("#stopUser").show();
+		statusBar.show("Cargando...").hide(1000);
+		controller.main.getOrdersPend();
+	});
+};
+
+controller.main.addEventsTable = function (){
 	$(".okOrder").click(function(e){
-		var idOrder = $(e.target).parent().data("id");
-		generic.confirm("Desea Aprobar el Pedido "+idOrder+"?", function(){alert("ok")})
+		var $row = $(e.target).parent().parent(),
+			idOrder = $(e.target).parent().data("id");
+
+		general.confirm("¿Desea Aprobar el Pedido "+idOrder+"?", function(){
+			$("#stopUser").show();
+			model.main.updateStatusOrder(idOrder, 3)
+				.done(function(resp){
+					$row.fadeOut(1000);
+			        $("#stopUser").hide();
+					statusBar.show("Pedido "+idOrder+" Aprobado.").hide(2000);
+					general.notification(parseInt($("#notification").text())-1);
+				})
+				.fail(function(e){
+			        $("#stopUser").hide();
+				 	alert("Error: " + e.responseText);
+				});
+		})
+	});
+
+	$(".rejectOrder").click(function(e){
+		var $row = $(e.target).parent().parent(),
+			idOrder = $(e.target).parent().data("id");
+
+		general.confirm("¿Desea Rechazar el Pedido "+idOrder+"?", function(){
+			$("#stopUser").show();
+			model.main.updateStatusOrder(idOrder, 4)
+				.done(function(resp){
+					$row.fadeOut(1000);
+			        $("#stopUser").hide();
+					statusBar.show("Pedido "+idOrder+" Rechazado.").hide(2000);
+					general.notification(parseInt($("#notification").text())-1);
+				})
+				.fail(function(e){
+			        $("#stopUser").hide();
+				 	alert("Error: " + e.responseText);
+				});
+		})
 	});
 };
 
 //---------------------------------------Constructor
 controller.main.getOrdersPend();
+controller.main.addEvents()
 
-setInterval(function(){
-	controller.main.getOrdersPend();
-}, 30000)
+

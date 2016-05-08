@@ -14,3 +14,15 @@ model.main.getOrdersPend = function() {
         });
 };
 
+model.main.updateStatusOrder = function(id, status) {
+    return $.ajax('services/main.php',
+        {
+           type: "GET", async: false,
+           data:{f:'updateStatusOrder', idOrder: id, newStatus: status} ,
+           contentType: "application/json"
+        })
+        .then(function (data) {
+            return data;
+        });
+};
+
