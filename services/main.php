@@ -26,17 +26,37 @@
 
 
     function getRecibidos($arrData){
-        $sql="SELECT   ped.estado, sec.secretaria, ped.id, ped.idsecretaria, tali.talimento, ped.fchentrega, ped.hora, 
+        $idRol = $arrData["idRol"];
+        $idUser = $arrData["idUser"];
+
+        //Interventor
+        $estados = "and (ped.estado=2 or ped.estado=7)";
+        $userFilter = "";
+
+        if($idRol == 1){
+            $estados = "and (ped.estado=3 or ped.estado=4)";
+            $userFilter = "and ped.idusuario = $idUser";
+        }
+
+         if($idRol == 3){
+            $estados = "and  ped.estado=3 ";
+            $userFilter = "";
+        }
+
+        $sql="SELECT   ped.estado , est.estado as descestado, sec.secretaria, ped.id, ped.idsecretaria, tali.talimento, ped.fchentrega, ped.hora, 
             ali.nombre as alimento, ped.cantidad, ped.valorpedido, ped.idppto, ped.direccion, ped.comentario, ped.personarecibe, 
             ppto.nombre as nomppto
-            FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec
-            WHERE  ped.bitactivo=1
-            and ped.idsecretaria=sec.id
-            and (ped.estado=2 or ped.estado=7)
-            and ped.idtalimento=tali.id
-            and ped.idalimento=ali.id
-            and ped.idppto=ppto.id
-            and ped.idusuario=us.id";
+            FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
+            WHERE  
+                ped.bitactivo=1
+                and ped.idsecretaria=sec.id
+                and ped.idtalimento=tali.id
+                and ped.idalimento=ali.id
+                and ped.idppto=ppto.id
+                and ped.idusuario=us.id
+                and ped.estado=est.id
+                $estados
+                $userFilter";
         
         return queryTojson($sql);
     }
@@ -44,14 +64,28 @@
     function updateStatusOrder($arrData){
         $id = $arrData["idOrder"];
         $newStatus = $arrData["newStatus"];
+        $msg = $arrData["msg"];
+        $user = $arrData["user"];
+        $log = date("d/m/Y - G:i")." user: ".$user;
 
-        $sql = "UPDATE  pedido SET  estado =  $newStatus WHERE  pedido.id = $id";
+        $id = str_replace("-",",",$id);
+        $sql = "UPDATE  pedido SET  estado =  $newStatus WHERE  pedido.id in ($id)";
+
 
         $conexion = new Conexion();
         $conexion->open();
         $result = mysql_query($sql) or die("Query Error");
+        
+        $array = explode(",", $id);
 
-        response(true, "Pedido Guardado");
+        for ($i=0; $i < sizeof($array); $i++) { 
+            $sql2 = "INSERT INTO `historico_estados_ped` (`id`, `pedido`, `newestado`, `comentario`, `log`)
+                     VALUES ( NULL , $array[$i], '$newStatus', '$msg', '$log' );";
+
+            $result = mysql_query($sql2) or die("Query Error");
+        };
+
+        response(true, "Pedido Actualizado");
 
         $conexion->close($result);
     }

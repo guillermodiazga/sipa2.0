@@ -140,12 +140,18 @@ body > div{
   font-weight: bold;
 }
 
-.okOrder{
+.green{
   color: #4CAF50!important;
 }
 
-.rejectOrder{
-  color: #A94442!important;
+.gray{
+  color: gray!important;
+}
+.red{
+  color: #DB3330!important;
+}
+.orange{
+  color: orange!important;
 }
 
 .editOrder{
@@ -154,4 +160,8 @@ body > div{
 
 .historyOrder{
   color: #337AB7!important;
+}
+
+.mainTable{
+  height: 800px;
 }

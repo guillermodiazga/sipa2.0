@@ -1,9 +1,9 @@
 var general = {};
 
 general.confirm = function(msg, task){
-    $("#textConfirm").html(msg)
+    $("#textConfirm").html(msg);
     $("#okConfirm").off().click(function(){
-         task()
+        setTimeout(task,100)
     });
     $('#modalConfirm').modal('show');
 };
@@ -11,17 +11,20 @@ general.confirm = function(msg, task){
 general.notification = function(number){
   //show desktop notification
   if(number > parseInt($("#notification").text()) ) {
-      var execute = function(){
-        controller.navigation.loadView("main");
-        //var b = window.open("http://google.com","_blank");
-        var windowAux = window.open("http://"+window.location.host+window.location.pathname+"app/view/exit.html","_blank");
-        windowAux.close();
-        closeNoti();
-      };
+    if(!document.hidden)
+      return;
 
-      var notif = createNewWebNotification("SIPA", "Tine pedidos por aprobar", "icon.ico", "session", null, execute);
+    var execute = function(){
+      controller.navigation.loadView("main");
+      //var b = window.open("http://google.com","_blank");
+      var windowAux = window.open("http://"+window.location.host+window.location.pathname+"app/view/exit.html","_blank");
+      windowAux.close();
+      closeNoti();
+    };
 
-      function closeNoti(){closeNotification(notif)};
+    var notif = createNewWebNotification("SIPA", "Tienes pedidos por aprobar", "icon.ico", "session", null, execute);
+
+    function closeNoti(){closeNotification(notif)};
   }
 
   if(number)
@@ -29,6 +32,145 @@ general.notification = function(number){
   else
    $("#notification").hide().text("");
 
+};
+
+general.stopUser = {
+  $div : $("#stopUser"),
+    show: function(msg){
+      msg = msg || "Cargando...";
+      html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
+      this.$div.html(html).show();
+      return this;
+    },
+    hide: function(delay){
+        var _this = this;
+        if(!isNaN(delay)){
+            setTimeout(function(){
+              _this.$div.hide();
+            },delay);
+        }else{
+            this.$div.hide();
+        }
+    }
+};
+
+general.setPagination = function(table, limitResults, selectPage){
+  var $table = $(table),
+      $rows = $table.find("tbody tr"),
+      numberRows = $rows.size(),
+      page = selectPage || 1,
+      numberPages = Math.ceil(numberRows/limitResults);
+
+      if(page > numberPages ){
+        page = numberPages;
+      }
+      
+      $(".pagination").remove();
+      $table.before('<ul class="pagination pull-right"></ul>');
+      $table.after('<ul class="pagination pull-right"></ul>');
+
+      var pageButtons = "",
+          active = "";
+      for (var i = 0; i < numberPages; i++) {
+        active = (i == page-1) ? ' active': '';
+        pageButtons += '<li class="page'+(i+1)+active+'" ><a class="btn">'+(i+1)+'</a></li>';
+      }
+      var nextButton = '<li><a class="btn" aria-label="Next" data-next="true"><span aria-hidden="true" data-next="true">&raquo;</span></a></li>',
+          previusButton = '<li><a class="btn" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+
+      $(".pagination").append(previusButton+pageButtons+nextButton);
+
+      $rows.hide();
+      var show = false;
+        $.each($rows, function(i, row){
+          var init =  ((limitResults*page)-limitResults),
+              end = (limitResults*page)-1;
+          if( i >= init && i <= end ){
+            $(row).show();
+            show = true;
+          }else if(show){
+            return false;
+          }
+        });
+
+
+      $(".pagination").click(function(e){
+        e.preventDefault();
+        var $element = $(e.target),
+            page = parseInt(e.target.text);
+
+        if(!page){
+          if($element.data("next") ==  true){
+            page = parseInt($(".pagination li.active:first").text())+1;
+            if(page > numberPages ){
+              statusBar.show("Pagina "+page+" no existe").hide(20000);
+              return;
+            } 
+              
+          }else{
+            page = parseInt($(".pagination li.active:first").text())-1;
+            if(page < 1 ){
+              statusBar.show("Pagina "+page+" no existe").hide(20000);
+              return;
+            }
+          }
+        }
+
+        $(".pagination li").removeClass("active");
+        $(".page"+page).addClass("active");
+
+        $rows.hide();
+
+        var show = false;
+        $.each($rows, function(i, row){
+          var init =  ((limitResults*page)-limitResults),
+              end = (limitResults*page)-1;
+          if( i >= init && i <= end ){
+            $(row).show();
+            show = true;
+          }else if(show){
+            return false;
+          }
+        });
+
+      });
+};
+
+general.iconStatus = function (estado) {
+  var ico = "flag", color;
+
+  switch (parseInt(estado)){
+    case 1:
+      ico = "flag";
+      color = "gray";
+      break;
+    case 2:
+      ico = "flag";
+      color = "orange";
+      break;
+    case 3:
+      ico = "flag";
+      color = "green";
+      break;
+    case 4:
+      ico = "repeat";
+      color = "red";
+      break;
+    case 5:
+      ico = "flag";
+      color = "green";
+      break;
+    case 6:
+      ico = "truck";
+      color = "green";
+      break;
+    case 7:
+      ico = "flag";
+      color = "red";
+      break;
+  } 
+
+  return '<i class="fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
 };
 
 //refrescar pedidos pendientes
@@ -88,7 +230,7 @@ $.ajaxSetup({
     },
     success: function(result,status,xhr) {
         // not showing the alert
-        $("#stopUser").hide();
+        //$("#stopUser").hide();
         controller.session.timeout = controller.session.timeToClose;
         controller.session.warningShowed = false;
     },

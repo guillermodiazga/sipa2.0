@@ -6,7 +6,7 @@ model.main.getOrdersPend = function() {
     return $.ajax('services/main.php',
         {
            type: "GET", async: false,
-           data:{f:'getRecibidos'} ,
+           data:{f:'getRecibidos', idUser: localStorage.id, idRol: localStorage.idrol} ,
            contentType: "application/json"
         })
         .then(function (data) {
@@ -14,11 +14,11 @@ model.main.getOrdersPend = function() {
         });
 };
 
-model.main.updateStatusOrder = function(id, status) {
+model.main.updateStatusOrder = function(id, status, msgStatus) {
     return $.ajax('services/main.php',
         {
            type: "GET", async: false,
-           data:{f:'updateStatusOrder', idOrder: id, newStatus: status} ,
+           data:{f:'updateStatusOrder', idOrder: id, newStatus: status, msg: msgStatus, user: localStorage.id} ,
            contentType: "application/json"
         })
         .then(function (data) {
