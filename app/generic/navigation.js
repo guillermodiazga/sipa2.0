@@ -43,11 +43,11 @@ controller.navigation.showMainMenu = function () {
 controller.navigation.hideOptionsMainMenuByRol = function () {
     //ocultar menu de configuracion
     if(localStorage.idrol != 2){
-        $(".menuPpal").find("a[href='#config']").parent().remove();
+        $(".menuPpal").find("a[href='#config']").parent().hide();
     }
 
     if(localStorage.idrol != 1){
-        $(".menuPpal").find("a[href='#newOrder']").parent().remove();
+        $(".menuPpal").find("a[href='#newOrder']").parent().hide();
     }
 };
 
