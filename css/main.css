@@ -154,14 +154,20 @@ body > div{
   color: orange!important;
 }
 
-.editOrder{
+.yellow{
   color: #FDD100!important;
 }
 
-.historyOrder{
+.blue{
   color: #337AB7!important;
 }
 
-.mainTable{
-  height: 800px;
+.purple{
+  color: #55267B!important;
+}
+
+.pagination{
+  height: 50px;
+  overflow: auto;
+  display: inline-block;
 }

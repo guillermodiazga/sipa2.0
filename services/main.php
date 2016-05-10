@@ -33,12 +33,14 @@
         $estados = "and (ped.estado=2 or ped.estado=7)";
         $userFilter = "";
 
+        //usuario
         if($idRol == 1){
-            $estados = "and (ped.estado=3 or ped.estado=4)";
+            $estados = "and (ped.estado=2 or ped.estado=3 or ped.estado=4)";
             $userFilter = "and ped.idusuario = $idUser";
         }
 
-         if($idRol == 3){
+        //proveedor
+        if($idRol == 3){
             $estados = "and  ped.estado=3 ";
             $userFilter = "";
         }
@@ -56,9 +58,22 @@
                 and ped.idusuario=us.id
                 and ped.estado=est.id
                 $estados
-                $userFilter";
+                $userFilter
+            order By 1, 4 asc";
         
         return queryTojson($sql);
+    }
+
+    function getHistoryOrder($arrData){
+        $idOrder = $arrData["idOrder"];
+
+        $sql = "SELECT his.`comentario` , his.`log` , est.estado
+                FROM historico_estados_ped AS his, estados AS est
+                WHERE est.id = his.newestado
+                AND his.pedido ='$idOrder' order by his.id desc";
+
+        return queryTojson($sql);
+
     }
 
     function updateStatusOrder($arrData){

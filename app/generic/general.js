@@ -1,11 +1,16 @@
 var general = {};
 
-general.confirm = function(msg, task){
+general.confirm = function(msg, callback){
     $("#textConfirm").html(msg);
     $("#okConfirm").off().click(function(){
-        setTimeout(task,100)
+        callback();
     });
     $('#modalConfirm').modal('show');
+};
+
+general.noDataToShowInTable = function ($table) {
+  $table.find('tbody').html("").append("<tr><td colspan='"+$table.find('th').size()+"'>No hay Pedidos Pendientes</td></tr>");
+  $('.pagination').remove();
 };
 
 general.notification = function(number){
@@ -205,8 +210,22 @@ statusBar = {
     }
 };
 
-window.alert = function(text){
-  $('#modalAlert').find("#textAlert").html(text).end().modal('show');
+window.alert = function(content){
+  var msg, 
+      title = "Mensaje";
+
+  if(typeof content == "object"){
+    title = content.title;
+    msg = content.msg;
+
+  }else{
+    msg = content;
+  }
+
+  $('#modalAlert')
+    .find(".modal-title").html(title).end()
+    .find("#textAlert").html(msg).end()
+    .modal('show');
 };
 
 
