@@ -1,11 +1,11 @@
 var general = {};
 
 general.confirm = function(msg, callback){
-    $("#textConfirm").html(msg);
-    $("#okConfirm").off().click(function(){
-        callback();
-    });
-    $('#modalConfirm').modal('show');
+  $("#textConfirm").html(msg);
+  $("#okConfirm").off().click(function(){
+    callback();
+  });
+  $('#modalConfirm').modal('show');
 };
 
 general.noDataToShowInTable = function ($table) {
@@ -41,104 +41,104 @@ general.notification = function(number){
 
 general.stopUser = {
   $div : $("#stopUser"),
-    show: function(msg){
-      msg = msg || "Cargando...";
-      html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
-      this.$div.html(html).show();
-      return this;
-    },
-    hide: function(delay){
-        var _this = this;
-        if(!isNaN(delay)){
-            setTimeout(function(){
-              _this.$div.hide();
-            },delay);
-        }else{
-            this.$div.hide();
-        }
+  show: function(msg){
+    msg = msg || "Cargando...";
+    html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
+    this.$div.html(html).show();
+    return this;
+  },
+  hide: function(delay){
+    var _this = this;
+    if(!isNaN(delay)){
+      setTimeout(function(){
+        _this.$div.hide();
+      },delay);
+    }else{
+      this.$div.hide();
     }
+  }
 };
 
 general.setPagination = function(table, limitResults, selectPage){
   var $table = $(table),
-      $rows = $table.find("tbody tr"),
-      numberRows = $rows.size(),
-      page = selectPage || 1,
-      numberPages = Math.ceil(numberRows/limitResults);
+  $rows = $table.find("tbody tr"),
+  numberRows = $rows.size(),
+  page = selectPage || 1,
+  numberPages = Math.ceil(numberRows/limitResults);
 
-      if(page > numberPages ){
-        page = numberPages;
-      }
-      
-      $(".pagination").remove();
-      $table.before('<ul class="pagination pull-right"></ul>');
-      $table.after('<ul class="pagination pull-right"></ul>');
+  if(page > numberPages ){
+    page = numberPages;
+  }
+  
+  $(".pagination").remove();
+  $table.before('<ul class="pagination pull-right"></ul>');
+  $table.after('<ul class="pagination pull-right"></ul>');
 
-      var pageButtons = "",
-          active = "";
-      for (var i = 0; i < numberPages; i++) {
-        active = (i == page-1) ? ' active': '';
-        pageButtons += '<li class="page'+(i+1)+active+'" ><a class="btn">'+(i+1)+'</a></li>';
-      }
-      var nextButton = '<li><a class="btn" aria-label="Next" data-next="true"><span aria-hidden="true" data-next="true">&raquo;</span></a></li>',
-          previusButton = '<li><a class="btn" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
+  var pageButtons = "",
+  active = "";
+  for (var i = 0; i < numberPages; i++) {
+    active = (i == page-1) ? ' active': '';
+    pageButtons += '<li class="page'+(i+1)+active+'" ><a class="btn">'+(i+1)+'</a></li>';
+  }
+  var nextButton = '<li><a class="btn" aria-label="Next" data-next="true"><span aria-hidden="true" data-next="true">&raquo;</span></a></li>',
+  previusButton = '<li><a class="btn" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>';
 
-      $(".pagination").append(previusButton+pageButtons+nextButton);
+  $(".pagination").append(previusButton+pageButtons+nextButton);
 
-      $rows.hide();
-      var show = false;
-        $.each($rows, function(i, row){
-          var init =  ((limitResults*page)-limitResults),
-              end = (limitResults*page)-1;
-          if( i >= init && i <= end ){
-            $(row).show();
-            show = true;
-          }else if(show){
-            return false;
-          }
-        });
+  $rows.hide();
+  var show = false;
+  $.each($rows, function(i, row){
+    var init =  ((limitResults*page)-limitResults),
+    end = (limitResults*page)-1;
+    if( i >= init && i <= end ){
+      $(row).show();
+      show = true;
+    }else if(show){
+      return false;
+    }
+  });
 
 
-      $(".pagination").click(function(e){
-        e.preventDefault();
-        var $element = $(e.target),
-            page = parseInt(e.target.text);
+  $(".pagination").click(function(e){
+    e.preventDefault();
+    var $element = $(e.target),
+    page = parseInt(e.target.text);
 
-        if(!page){
-          if($element.data("next") ==  true){
-            page = parseInt($(".pagination li.active:first").text())+1;
-            if(page > numberPages ){
-              statusBar.show("Pagina "+page+" no existe").hide(20000);
-              return;
-            } 
-              
-          }else{
-            page = parseInt($(".pagination li.active:first").text())-1;
-            if(page < 1 ){
-              statusBar.show("Pagina "+page+" no existe").hide(20000);
-              return;
-            }
-          }
+    if(!page){
+      if($element.data("next") ==  true){
+        page = parseInt($(".pagination li.active:first").text())+1;
+        if(page > numberPages ){
+          statusBar.show("Pagina "+page+" no existe").hide(20000);
+          return;
+        } 
+        
+      }else{
+        page = parseInt($(".pagination li.active:first").text())-1;
+        if(page < 1 ){
+          statusBar.show("Pagina "+page+" no existe").hide(20000);
+          return;
         }
+      }
+    }
 
-        $(".pagination li").removeClass("active");
-        $(".page"+page).addClass("active");
+    $(".pagination li").removeClass("active");
+    $(".page"+page).addClass("active");
 
-        $rows.hide();
+    $rows.hide();
 
-        var show = false;
-        $.each($rows, function(i, row){
-          var init =  ((limitResults*page)-limitResults),
-              end = (limitResults*page)-1;
-          if( i >= init && i <= end ){
-            $(row).show();
-            show = true;
-          }else if(show){
-            return false;
-          }
-        });
+    var show = false;
+    $.each($rows, function(i, row){
+      var init =  ((limitResults*page)-limitResults),
+      end = (limitResults*page)-1;
+      if( i >= init && i <= end ){
+        $(row).show();
+        show = true;
+      }else if(show){
+        return false;
+      }
+    });
 
-      });
+  });
 };
 
 general.iconStatus = function (estado) {
@@ -146,33 +146,33 @@ general.iconStatus = function (estado) {
 
   switch (parseInt(estado)){
     case 1:
-      ico = "flag";
-      color = "gray";
-      break;
+    ico = "flag";
+    color = "gray";
+    break;
     case 2:
-      ico = "flag";
-      color = "orange";
-      break;
+    ico = "flag";
+    color = "orange";
+    break;
     case 3:
-      ico = "flag";
-      color = "green";
-      break;
+    ico = "flag";
+    color = "green";
+    break;
     case 4:
-      ico = "repeat";
-      color = "red";
-      break;
+    ico = "repeat";
+    color = "red";
+    break;
     case 5:
-      ico = "flag";
-      color = "green";
-      break;
+    ico = "flag";
+    color = "green";
+    break;
     case 6:
-      ico = "truck";
-      color = "green";
-      break;
+    ico = "truck";
+    color = "green";
+    break;
     case 7:
-      ico = "flag";
-      color = "red";
-      break;
+    ico = "flag";
+    color = "red";
+    break;
   } 
 
   return '<i class="fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
@@ -182,9 +182,9 @@ general.iconStatus = function (estado) {
 setInterval(function(){
   if(!controller.main){
     $.getScript("app/model/home/main.js",function(){
-        $.getScript("app/controller/home/main.js", function(){
-          controller.main.getOrdersPend();
-        });
+      $.getScript("app/controller/home/main.js", function(){
+        controller.main.getOrdersPend();
+      });
     });
   }else{
     controller.main.getOrdersPend();
@@ -193,26 +193,26 @@ setInterval(function(){
 }, 30000);
 
 statusBar = {
-    $div : $("#statusBar"),
-    show: function(text){
-        this.$div.slideDown().text(text);
-        return this;
-    },
-    hide: function(delay){
-        var _this = this;
-        if(!isNaN(delay)){
-            setTimeout(function(){
-              _this.$div.slideUp();
-            },delay);
-        }else{
-            this.$div.slideUp();
-        }
+  $div : $("#statusBar"),
+  show: function(text){
+    this.$div.slideDown().text(text);
+    return this;
+  },
+  hide: function(delay){
+    var _this = this;
+    if(!isNaN(delay)){
+      setTimeout(function(){
+        _this.$div.slideUp();
+      },delay);
+    }else{
+      this.$div.slideUp();
     }
+  }
 };
 
 window.alert = function(content){
   var msg, 
-      title = "Mensaje";
+  title = "Mensaje";
 
   if(typeof content == "object"){
     title = content.title;
@@ -223,9 +223,9 @@ window.alert = function(content){
   }
 
   $('#modalAlert')
-    .find(".modal-title").html(title).end()
-    .find("#textAlert").html(msg).end()
-    .modal('show');
+  .find(".modal-title").html(title).end()
+  .find("#textAlert").html(msg).end()
+  .modal('show');
 };
 
 
@@ -239,25 +239,25 @@ window.alert = function(content){
 
 
 $.ajaxSetup({
-    beforeSend: function() {
+  beforeSend: function() {
         // show loading dialog // works
         //$("#stopUser").show();
-    },
-    complete: function(xhr, stat) {
+      },
+      complete: function(xhr, stat) {
         // hide dialog // works
         //$("#stopUser").hide();
-    },
-    success: function(result,status,xhr) {
+      },
+      success: function(result,status,xhr) {
         // not showing the alert
         //$("#stopUser").hide();
         controller.session.timeout = controller.session.timeToClose;
         controller.session.warningShowed = false;
-    },
-    fail: function(result,status,xhr) {
+      },
+      fail: function(result,status,xhr) {
         // not showing the alert
         $("#stopUser").hide();
-    }
-});
+      }
+    });
 
 function currentDate () {
 	var now = new Date();
@@ -277,55 +277,55 @@ function currentTime () {
 }
 
 function formatMoney (n, c, d, t){
-    c = isNaN(c = Math.abs(c)) ? 0 : c, 
-    d = d == undefined ? "," : d, 
-    t = t == undefined ? "." : t, 
-    s = n < 0 ? "-" : "", 
-    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
-    j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
- };
+  c = isNaN(c = Math.abs(c)) ? 0 : c, 
+  d = d == undefined ? "," : d, 
+  t = t == undefined ? "." : t, 
+  s = n < 0 ? "-" : "", 
+  i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+  j = (j = i.length) > 3 ? j % 3 : 0;
+  return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
 
- function formatDate(date) {
-     var arDate = date.split("-");
+function formatDate(date) {
+ var arDate = date.split("-");
 
-     date = arDate[2] + "/" + arDate[1] + "/" + arDate[0];
-     return date;
- };
+ date = arDate[2] + "/" + arDate[1] + "/" + arDate[0];
+ return date;
+};
 
 function zoomImg(){
-    $(".zoomImg")
-        .addClass("btn")
-        .attr("title", "Ver Imagen")
-        .click(function(){
-            $(this)
-                .clone()
-                .hide()
-                .removeClass("zoomImg")
-                .addClass("imgZoomInContainer")
-                .addClass("img-responsive")
-                .attr("width", "60%")
-                .fadeIn()
-                .appendTo("body");
+  $(".zoomImg")
+  .addClass("btn")
+  .attr("title", "Ver Imagen")
+  .click(function(){
+    $(this)
+    .clone()
+    .hide()
+    .removeClass("zoomImg")
+    .addClass("imgZoomInContainer")
+    .addClass("img-responsive")
+    .attr("width", "60%")
+    .fadeIn()
+    .appendTo("body");
 
-               $("#stopUser")
-                .show()
-                .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
-                .find(".close")
-                .click(function(){
-                    $(this)
-                        .parent()
-                        .hide()
-                        .end()
-                        .remove();
-                    
-                    $(".imgZoomInContainer").remove();
+    $("#stopUser")
+    .show()
+    .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
+    .find(".close")
+    .click(function(){
+      $(this)
+      .parent()
+      .hide()
+      .end()
+      .remove();
+      
+      $(".imgZoomInContainer").remove();
 
-                })
-                
+    })
+    
 
-        });
- 
+  });
+  
 };
 
 
