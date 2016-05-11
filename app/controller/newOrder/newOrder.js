@@ -219,7 +219,7 @@ controller.newOrder.getFormData = function(form){
 	jsonData = [],
 	data = {};
 
-	data.typeOrder= $form.find("#typeOrder").val();
+	data.typeOrder = $form.find("#typeOrder").val();
 	data.deliveryDate= $form.find("#deliveryDate").val();
 	data.deliveryTime= $form.find("#deliveryTime").val();
 	data.nameEvent= $form.find("#nameEvent").val();
@@ -240,6 +240,47 @@ controller.newOrder.getFormData = function(form){
 	return jsonData;
 
 };
+
+//Edit Order
+controller.newOrder.loadOrderToEdit = function(){
+	if(sessionStorage.idOrderToEdit){
+		general.stopUser.show();
+	}else{
+		return;
+	}
+
+	model.newOrder.loadDataOrder(sessionStorage.idOrderToEdit)
+		.done(function (data) {
+			data = data[0];
+			general.stopUser.hide();
+			sessionStorage.idOrderToEdit = '';
+
+			//load data in view
+			var $form = $("#formNewOrder");
+debugger
+			$form
+				.find("#typeOrder").val(data.talimento).end()
+				.find("#deliveryDate").val(data.fchentrega).end()
+				.find("#deliveryTime").val(data.hora).end()
+				.find("#nameEvent").val(data.evento).end()
+				.find("#address").val(data.direccion).end()
+				.find("#comment").val(data.comentario).end()
+				.find("#nameReceive").val(data.personarecibe).end()
+				.find("#telephone").val(data.telfjorecibe).end()
+				.find("#celphone").val(data.movilrecibe).end()
+				.find("#ppto").val(data.idppto);
+				/*
+				.find("#items").find(".item").attr("id").end(),
+				.find("#items").find(".item").find(".quantity").val(),
+				.find("#items").find(".item").find(".aditionalValue").val();
+				*/
+
+		}).fail(function(e){
+			    general.stopUser.hide();
+				alert("Error: " + e.responseText);
+		});
+};
+
 
 //add all events
 controller.newOrder.initEvents = function(){
@@ -268,6 +309,8 @@ controller.newOrder.initEvents = function(){
 	$("#addItems").click(function(){
 
 	});
+
+	controller.newOrder.loadOrderToEdit();
 
 };
 

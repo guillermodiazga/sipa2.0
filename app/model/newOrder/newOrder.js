@@ -47,3 +47,12 @@ model.newOrder.saveNewOrder = function(jsonData) {
            contentType: "application/json"
         });
 };
+
+model.newOrder.loadDataOrder = function(idOrder) {
+    return $.ajax('services/main.php',
+        {
+           type: "GET", async: true,
+           data:{f:'loadDataOrder', idOrder: idOrder, idUser: localStorage.id},
+           contentType: "application/json"
+        })
+};

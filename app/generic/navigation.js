@@ -4,7 +4,7 @@ controller.navigation = {};
 
 controller.navigation.loadViewOnReload = function () {
     var currentPage=location.href.split( '#' );
-        currentPage=currentPage[1];
+    currentPage=currentPage[1];
     localStorage.page='main';
     if(currentPage && currentPage != "exit")
         localStorage.page = currentPage;
@@ -27,11 +27,11 @@ controller.navigation.showMainMenu = function () {
     if( getWebNotificationsSupported() &&  getWebNotificationPermissionStatus() != 2){
 
         $("#activNotifications")
-            .slideDown()
-            .click( function () {
-                askForWebNotificationPermissions();
-                $(this).slideUp();
-            });
+        .slideDown()
+        .click( function () {
+            askForWebNotificationPermissions();
+            $(this).slideUp();
+        });
 
         if( getWebNotificationPermissionStatus() == 2 ){
             $("#activNotifications").hide();
@@ -74,14 +74,14 @@ controller.navigation.loadView = function (view, idElementToShow) {
     $("li[class=active]").removeClass("active");
     $("a[href='#"+localStorage.page+"'").parent().addClass("active");
     $.get('app/view/'+view+'.html?a='+Math.random())
-       .done(function(data){
-            $("#"+idElementToShow).html(data);
-            $("#stopUser").hide();
-       })
-       .fail(function(e){
-            $("#container").html("Error: "+e.status+" "+e.statusText);
-            $("#stopUser").hide();
-       });
+    .done(function(data){
+        $("#"+idElementToShow).html(data);
+        $("#stopUser").hide();
+    })
+    .fail(function(e){
+        $("#container").html("Error: "+e.status+" "+e.statusText);
+        $("#stopUser").hide();
+    });
     
 }
 
@@ -111,23 +111,24 @@ controller.navigation.init = function (){
     var _this = this;
 
      //on reload page with sesion active
-    if(!localStorage.id){
+     if(!localStorage.id){
         controller.navigation.loadView('login');
     }else{
-       controller.navigation.loadViewOnReload();
-       $("#userName").text(localStorage.name);
-       
-       if(localStorage.remenberMe != "true")
+        controller.navigation.loadViewOnReload();
+        $("#userName").text(localStorage.name);
+
+        if(localStorage.remenberMe != "true"){
             controller.session.checkSession();
+        }
     }
 
    //click on ppal menu
-    $(".navbar-nav a").click(function(e){
-        var view = this.href.split("#")[1];
-        if(view != 'exit'){
-            $("li[class=active]").removeClass("active");
-            $(this).parent().addClass("active");
-            _this.loadView(view);
+   $(".navbar-nav a").click(function(e){
+    var view = this.href.split("#")[1];
+    if(view != 'exit'){
+        $("li[class=active]").removeClass("active");
+        $(this).parent().addClass("active");
+        _this.loadView(view);
 
             //close menu desplegable on mobile
             if($(window).width()<768){

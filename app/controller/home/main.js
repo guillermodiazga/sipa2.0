@@ -208,6 +208,11 @@ controller.main.addEventsTable = function (){
 		window.open("http://"+location.host+"/sipa/remision.php?ped="+idOrder, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
 	});
 
+	$(".editOrder").click(function(e){
+		sessionStorage.idOrderToEdit = $(e.target).parent().data("id");
+		controller.navigation.loadView('neworder');
+	});
+
 	$(".historyOrder").click(function(e){
 		var idOrder = $(e.target).parent().data("id");
 		
