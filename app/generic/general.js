@@ -14,10 +14,12 @@ general.noDataToShowInTable = function ($table) {
 };
 
 general.notification = function(number){
+  if(number <= 0) return $("#notification").hide().text("");
   //show desktop notification
   if(number > parseInt($("#notification").text()) ) {
-    if(!document.hidden)
+    if(!document.hidden){
       return;
+    }
 
     var execute = function(){
       controller.navigation.loadView("main");
