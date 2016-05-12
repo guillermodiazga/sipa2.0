@@ -3,11 +3,11 @@ var model =  model || {};
 // Constructor
 model.newOrder = {};
 
-model.newOrder.getTypesOrders = function() {
+model.newOrder.getTypesOrders = function(idTypeOrder) {
     return $.ajax('services/main.php',
         {
            type: "GET", async: true,
-           data:{f:'getTypesOrders'} ,
+           data:{f:'getTypesOrders', idTypeOrder: idTypeOrder},
            contentType: "application/json"
         })
         .done(function (data) {

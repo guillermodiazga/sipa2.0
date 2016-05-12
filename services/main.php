@@ -115,8 +115,12 @@ function login($arrData){
 
 
 /*----------------------------------------------------------New Order*/
-function getTypesOrders(){
-    $sql = "SELECT id, talimento FROM `tipoalimento` where bitactivo=1";
+function getTypesOrders($arrData){
+    $filter = "";
+    if($arrData["idTypeOrder"] != ''){
+        $filter = " and id=".$arrData['idTypeOrder'];
+    }
+    $sql = "SELECT id, talimento FROM `tipoalimento` where bitactivo=1 $filter ORDER BY 2";
     return queryTojson($sql);
 };
 
@@ -564,7 +568,7 @@ function loadDataOrder($arrData){
     $idOrder = $arrData["idOrder"];
     $idUser = $arrData["idUser"];
     
-    $sql = "SELECT us.nombre, ped.idusuario,ped.valoradic, est.estado as estad, est.id as idestad, ped.evento, ped.personarecibe, ped.telfjorecibe, ped.movilrecibe, ped.fchentrega, ped.hora, ped.cantidad, ped.direccion, ped.idtalimento, ped.valorpedido, ped.idppto, ped.comentario, tip.talimento, ali.id as iditem, ali.nombre as item, ped.idalimento
+    $sql = "SELECT us.nombre, ped.idusuario,ped.fchreg, ped.valoradic, est.estado as estad, est.id as idestad, ped.evento, ped.personarecibe, ped.telfjorecibe, ped.movilrecibe, ped.fchentrega, ped.hora, ped.cantidad, ped.direccion, ped.idtalimento, ped.valorpedido, ped.idppto, ped.comentario, tip.talimento, ali.id as iditem, ali.nombre as item, ped.idalimento
     FROM pedido as ped, tipoalimento  as tip , usuario as us, alimento as ali, estados as est
     WHERE 
         ped.id = $idOrder and
