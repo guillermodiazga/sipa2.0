@@ -131,7 +131,7 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 		        	.appendTo("#itemList");
 		        });
 		        
-		        zoomImg();
+		        general.zoomImg();
 
 		        $("#addItems").removeAttr("disabled");
 
@@ -205,7 +205,7 @@ controller.newOrder.selectedItem = function(element){
 		$element.parent().parent().parent().remove();
 	});
 
-	zoomImg();
+	general.zoomImg();
 };
 
 controller.newOrder.save = function(jsonData, swSaveDirect){

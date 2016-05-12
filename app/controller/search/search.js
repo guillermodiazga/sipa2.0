@@ -70,7 +70,7 @@ controller.search.getQuery = function(jsonData) {
 						}
 			       	)*/;
 
-			  zoomImg();
+			  general.zoomImg();
 		      general.iconStatus.addEvents();
 		      general.setPagination("#resultsTable", 10, parseInt($(".pagination li.active:first").text()));
 
@@ -109,7 +109,7 @@ controller.search.getQuery = function(jsonData) {
 
 		      $(".printOrder").click(function(e){
 		      	var idOrder = $(e.target).parent().data("id");
-				window.open("http://"+location.host+"/sipa/remision.php?ped="+idOrder, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
+				general.printOrder(idOrder);
 		      });
 		    }else{
 	        	general.noDataToShowInTable($('#resultsTable'), "No hay resultados para esta busqueda");

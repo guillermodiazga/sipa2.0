@@ -117,12 +117,20 @@ function formatTable (){
 		$element = null,
 		firstSub = false,
 		sumCant = 0,
-		sumValue = 0;
+		sumValue = 0,
+		totalRows = $("#report-item-table tbody tr").size();
 
 	$.each($("#report-item-table tbody tr"), function(i, e){
 		var $td = $(e).find("td:first"),
 		    value = $td.text();
 
+		if(i+1 == totalRows){
+			debugger
+			$element.attr("rowspan", counter+1);
+			$element.parent().before("<tr class='success'><td colspan=2>Subtotal:</td><td></td><td></td></tr>")
+			$td.parent().before("<tr class='success'><td colspan=2>Subtotal:</td><td></td><td></td></tr>");
+			return false;
+		}
 		if(value != beforeValue){
 			if($element){
 				$element.attr("rowspan", counter);
@@ -139,9 +147,5 @@ function formatTable (){
 
 		counter++;
 		beforeValue = value;
-
-		if(i+1 == $("#report-item-table tbody tr").size()){
-			$element.attr("rowspan", counter);
-		}
 	})
 }

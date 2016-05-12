@@ -206,7 +206,7 @@ controller.main.addEventsTable = function (){
 
 	$(".printOrder").click(function(e){
 		var idOrder = $(e.target).parent().data("id");
-		window.open("http://"+location.host+"/sipa/remision.php?ped="+idOrder, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
+		general.printOrder(idOrder);
 	});
 
 	$(".editOrder").click(function(e){

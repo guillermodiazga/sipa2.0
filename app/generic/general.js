@@ -344,42 +344,43 @@ function formatDate(date) {
  return date;
 };
 
-function zoomImg(){
+general.zoomImg = function(){
   $(".zoomImg")
-  .addClass("btn")
-  .attr("title", "Ver Imagen")
-  .click(function(){
-    $(this)
-    .clone()
-    .hide()
-    .removeClass("zoomImg")
-    .addClass("imgZoomInContainer")
-    .addClass("img-responsive")
-    .attr("width", "60%")
-    .fadeIn()
-    .appendTo("body");
+      .addClass("btn")
+      .attr("title", "Zoom Imagen")
+      .click(function(){
+        $(this)
+            .clone()
+            .hide()
+            .removeClass("zoomImg")
+            .addClass("imgZoomInContainer")
+            .addClass("img-responsive")
+            .attr("width", "60%")
+            .fadeIn()
+            .appendTo("body");
 
-    $("#stopUser")
-    .show()
-    .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
-    .find(".close")
-    .click(function(){
-      $(this)
-      .parent()
-      .hide()
-      .end()
-      .remove();
+        $("#stopUser")
+            .show()
+            .find(".close").remove().end()
+            .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
+            .find(".close")
+            .click(function(){
+              $(this)
+                  .parent()
+                  .hide()
+                  .end()
+                  .remove();
+          
+              $(".imgZoomInContainer").remove();
+
+           });
+      });
       
-      $(".imgZoomInContainer").remove();
-
-    })
-    
-
-  });
-  
 };
 
-
+general.printOrder = function(idOrder){
+    window.open("http://"+location.host+"/"+location.pathname+"/sipa_legacy/remision.php?ped="+idOrder, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
+}
 
 
 //Funcion para validar numero
