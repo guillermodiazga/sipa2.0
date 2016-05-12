@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Servidor: localhost
--- Tiempo de generación: 10-05-2016 a las 21:58:06
+-- Tiempo de generación: 12-05-2016 a las 19:29:14
 -- Versión del servidor: 5.0.51
 -- Versión de PHP: 5.2.6
 
@@ -121,7 +121,7 @@ CREATE TABLE `historico_estados_ped` (
   `comentario` varchar(250) NOT NULL,
   `log` varchar(35) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3322 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3325 ;
 
 -- 
 -- Volcar la base de datos para la tabla `historico_estados_ped`
@@ -3448,6 +3448,9 @@ INSERT INTO `historico_estados_ped` VALUES (3318, 4, 6, '', '09/05/2016 - 23:32 
 INSERT INTO `historico_estados_ped` VALUES (3319, 5, 6, '', '09/05/2016 - 23:32 user: 42782597');
 INSERT INTO `historico_estados_ped` VALUES (3320, 6, 6, '', '09/05/2016 - 23:33 user: 42782597');
 INSERT INTO `historico_estados_ped` VALUES (3321, 7, 6, '', '09/05/2016 - 23:47 user: 42782597');
+INSERT INTO `historico_estados_ped` VALUES (3322, 8, 6, '', '10/05/2016 - 23:27 user: 42782597');
+INSERT INTO `historico_estados_ped` VALUES (3323, 9, 7, 'Ok', '11/05/2016 - 23:08 user: 42782597');
+INSERT INTO `historico_estados_ped` VALUES (3324, 10, 6, 'Aprobacion+Masiva', '11/05/2016 - 23:09 user: 42782597');
 
 -- --------------------------------------------------------
 
@@ -3493,9 +3496,9 @@ INSERT INTO `pedido` VALUES (4, 604, 43263603, '4700049001-120222-2', '13/04/201
 INSERT INTO `pedido` VALUES (5, 621, 32150171, '4700048997-120029-2', '14/04/2015 - 14:18', '2015-04-16', '08:40:00', 2, 40, 'Autoriza la Dra. Clara Luz Trujillo.', 'REUNION EQUIPO SALUD PUBLICA', 'Cra 51 D # 62 - 42. Av. Juan del Corral. PARQUE DE LA VIDA 2 PISO AULA 210 O 209', 25, 'LINA GOMEZ LOPERA', '3855923', '3004545172', 6, 219849, 0, '', '', '190.248.129.46', 1);
 INSERT INTO `pedido` VALUES (6, 631, 43594075, '4700049041-120274-2', '14/04/2015 - 15:15', '2015-04-15', '10:09:00', 2, 18, '***** OK', 'CASAS DE JUSTICIAS', 'cara 52  71-84, Coordinación de la UPJ Bosque', 657, 'rosa isaza', '4939736', '3113134917', 6, 5001794, 0, '', '', '190.248.129.54', 1);
 INSERT INTO `pedido` VALUES (7, 621, 32150171, '4700048997-120029-2', '14/04/2015 - 15:51', '2015-04-15', '08:30:00', 2, 21, 'Autoriza la Dra. Clara Luz Trujillo Escobar', 'Mesa PyP Discapacidad', 'Cra 53 A  # 42-161. Centro Cívico de Antioquia. Plaza de la Libertad. Piso 16-Torre B (Salud)', 25, 'Ximena Rios', '3855037', '3162216556', 6, 142013, 0, '', '', '190.248.129.58', 1);
-INSERT INTO `pedido` VALUES (8, 621, 32150171, '4700048997-120043-2', '14/04/2015 - 17:29', '2015-04-15', '08:45:00', 2, 7, 'Autoriza la Dra. Verónica Lopera', 'Reunión Consejo Municipal Seguridad Social Salud', 'Cra 53 A  # 42-161. Piso 21- Centro Cívico de Antioquia. Plaza de la Libertad. Despacho de Salud', 15, 'Maria Isabel Tamayo Vélez', '3855450', '3164952171', 3, 63910, 0, '', '', '190.248.129.54', 1);
-INSERT INTO `pedido` VALUES (9, 621, 32150171, '4700048997-120029-2', '15/04/2015 - 14:46', '2015-04-16', '14:15:00', 2, 8, 'Autoriza la Dra. Clara Luz Trujillo Escobar.', 'COVECOM, COMUNA 4-ARANJUEZ', 'COMUNA4-ARANJUEZ CARRERA 51 B # 85 - 24', 25, 'Doris Yance R.', '3145915370', '3013614380', 3, 90886, 0, '', '', '190.0.32.198', 1);
-INSERT INTO `pedido` VALUES (10, 621, 32150171, '4700048997-120029-2', '15/04/2015 - 14:52', '2015-04-20', '14:15:00', 2, 12, 'Autoriza la Dra. Clara Luz Trujillo.', 'COVECOM, COMUNA 6- DOCE DE OCTUBRE', 'Calle 101bb No.78-10 Unidad Hospitalaria 12 de Octubre', 25, 'Doris Yance R.', '3145915370', '3013614380', 3, 71862, 0, '', '', '190.248.129.54', 1);
+INSERT INTO `pedido` VALUES (8, 621, 32150171, '4700048997-120043-2', '14/04/2015 - 17:29', '2015-04-15', '08:45:00', 2, 7, 'Autoriza la Dra. Verónica Lopera', 'Reunión Consejo Municipal Seguridad Social Salud', 'Cra 53 A  # 42-161. Piso 21- Centro Cívico de Antioquia. Plaza de la Libertad. Despacho de Salud', 15, 'Maria Isabel Tamayo Vélez', '3855450', '3164952171', 6, 63910, 0, '', '', '190.248.129.54', 1);
+INSERT INTO `pedido` VALUES (9, 621, 32150171, '4700048997-120029-2', '15/04/2015 - 14:46', '2015-04-16', '14:15:00', 2, 8, 'Autoriza la Dra. Clara Luz Trujillo Escobar.', 'COVECOM, COMUNA 4-ARANJUEZ', 'COMUNA4-ARANJUEZ CARRERA 51 B # 85 - 24', 25, 'Doris Yance R.', '3145915370', '3013614380', 7, 90886, 0, '', '', '190.0.32.198', 1);
+INSERT INTO `pedido` VALUES (10, 621, 32150171, '4700048997-120029-2', '15/04/2015 - 14:52', '2015-04-20', '14:15:00', 2, 12, 'Autoriza la Dra. Clara Luz Trujillo.', 'COVECOM, COMUNA 6- DOCE DE OCTUBRE', 'Calle 101bb No.78-10 Unidad Hospitalaria 12 de Octubre', 25, 'Doris Yance R.', '3145915370', '3013614380', 6, 71862, 0, '', '', '190.248.129.54', 1);
 INSERT INTO `pedido` VALUES (11, 621, 32150171, '4700048997-120029-2', '15/04/2015 - 16:04', '2015-05-12', '07:45:00', 2, 12, 'Autoriza el Dr. Gabriel Jaime Guarín y la Dra. Clara Luz Trujillo.', 'Apoyo a "Jornada Cultural y Académica por la Vida"', 'Teatro Lido .Carrera 48 No. 54-20 (Parque de Bolivar)', 500, 'Paula Andrea Pajón Toro', '4484411', '3166213925', 6, 1437240, 0, '', '', '190.248.129.58', 1);
 INSERT INTO `pedido` VALUES (12, 631, 71367933, '4700049041-120279-2', '15/04/2015 - 18:25', '2015-04-16', '09:00:00', 2, 33, 'con gaseasa', 'DELINQUIR NO PAGA', 'ITM  FRATERNIDAD - BOSTON CALLE 51 # 30-01', 45, 'ALEXANDER JIMENEZ', '4939880', '3126103172', 6, 196846, 0, '', '', '190.248.129.46', 1);
 INSERT INTO `pedido` VALUES (13, 631, 71367933, '4700049041-120279-2', '15/04/2015 - 18:28', '2015-04-17', '10:00:00', 2, 8, '', 'DELINQUIR NO PAGA', 'ITM  FRATERNIDAD - BOSTON CALLE 51 # 30-01', 45, 'WILMER CELIS', '4939880', '3006570122', 6, 163595, 0, '', '', '190.0.32.198', 1);
@@ -5186,9 +5189,9 @@ CREATE TABLE `tipoalimento` (
 -- Volcar la base de datos para la tabla `tipoalimento`
 -- 
 
-INSERT INTO `tipoalimento` VALUES (1, 'Almuerzo', 900123456, 0);
+INSERT INTO `tipoalimento` VALUES (1, 'Almuerzo', 900123456, 1);
 INSERT INTO `tipoalimento` VALUES (2, 'Refrigerio', 900123456, 1);
-INSERT INTO `tipoalimento` VALUES (4, 'Servicio', 900123456, 0);
+INSERT INTO `tipoalimento` VALUES (4, 'Servicio', 900123456, 1);
 INSERT INTO `tipoalimento` VALUES (3, 'Agua', 900123456, 1);
 
 -- --------------------------------------------------------
