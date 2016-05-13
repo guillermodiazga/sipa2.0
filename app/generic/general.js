@@ -303,15 +303,15 @@ var normalize = (function() {
 })();
 
 general.exportToExcel = function ($table) {
-  if(!$table.size()) return alert("Tabla invalida");
-  var html = "<table>"+$table.html()+"</table>";
-  html= html.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+    if(!$table.size()) return alert("Tabla invalida");
+    var html = "<table>"+$table.html()+"</table>";
+    html= html.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
       html= html.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
       html= html.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
       html = normalize(html)
 
-  var url='data:application/vnd.ms-excel,' + encodeURIComponent(html) 
-          location.href=url
+    var url='data:application/vnd.ms-excel,' + encodeURIComponent(html);
+    location.href=url;
 };
 
 

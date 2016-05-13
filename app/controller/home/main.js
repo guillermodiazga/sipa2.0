@@ -73,6 +73,28 @@ controller.main.showDataInTable = function (data) {
 };
 
 controller.main.addEvents = function (){
+	$(".tabsMain").click(function(e){
+		var $e = $(e.target),
+			id = $e.parent().attr("id");
+
+		$e.parent()
+			.siblings().removeClass("active").end()
+			.addClass("active");
+
+		$(".tabsContainers").hide();
+
+		switch(id){
+			case "tab1":
+				$("#container1").show();
+				break;
+			case "tab2":
+				$("#container2").show();
+				break;
+			case "tab3":
+				$("#container3").show();
+				break;
+		}
+	});
 	$("#refreshResults").click(function(){
 		$("#stopUser").show();
 		statusBar.show("Cargando...").hide(1000);

@@ -230,6 +230,7 @@ controller.search.initEvents = function(){
 		.submit(function(e){
 			e.preventDefault();
 			$("#stopUser").show();
+			$("legend").click();
 			var jsonData = controller.search.getFormData(this);
 			controller.search.getQuery(jsonData);
 		});

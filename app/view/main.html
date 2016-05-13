@@ -1,34 +1,51 @@
 <legend>
-    <i class="glyphicon glyphicon-inbox"></i> 
-    Entrada 
-    <i class='btn btn-default fa fa-refresh pull-right' title='Refrescar resultados.' id="refreshResults" ></i>
+    
+    <i class='btn btn-default fa fa-refresh pull-right blue' title='Refrescar resultados.' id="refreshResults" ></i>
     <i class='btn btn-default fa fa-flag-checkered pull-right green' title='Aprobar todos los pedidos.' id="aproveAll" style="display: none;"></i>
-    <i class="fa fa-check" aria-hidden="true"></i>
+    
 </legend>
-
-<div class="table-responsive" id="mainTableContainer">
-    <table align="center" border="0" rules="" class="table table-striped" id="mainTable">
-        <thead>
-            <tr>
-                <th>Estado</th>
-                <th></th>
-                <th class='hide'>Sec</th>
-                <th>#</th>
-                <th>Tipo</th>
-                <th>Item</th>
-                <th>Cant</th>
-                <th>Valor Pedido</th>
-                <th>Fecha Entrega</th>
-                <th>Hora Entrega</th>
-                <th>Dirección</th>
-                <th>Presupuesto</th>
-                <th>Recibe</th>
-                <th>Observación</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+<ul class="nav nav-tabs" >
+    <li id="tab1" class="tabsMain active">
+        <a href="#"><i class="glyphicon glyphicon-inbox"></i> Entrada </a>
+    </li>
+    <li id="tab2" class="tabsMain">
+        <a href="#"><i class="fa fa-check" aria-hidden="true"></i>Aprobados Recientemente</a>
+    </li>
+    <li id="tab3" class="tabsMain">
+        <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Pedidos Para Mañana</a>
+    </li>
+</ul>
+<div id="container3" class="tabsContainers" style="display:none">
+    3
+</div>
+<div id="container2" class="tabsContainers" style="display:none">
+    2
+</div>
+<div id="container1" class="tabsContainers">
+    <div class="table-responsive" id="mainTableContainer">
+        <table align="center" border="0" rules="" class="table table-striped" id="mainTable">
+            <thead>
+                <tr>
+                    <th>Estado</th>
+                    <th></th>
+                    <th class='hide'>Sec</th>
+                    <th>#</th>
+                    <th>Tipo</th>
+                    <th>Item</th>
+                    <th>Cant</th>
+                    <th>Valor Pedido</th>
+                    <th>Fecha Entrega</th>
+                    <th>Hora Entrega</th>
+                    <th>Dirección</th>
+                    <th>Presupuesto</th>
+                    <th>Recibe</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="app/model/home/main.js" async='false'></script>
