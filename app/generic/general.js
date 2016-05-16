@@ -237,7 +237,7 @@ setInterval(function(){
     controller.main.getOrdersPend();
   }
 
-}, 6030000);
+}, 60000);
 
 statusBar = {
   $div : $("#statusBar"),
@@ -280,7 +280,39 @@ window.alert = function(content, callback){
 };
 
 
+var normalize = (function() {
+  var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç", 
+      to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc",
+      mapping = {};
+ 
+  for(var i = 0, j = from.length; i < j; i++ )
+      mapping[ from.charAt( i ) ] = to.charAt( i );
+ 
+  return function( str ) {
+      var ret = [];
+      for( var i = 0, j = str.length; i < j; i++ ) {
+          var c = str.charAt( i );
+          if( mapping.hasOwnProperty( str.charAt( i ) ) )
+              ret.push( mapping[ c ] );
+          else
+              ret.push( c );
+      }      
+      return ret.join( '' );
+  }
+ 
+})();
 
+general.exportToExcel = function ($table) {
+  if(!$table.size()) return alert("Tabla invalida");
+  var html = "<table>"+$table.html()+"</table>";
+  html= html.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+      html= html.replace(/<img[^>]*>/gi,""); // remove if u want images in your table
+      html= html.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+      html = normalize(html)
+
+  var url='data:application/vnd.ms-excel,' + encodeURIComponent(html) 
+          location.href=url
+};
 
 
 
