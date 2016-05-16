@@ -75,7 +75,7 @@ controller.newOrder.loadPptoUserToNewOrder = function (){
 		        //load data in view
 		        var items = "";
 		        $.each(data, function(i, item){
-		        	items += "<option value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
+		        	items += "<option data-saldo="+(item.valorini-item.valorpedido)+" value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
 		        });
 		        $("#ppto").append(items);
 		        controller.newOrder.loadItemsToNewOrder();
@@ -183,20 +183,22 @@ controller.newOrder.selectedItem = function(element){
 	
 	//add events
 	$(".quantity").off().on("keyup change", function(e){
-		var element = e.target;
-		var quantity = parseInt(element.value) || 0;
-		var aditionalValue  = parseInt($(element).parent().parent().find(".aditionalValue").val()) || 0;
-		var individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value"));
-		$(element).parent().parent().find(".totalValue").text("$"+formatMoney((quantity*individualValue)+aditionalValue));
+		var element = e.target,
+		    aditionalValue = parseInt(element.value) || 0,
+		    quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0,
+		    individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value")),
+		    totalValue = (quantity*individualValue)+aditionalValue;
+		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(totalValue)).data("totalValue", totalValue);
 
 	});
 
 	$(".aditionalValue").off().on("keyup change", function(e){
-		var element = e.target;
-		var aditionalValue = parseInt(element.value) || 0;
-		var quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0;
-		var individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value"));
-		$(element).parent().parent().find(".totalValue").text("$"+formatMoney((quantity*individualValue)+aditionalValue));
+		var element = e.target,
+		    aditionalValue = parseInt(element.value) || 0,
+		    quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0,
+		    individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value")),
+		    totalValue = (quantity*individualValue)+aditionalValue;
+		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(totalValue)).data("totalValue", totalValue);
 
 	});
 
@@ -378,7 +380,14 @@ controller.newOrder.validateForm = function(jsonData) {
 	evento = jsonData[0]["nameEvent"],
 	movilrecibe = jsonData[0]["celphone"],
 	personarecibe = jsonData[0]["nameReceive"],
-	msg = true;
+	msg = true,
+	saldo = parseInt($("#ppto").find("option:selected").data("saldo")),
+	totalValue = $(".totalValue:visible").data("totalValue");
+
+
+	if($(".totalValue:visible").size() && totalValue > saldo){
+		return msg = "El valor total del pedido supera el presupuesto seleccionado";
+	}
 
 	if((validateText(personarecibe))==false){
 		return msg = "Persona que recibe invalido";

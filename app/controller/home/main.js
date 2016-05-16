@@ -22,7 +22,6 @@ controller.main.getOrdersPend = function () {
 
 controller.main.getOrdersToDashboard = function () {
 	if(!localStorage.id)return;
-	general.stopUser.show();
 	model.main.getOrdersToDashboard().then(function(data){
 		//general.notification(data.length);
 		

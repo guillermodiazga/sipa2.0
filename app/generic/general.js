@@ -67,7 +67,6 @@ general.stopUser = {
   $div : $("#stopUser"),
   show: function(msg){
     var _this = this;
-    debugger
     msg = msg || "Cargando...";
     html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
     _this.$div.html(html).show();
@@ -260,7 +259,9 @@ statusBar = {
 
 window.alert = function(content, callback){
   var msg, 
-  title = "Mensaje";
+  title = "Mensaje",
+  $div = $('#modalAlert'),
+  $divTitle = $div.find(".modal-title");
 
   if(typeof content == "object"){
     title = content.title;
@@ -274,11 +275,30 @@ window.alert = function(content, callback){
     callback = function(){};
   }
 
-  $('#modalAlert')
+  $div
     .find(".modal-title").html(title).end()
     .find("#textAlert").html(msg).end()
     .modal('show').off('hide.bs.modal').on('hide.bs.modal', function(){callback()});
+  
+  this.info = function(){
+    $divTitle.html("Información");
+  };
+
+  this.error = function(){
+    $divTitle.html("Error");
+  };
+
+  this.warning = function(){
+    $divTitle.html("Advertencia");
+  };
+
+  this.success = function(){
+    $divTitle.html("Mensaje");
+  };
+
+  return this;
 };
+
 
 
 var normalize = (function() {
