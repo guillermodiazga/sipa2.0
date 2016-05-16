@@ -685,7 +685,8 @@ function reportItem($arrData){
                 ped.fchentrega Between '$fchdesde' and '$fchhasta' 
                 $usBuscado
 
-            group by 1, 2";
+            group by 1, 2
+            order by ped.idalimento, ped.idsecretaria";
 
     return queryTojson($sql);
 

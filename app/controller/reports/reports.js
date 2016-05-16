@@ -82,6 +82,8 @@ controller.reports.initEvents = function(){
 };
 
 controller.reports.reportItem = {
+
+
 	addEvents: function(){
 		$("#report-item-form").submit(function(e){
 			e.preventDefault();
@@ -91,8 +93,17 @@ controller.reports.reportItem = {
 				.done(function(data){
 					general.stopUser.hide();
 					if(data.length){
-						$("#report-item-table tbody").html(general.jsonToTableHtml(data));
-						formatTable();
+						var html = "";
+
+						$.each(data, function(i, data) {
+				        	html += "<tr><td class='merge'>"+data.item+"</td><td>"+data.secretaria+"</td><td class='sum sum1' data-value='"+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td><td class='sum sum2' data-value='"+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td></tr>";
+				        });
+
+						$("#report-item-table tbody").html(html);
+						controller.reports.reportItem.addMergeCells();
+						controller.reports.reportItem.addTotalInTable($("#report-item-table"));
+						controller.reports.reportItem.addSubtotales($("#report-item-table"));
+
 					}else{
 						general.noDataToShowInTable($("#report-item-table"));
 					}					
@@ -102,50 +113,91 @@ controller.reports.reportItem = {
 					alert("Error: " + e.responseText);
 				});
 		});
+	},
+
+	addTotalInTable: function($table){
+		var total1 = 0,
+			total2 = 0;
+
+		$.each($table.find(".sum"), function(i, e){
+			var $e = $(e);
+			total1 += ($e.hasClass("sum1")) ? parseInt($e.data("value")) : 0;
+			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
+		});
+		
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th></tr>")
+	},
+
+	addSubtotales: function($table){
+		var total1 = 0,
+			total2 = 0;
+
+		$.each($table.find("tbody tr"), function(i, e){
+			var $tr = $(e),
+				value1 =  parseInt($tr.find(".sum1").data("value")),
+				value2 =  parseInt($tr.find(".sum2	").data("value"));
+
+			total1 += (isNaN(value1)) ? 0 : value1;
+			total2 += (isNaN(value2)) ? 0 : value2;
+
+			if($tr.find(".total1").size()){
+				$tr
+					.find(".total1").text(formatMoney(total1)).end()
+					.find(".total2").text("$"+formatMoney(total2));
+				total1 = 0;
+				total2 = 0;
+			}
+		});
+		
+	},
+
+	addMergeCells: function (){
+		var beforeValue = false,
+			counter = 0,
+			$element = null,
+			firstSub = false,
+			totalRows = $("#report-item-table tbody tr").size();
+
+		$.each($("#report-item-table tbody tr"), function(i, e){
+			var $e = $(e),
+				$td = $e.find(".merge"),
+			    value = $td.text(),
+			    trSubtotal = "<tr class='success'><th colspan=2>Subtotal:</th><th class='total1'></th><th  class='total2'></th></tr>";
+
+			if(i+1 == totalRows){
+				$element.attr("rowspan", counter+1);
+				$element.parent().before(trSubtotal)
+				$td.parent().after(trSubtotal);
+				$td.remove();
+				return false;
+			}
+			
+			if(value != beforeValue){
+				if($element){
+					$element.attr("rowspan", counter);
+					if(firstSub){
+						$element.parent().before(trSubtotal);
+					}
+					
+					firstSub = true;
+				}
+				$element = $td;
+				counter = 0;
+			}else{
+				$td.remove();
+			}
+
+			counter++;
+			beforeValue = value;
+		})
 	}
+
+
 }
+
+
+
+
 //---------------------------------------Constructor
 //add Events
 controller.reports.initEvents();
-
-
-
-
-function formatTable (){
-	var beforeValue = false,
-		counter = 0,
-		$element = null,
-		firstSub = false,
-		sumCant = 0,
-		sumValue = 0,
-		totalRows = $("#report-item-table tbody tr").size();
-
-	$.each($("#report-item-table tbody tr"), function(i, e){
-		var $td = $(e).find("td:first"),
-		    value = $td.text();
-
-		if(i+1 == totalRows){
-			debugger
-			$element.attr("rowspan", counter+1);
-			$element.parent().before("<tr class='success'><td colspan=2>Subtotal:</td><td></td><td></td></tr>")
-			$td.parent().before("<tr class='success'><td colspan=2>Subtotal:</td><td></td><td></td></tr>");
-			return false;
-		}
-		if(value != beforeValue){
-			if($element){
-				$element.attr("rowspan", counter);
-				if(firstSub){
-					$element.parent().before("<tr class='success'><td colspan=2>Subtotal:</td><td></td><td></td></tr>")
-				}
-				firstSub = true;
-			}
-			$element = $td;
-			counter = 0;
-		}else{
-			$td.remove();
-		}
-
-		counter++;
-		beforeValue = value;
-	})
-}
