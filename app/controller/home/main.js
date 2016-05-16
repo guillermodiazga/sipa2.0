@@ -21,7 +21,7 @@ controller.main.showDataInTable = function (data) {
 		editOrder = "";
 
 	if(!data.length){
-		return general.noDataToShowInTable($('#mainTable'));
+		return general.noDataToShowInTable($('#mainTable'), "No hay Pedidos Pendientes");
 	}
 
 	if(localStorage.idrol != 1){
@@ -36,7 +36,7 @@ controller.main.showDataInTable = function (data) {
 	$.each(data, function(i, resp){
 		result += 
 			"<tr data-id='"+resp.id+"''>"+
-	            "<td title='"+resp.descestado+"'>"+general.iconStatus(resp.estado)+"</td>"+
+	            "<td title='"+resp.descestado+"'>"+general.iconStatus.html(resp.estado)+"</td>"+
 	            "<td data-id='"+resp.id+"''>"+
 		       		approveOrders+
 	            	"<i class='historyOrder blue btn fa fa-history btn-default' title='Ver historico de estados del Pedido'></i>"+
@@ -59,6 +59,7 @@ controller.main.showDataInTable = function (data) {
     });
 
     $('#mainTable tbody').html("").append(result);
+    general.iconStatus.addEvents();
     general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 
   // $("#mainTableContainer").css("width", $(window).width()-20).css("height", $(window).height()-170)

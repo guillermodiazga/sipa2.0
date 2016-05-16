@@ -40,12 +40,13 @@ model.newOrder.getPptoUserToNewOrder = function(typeOrder, userId ) {
 };
 
 model.newOrder.saveNewOrder = function(jsonData) {
-    return $.ajax('services/main.php',
-        {
-           type: "POST", async: true,
-           data:{f:'saveOrder', jsonData: jsonData},
-           contentType: "application/json"
-        });
+  var f = (!jsonData[0].idOrder)? 'saveOrder' : 'updateOrder';
+  return $.ajax('services/main.php',
+      {
+         type: "POST", async: true,
+         data:{f: f, jsonData: jsonData},
+         contentType: "application/json"
+      });
 };
 
 model.newOrder.loadDataOrder = function(idOrder) {
@@ -55,4 +56,13 @@ model.newOrder.loadDataOrder = function(idOrder) {
            data:{f:'loadDataOrder', idOrder: idOrder, idUser: localStorage.id},
            contentType: "application/json"
         })
+};
+
+model.newOrder.deleteOrder = function(idOrder, ppto, vlrtotalanterior) {
+  return $.ajax('services/main.php',
+      {
+         type: "POST", async: true,
+         data:{f: "deleteOrder", idOrder: idOrder, ppto: ppto, vlrtotalanterior: vlrtotalanterior, idUser: localStorage.id},
+         contentType: "application/json"
+      });
 };

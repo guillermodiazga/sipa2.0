@@ -5,17 +5,41 @@ controller.newOrder = {};
 
 controller.newOrder.loadDataToOrder = function() {
 	if(sessionStorage.idOrderToEdit){
-		controller.newOrder.loadOrderToEdit();
+		var idOrderToEdit = sessionStorage.idOrderToEdit;
+		controller.newOrder.loadOrderToEdit(idOrderToEdit);
+		$("legend span").html("Modificar Pedido: <b>"+idOrderToEdit+"<span id='deleteOrder' class='pull-right btn btn-danger' ><i class='fa fa-trash'></i> Anular Pedido</span>");
+		$("#deleteOrder").click(function(){controller.newOrder.deleteOrder(idOrderToEdit, $("#ppto").val(), $("#formNewOrder").attr("vlrtotalanterior"))});
+		sessionStorage.idOrderToEdit = '';
+
 	}else{
 		controller.newOrder.loadOrderTypes();
 		controller.newOrder.showCurrentDate();
-		$("#formNewOrder").find("#typeOrder").removeAttr("disabled");
+		$("#formNewOrder").find("#typeOrder").removeAttr("disabled").end()
+						  .find("#ppto").removeAttr("disabled");
 	}
 
 };
 
-controller.newOrder.loadOrderTypes = function (idTypeOrder){
+controller.newOrder.deleteOrder = function(idOrder, ppto, vlrtotalanterior ){
+	general.confirm("Desea anular este pedido?", function(){
+		general.stopUser.show();
+		model.newOrder.deleteOrder(idOrder, ppto, vlrtotalanterior)
+			.done(function(data){
+				var callBack = function(){
+									controller.navigation.loadView('main');
+							    }
+				general.stopUser.hide();
+				alert(data.message, callBack);
+			})
+			.fail(function(e){
+				general.stopUser.hide();
+				alert("Error: " + e.responseText);
+			});
+	});
 
+};
+
+controller.newOrder.loadOrderTypes = function (idTypeOrder){
 	model.newOrder.getTypesOrders(idTypeOrder)
 		.done(function (data) {
 			if( data.length > 0){
@@ -79,8 +103,8 @@ controller.newOrder.showCurrentDate = function (){
 	$("#deliveryTime").val(currentTime());
 }
 
-controller.newOrder.loadItemsToNewOrder = function (){
-	var typeOrder = $("#typeOrder").val();
+controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
+	var typeOrder = typeOrder || $("#typeOrder").val();
 	statusBar.show("Cargando Productos...");
 	if(typeOrder){
 		model.newOrder.getItemsToNewOrder(typeOrder)
@@ -108,12 +132,18 @@ controller.newOrder.loadItemsToNewOrder = function (){
 		        });
 		        
 		        zoomImg();
-		        
+
+		        $("#addItems").removeAttr("disabled");
+
 		        $(".selectItem").click(function(){
 					//change items list
 					$(".deletedItem:visible").click();//delete other product selected
 					controller.newOrder.selectedItem(this);
 				});
+
+				if(typeof callBack == 'function' ){
+					callBack();
+				}
 
 		    }else{
 		    	alert("No se pudieron cargar los items")
@@ -129,19 +159,19 @@ controller.newOrder.loadItemsToNewOrder = function (){
 
 controller.newOrder.selectedItem = function(element){
 
-		var $parent = $(element).parent().parent().parent();
-		$("#items").html("");
+	var $parent = $(element).parent().parent().parent();
+	$("#items").html("");
 		
     //clone and fill template 
     $("#templateItemAdded")
-    .clone()
-    .find(".nameItem").text($parent.parent().find(".nameItem").text()).end()
-    .find(".description").text($parent.parent().find(".description").text()).end()
-    .find("img").attr("src",$parent.parent().find("img").attr("src")).end()
-    .find(".individualValue").attr("data-value",$parent.parent().attr("data-value"))
-    .text("$"+formatMoney($parent.parent().attr("data-value"))).end()
-    .attr("id",$parent.parent().attr("data-id"))
-    .appendTo("#items");
+	    .clone()
+	    .find(".nameItem").text($parent.parent().find(".nameItem").text()).end()
+	    .find(".description").text($parent.parent().find(".description").text()).end()
+	    .find("img").attr("src",$parent.parent().find("img").attr("src")).end()
+	    .find(".individualValue").attr("data-value",$parent.parent().attr("data-value"))
+	    .text("$"+formatMoney($parent.parent().attr("data-value"))).end()
+	    .attr("id",$parent.parent().attr("data-id"))
+	    .appendTo("#items");
     
     $("#items").find(".itemTemplate").addClass("item").removeClass("itemTemplate").end()
     $("#items .row").show()
@@ -201,9 +231,17 @@ controller.newOrder.save = function(jsonData, swSaveDirect){
 	model.newOrder.saveNewOrder(jsonData)
 	.done(function (data, textStatus, jqXHR) {
 		if( data.success ){
-		    	//load data in view
-		    	alert(data.message);
-		    	controller.newOrder.resetForm();
+
+				var callBack = function(){controller.newOrder.resetForm();};
+
+				if($("#formNewOrder").attr("idordertoedit")){
+					callBack = function(){
+									controller.navigation.loadView('main');
+							    }
+				}
+
+		    	alert(data.message, callBack);
+		    	
 		    	$("#stopUser").hide();
 		    }else{
 		    	alert("No se pudo guardar " + textStatus + " " + data.message)
@@ -229,6 +267,8 @@ controller.newOrder.getFormData = function(form){
 	jsonData = [],
 	data = {};
 
+	data.vlrtotalanterior = $form.attr("vlrtotalanterior") || "";
+	data.idOrder = $form.attr("idordertoedit") || "";
 	data.typeOrder = $form.find("#typeOrder").val();
 	data.deliveryDate= $form.find("#deliveryDate").val();
 	data.deliveryTime= $form.find("#deliveryTime").val();
@@ -252,20 +292,19 @@ controller.newOrder.getFormData = function(form){
 };
 
 //Edit Order
-controller.newOrder.loadOrderToEdit = function(){
+controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 	general.stopUser.show();
-	model.newOrder.loadDataOrder(sessionStorage.idOrderToEdit)
+	model.newOrder.loadDataOrder(idOrderToEdit)
 		.done(function (data) {
 			data = data[0];
 			general.stopUser.hide();
-			sessionStorage.idOrderToEdit = '';
-debugger
 			//load data in view
 			var $form = $("#formNewOrder"),
 			creationDate = moment(data.fchreg.substring(0,10), "L").format("Y-MM-DD");
-
-			controller.newOrder.loadOrderTypes(data.iditem);
+			controller.newOrder.loadOrderTypes(data.idtalimento);
 			$form
+				.attr("vlrtotalanterior", (parseInt(data.valorpedido) + parseInt(data.valoradic)))
+				.attr("idordertoedit", idOrderToEdit)
 				.find("#typeOrder").attr("disabled", "disabled").end()
 				.find("#deliveryDate").val(data.fchentrega).end()
 				.find("#deliveryTime").val(data.hora).end()
@@ -276,14 +315,21 @@ debugger
 				.find("#nameReceive").val(data.personarecibe).end()
 				.find("#telephone").val(data.telfjorecibe).end()
 				.find("#celphone").val(data.movilrecibe).end()
-				.find("#ppto").val(data.idppto);
-				/*
-				.find("#items").find(".item").attr("id").end(),
-				.find("#items").find(".item").find(".quantity").val(),
-				.find("#items").find(".item").find(".aditionalValue").val();
-				*/
-	
-
+				.find("#ppto").attr("disabled", "disabled").append("<option value='"+data.idppto+"'>"+data.idppto+" - No esta permitido cambiar el presupuesto</option>").val(data.idppto);
+				
+		//Add item
+				$("#addItems").removeAttr("disabled");
+				controller.newOrder.loadItemsToNewOrder(data.idtalimento, 
+					function(){
+						$("#itemList").find(".selectItem[id="+data.iditem+"]").click();
+						
+						$form
+							.find("#items").find(".item").attr("id", data.iditem).end()
+							.find(".quantity").val(data.cantidad).change().end()
+							.find(".aditionalValue").val(data.valoradic).change();
+					}
+				);
+				
 		}).fail(function(e){
 			    general.stopUser.hide();
 				alert("Error: " + e.responseText);
@@ -300,7 +346,6 @@ controller.newOrder.initEvents = function(){
 		controller.newOrder.loadPptoUserToNewOrder();
 		//Clear items selected
 		$("#items").html("");
-		$("#addItems").removeAttr("disabled");
 	});
 
 	$("#formNewOrder").submit(function(e){

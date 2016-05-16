@@ -41,6 +41,9 @@ controller.navigation.showMainMenu = function () {
 };
 
 controller.navigation.hideOptionsMainMenuByRol = function () {
+
+     $(".menuPpal").find("a").parent().show();
+
     //ocultar menu de configuracion
     if(localStorage.idrol != 2){
         $(".menuPpal").find("a[href='#config']").parent().hide();
@@ -56,7 +59,7 @@ controller.navigation.hideMainMenu = function () {
     $("#activNotifications").hide();
 }
 
-controller.navigation.loadView = function (view, idElementToShow) {
+controller.navigation.loadView = function (view, idElementToShow, callBack) {
     var idElementToShow = idElementToShow || "container";
     $("#stopUser").show();
     $("#container-xl").html("").hide();
@@ -75,8 +78,12 @@ controller.navigation.loadView = function (view, idElementToShow) {
     $("a[href='#"+localStorage.page+"'").parent().addClass("active");
     $.get('app/view/'+view+'.html?a='+Math.random())
     .done(function(data){
-        $("#"+idElementToShow).html(data);
+        $("#"+idElementToShow).html("").append(data);
         $("#stopUser").hide();
+
+        if(callBack){
+            callBack();
+        }
     })
     .fail(function(e){
         $("#container").html("Error: "+e.status+" "+e.statusText);

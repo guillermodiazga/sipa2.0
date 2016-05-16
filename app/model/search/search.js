@@ -46,7 +46,7 @@ model.search.getListDependences = function() {
            data:{f:'getListDependences'},
            contentType: "application/json"
         })
-        .then(function (data) {
+        .done(function (data) {
             return data;
         });
 };

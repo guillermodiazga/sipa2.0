@@ -29,6 +29,7 @@ controller.search.getFormData = function(form){
 };
 
 controller.search.getQuery = function(jsonData) {
+	general.stopUser.show();
 	model.search.getQuery(jsonData)
 		.done(function (data) {
 		    if( data.length > 0){
@@ -37,9 +38,9 @@ controller.search.getQuery = function(jsonData) {
 		       var result = "";
 		       $.each(data, function(i, resp){
 		       		result += '<tr>'+
-		       					'<td><i class="btn fa fa-eye" title="Ver historico de estados del Pedido"></i>'+
-		       					'<i class="btn fa fa-print" title="Imprimir Pedido"></i></td>'+
-		       					'<td>'+resp.estado+'</td>'+
+		       					'<td data-id='+resp.id+'><i class="historyOrder btn btn-default fa fa-history blue" title="Ver historico de estados del Pedido"></i>'+
+		       					'<i class="printOrder btn btn-default fa fa-print purple" title="Imprimir Pedido"></i></td>'+
+		       					'<td title="'+resp.nomestado+'">'+general.iconStatus.html(resp.estado)+'</td>'+
 		       					'<td>'+resp.id+'</td>'+
 		       					'<td>'+resp.idsecretaria+'-'+resp.secretaria+'</td>'+
 		       					'<td>'+resp.usnam+'</td>'+
@@ -57,39 +58,74 @@ controller.search.getQuery = function(jsonData) {
 		       });
 
 		       
-		       	$("#resultsTemplate")
-			       .clone()
-			       .attr("id", "resultsTable")
-			       .show()
-			       .appendTo("#results")
+		       	$("#resultsTable")
 			       .find("tbody")
 			       .append(result).end()
-			       .DataTable(
+			       /*.DataTable(
 					    {
 							"initComplete": function( settings ) {
 							   //add events to zoom images
 							   alert("df");
-						       zoomImg();
 						    }
 						}
-			       	);
+			       	)*/;
 
-		      
+			  zoomImg();
+		      general.iconStatus.addEvents();
+		      general.setPagination("#resultsTable", 10, parseInt($(".pagination li.active:first").text()));
+
+		      $(".historyOrder").click(function(e){
+		      	var idOrder = $(e.target).parent().data("id");
+		
+				general.stopUser.show();
+
+				model.main.getHistoryOrder(idOrder)
+					.done(function(resp){
+
+				        general.stopUser.hide();
+
+				        var title = "<legend>Estados del Pedido: "+idOrder+"</legend>",
+				        	html = "<div class='table-responsive' ><table class='table table-striped' >"+
+				        		   "<tr><th>Estado</th><th>Fecha y Hora</th><th>Comentario</th></tr>";
+
+				        $.each(resp, function(i, data) {
+				        	html += "<tr><td>"+data.estado+"</td><td>"+data.log+"</td><td>"+data.comentario+"</td></tr>";
+				        });
+
+				        html += "</table></div>";
+
+				        if(!resp.length){
+				        	html="<legend>No hay cambios de estado del pedido: "+idOrder+"</legend>";
+				        }
+
+				        alert({msg: html, title:title});
+
+					})
+					.fail(function(e){
+				        $("#stopUser").hide();
+					 	alert("Error: " + e.responseText);
+					});
+		      });
+
+		      $(".printOrder").click(function(e){
+		      	var idOrder = $(e.target).parent().data("id");
+				window.open("http://"+location.host+"/sipa/remision.php?ped="+idOrder, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
+		      });
 		    }else{
-	        	alert("No hay resultados para esta busqueda");
+	        	general.noDataToShowInTable($('#resultsTable'), "No hay resultados para esta busqueda");
 	        }
 
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		 }).fail(function(e){
 
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		 	alert("Error: " + e.responseText);
 		});
 };
 
 controller.search.loadDataInList = function() {
-	$("#creationDateFrom").val(currentDate());
-	$("#creationDateTo").val(currentDate());
+	//$("#creationDateFrom").val(currentDate());
+	//$("#creationDateTo").val(currentDate());
 	controller.search.loadOrderTypes();
 	controller.search.loadPptoUserToSearch();
 	controller.search.orderStatusList();
@@ -111,8 +147,6 @@ controller.search.orderStatusList = function () {
 		    }else{
 	        	alert("No se pudieron cargar los estados de pedido");
 	        }
-
-	        $("#stopUser").hide();
 		 }).fail(function(e){
 		 	alert("Error: " + e.responseText);
 		});
@@ -197,7 +231,6 @@ controller.search.initEvents = function(){
 			e.preventDefault();
 			$("#stopUser").show();
 			var jsonData = controller.search.getFormData(this);
-			console.log(jsonData);
 			controller.search.getQuery(jsonData);
 		});
 

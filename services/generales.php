@@ -14,7 +14,7 @@ function queryTojson($sql, $swReturn=false){
     }
     
     $conexion->close($result);
-    
+
     if($swReturn)
         return json_encode($rows);
     else

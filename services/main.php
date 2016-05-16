@@ -93,17 +93,30 @@ function updateStatusOrder($arrData){
 
     $array = explode(",", $id);
 
-    for ($i=0; $i < sizeof($array); $i++) { 
-        $sql2 = "INSERT INTO `historico_estados_ped` (`id`, `pedido`, `newestado`, `comentario`, `log`)
-        VALUES ( NULL , $array[$i], '$newStatus', '$msg', '$log' );";
 
-        $result = mysql_query($sql2) or die("Query Error");
-    };
+    $conexion->close($result);
+ 
+    for ($i=0; $i < sizeof($array); $i++) { 
+        saveHistoricStatus ($array[$i], $newStatus, $msg, $log);
+    }
 
     response(true, "Pedido Actualizado");
 
+};
+
+function saveHistoricStatus ($idOrder, $newStatus, $msg, $log){
+
+    $sql = "INSERT INTO `historico_estados_ped` (`id`, `pedido`, `newestado`, `comentario`, `log`)
+            VALUES ( NULL , $idOrder, '$newStatus', '$msg', '$log' );";
+
+    $conexion = new Conexion();
+    $conexion->open();
+
+    $result = mysql_query($sql) or die("Query Error".$sql);
+
     $conexion->close($result);
-}
+
+};
 
 /*----------------------------------------------------------Generic*/       
 function login($arrData){
@@ -148,6 +161,50 @@ function getPptoUserToNewOrder($arrData){
     return queryTojson($sql);
 }; 
 
+function updateOrder($arrData){
+    foreach( $arrData as $key => $val){
+        $key = urldecode($key);
+        $val = urldecode($val);
+        $arrKeys = explode("[", $key);
+        $nameKey = str_replace("]", "", $arrKeys[2]);
+        $$nameKey = $val;
+    }
+
+    $log = date("d/m/Y - G:i")." User:  ".$idUser;
+
+    $sql = "UPDATE `pedido` SET 
+                `fchentrega` =  '$deliveryDate',
+                `hora` = '$deliveryTime',
+                `direccion`='$address',
+                `evento`='$nameEvent',
+                `personarecibe`='$nameReceive',
+                `movilrecibe`='$celphone',
+                `telfjorecibe`='$telephone',
+                `valorpedido` =  (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
+                `valoradic` =  $aditionalValue,
+                `idalimento` = '$idItem',
+                `comentario` = '$comment',
+                `estado` = 2,
+                `cantidad` = '$quantity',
+                `bitactivo` =1
+            WHERE `id`= $idOrder";
+    
+    $sql2 = "UPDATE  `presupuesto` 
+            SET  `valorpedido` =  (valorpedido - $vlrtotalanterior) + ( (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue)
+            WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
+
+    $conexion = new Conexion();
+    $conexion->open();
+    $result = mysql_query($sql) or die("Query Error");
+    $result = mysql_query($sql2) or die("Query Error");
+    $conexion->close($result);
+
+    saveHistoricStatus ($idOrder, 2, "Modificacion", $log);
+
+    response(true, "Pedido Actualizado");
+
+}
+
 function saveOrder($arrData){
 
     foreach( $arrData as $key => $val){
@@ -161,52 +218,52 @@ function saveOrder($arrData){
     $log = date("d/m/Y - G:i");
 
     $sql = "
-    INSERT INTO `pedido` (
-    `id` ,
-    `idsecretaria` ,
-    `idusuario` ,
-    `idppto` ,
-    `fchreg` ,
-    `fchentrega` ,
-    `hora` ,
-    `idtalimento` ,
-    `idalimento` ,
-    `comentario` ,
-    `personarecibe` ,
-    `telfjorecibe` ,
-    `movilrecibe` ,
-    `direccion` ,
-    `evento` ,
-    `cantidad` ,
-    `valorpedido` ,
-    `valoradic` ,
-    `iplog` ,
-    `bitactivo`,
-    `estado` 
-    )
-    VALUES (
-    NULL , 
-    (SELECT idsecretaria  FROM `presupuesto` WHERE id = '$ppto'),
-    '$idUser',
-    '$ppto',
-    '$log',
-    '$deliveryDate',
-    '$deliveryTime',
-    $typeOrder,
-    $idItem,
-    '$comment',
-    '$nameReceive',
-    '$telephone',
-    '$celphone',
-    '$address',
-    '$nameEvent',
-    $quantity,
-    (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
-    $aditionalValue,
-    '$REMOTE_ADDR',
-    '1',
-    2
-    );";
+        INSERT INTO `pedido` (
+            `id` ,
+            `idsecretaria` ,
+            `idusuario` ,
+            `idppto` ,
+            `fchreg` ,
+            `fchentrega` ,
+            `hora` ,
+            `idtalimento` ,
+            `idalimento` ,
+            `comentario` ,
+            `personarecibe` ,
+            `telfjorecibe` ,
+            `movilrecibe` ,
+            `direccion` ,
+            `evento` ,
+            `cantidad` ,
+            `valorpedido` ,
+            `valoradic` ,
+            `iplog` ,
+            `bitactivo`,
+            `estado` 
+            )
+        VALUES (
+            NULL , 
+            (SELECT idsecretaria  FROM `presupuesto` WHERE id = '$ppto'),
+            '$idUser',
+            '$ppto',
+            '$log',
+            '$deliveryDate',
+            '$deliveryTime',
+            $typeOrder,
+            $idItem,
+            '$comment',
+            '$nameReceive',
+            '$telephone',
+            '$celphone',
+            '$address',
+            '$nameEvent',
+            $quantity,
+            (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
+            $aditionalValue,
+            '$REMOTE_ADDR',
+            '1',
+            2
+        );";
 
     $sql2 = "
     UPDATE  `presupuesto` 
@@ -217,11 +274,11 @@ function saveOrder($arrData){
     $conexion->open();
     $result = mysql_query($sql) or die("Query Error");
     $result = mysql_query($sql2) or die("Query Error");
-
-    response(true, "Pedido Guardado");
-
     $conexion->close($result);
 
+    saveHistoricStatus ($idOrder, 2, "", $log);
+
+    response(true, "Pedido Guardado");
 };
 
 
@@ -580,6 +637,60 @@ function loadDataOrder($arrData){
     return queryTojson($sql);
 };
 
+function deleteOrder($arrData){
+    $vlrtotalanterior = $arrData["vlrtotalanterior"];
+    $ppto = $arrData["ppto"];
 
+    $log = date("d/m/Y - G:i")." user: ".$arrData['idUser'];
+    $sql = "UPDATE `pedido` SET `bitactivo` =0, estado=1 WHERE `id` ='".$arrData['idOrder']."' LIMIT 1;"; 
+
+     $sql2 = "UPDATE  `presupuesto` 
+              SET  `valorpedido` = valorpedido - $vlrtotalanterior
+              WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
+
+    $conexion = new Conexion();
+    $conexion->open();
+    $result = mysql_query($sql) or die("Query Error ");
+    $result = mysql_query($sql2) or die("Query Error ".$sql2);
+    $conexion->close($result);
+
+    saveHistoricStatus ($arrData['idOrder'], 1, "Anulado", $log);
+    response(true, "Pedido ".$arrData['idOrder']." Anulado");
+
+}
+
+function reportItem($arrData){
+    $idUser = $arrData["idUser"];
+    $fchdesde = $arrData["dateIni"];
+    $fchhasta = $arrData["dateEnd"];
+    $usBuscado = "";
+
+    if($usBuscado){
+        $usBuscado = "and ped.idusuario= $idUser";
+    }
+
+    $sql = "SELECT CONCAT(ped.idalimento, '-', ali.nombre) as item,
+                   CONCAT(ped.idsecretaria, '-', sec.secretaria) as secretaria, 
+
+                    sum(ped.cantidad) as cantidad,
+
+                    sum(ped.valorpedido)  as valorpedido
+                         
+            FROM `pedido` as ped,  secretaria as sec, alimento as ali
+
+            WHERE 
+                ped.idalimento = ali.id and 
+                ped.bitactivo = 1 and 
+                ped.idsecretaria = sec.id and
+                ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+                $usBuscado
+
+            group by 1, 2";
+
+    return queryTojson($sql);
+
+};
+
+//error_log($sql2);
 
 ?>

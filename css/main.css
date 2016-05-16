@@ -75,9 +75,6 @@ body > div{
 /*----------------------------------------------------search  css*/
 
 
-.resultsContainer{
-
-}
 
 
 /*----------------------------------------------------reports css*/
@@ -113,7 +110,7 @@ body > div{
 .tab{
   border-radius: 5px 5px 0px 0px !important;
   border-radius: 5px 5px 0px 0px !important;
-  border-color: gray  !important;
+  border-color: #E5E5E5  !important;
   background-color: #DDDDDD;
   margin: 0.1rem;
 }
@@ -167,7 +164,9 @@ body > div{
 }
 
 .pagination{
-  height: 50px;
+  height: 38px;
   overflow: auto;
   display: inline-block;
+  overflow-x: hidden;
 }
+

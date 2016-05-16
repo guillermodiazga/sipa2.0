@@ -22,7 +22,7 @@
 	<br>
 	<div class="row">
 		<div class="col-xs-12 col-md-2">
-			<label>Fecha de Pedido <br class="hidden-xs"><span class="text-muted">(Desde-Hasta)</span></label>
+			<label>Fecha Creación <br class="hidden-xs"><span class="text-muted">(Desde-Hasta)</span></label>
 		</div>
 		<div class="col-xs-12 col-md-2">
 			<input id="creationDateFrom" placeholder="Desde" type="date" class="form-control" maxlength="50" title="Desde" />
@@ -78,30 +78,29 @@
 
 </form>
 <hr>
-<div id="results" class="resultsContainer"></div>
-
-<table id="resultsTemplate" style="display: none" data-page-length='5'>
-  <thead>
-    <tr title="Ordenar">
-      <th >Acción</th>
-      <th>Estado</th>
-      <th>Nro. Pedido</th>
-      <th>Secretaria</th>
-      <th>Persona Recibe</th>
-      <th>Tipo</th>
-      <th>Item</th>
-      <th>Cantidad</th>
-      <th colspan="2">Valor Pedido</th>
-      <th>Fecha Entrega</th>
-      <th>Hora Entrega</th>
-      <th>Dirección</th>
-      <th>Presupuesto</th>
-      <th>Fecha de Pedido</th>
-      <th>Observación</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
-
+<div  class="resultsContainer table-responsive">
+	<table id="resultsTable" class="table table-striped">
+	  <thead>
+	    <tr title="Ordenar">
+	      <th></th>
+	      <th>Estado</th>
+	      <th>Nro. Pedido</th>
+	      <th>Secretaria</th>
+	      <th>Persona Recibe</th>
+	      <th>Tipo</th>
+	      <th colspan="2">Item</th>
+	      <th>Cantidad</th>
+	      <th>Valor Pedido</th>
+	      <th>Fecha Entrega</th>
+	      <th>Hora Entrega</th>
+	      <th>Dirección</th>
+	      <th>Presupuesto</th>
+	      <th>Fecha Creación</th>
+	      <th>Observación</th>
+	    </tr>
+	  </thead>
+	  <tbody></tbody>
+	</table>
+</div>
 <script src="app/model/search/search.js" async='false'></script>
 <script src="app/controller/search/search.js" async='false'></script>

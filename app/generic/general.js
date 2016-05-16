@@ -8,22 +8,42 @@ general.confirm = function(msg, callback){
   $('#modalConfirm').modal('show');
 };
 
-general.noDataToShowInTable = function ($table) {
-  $table.find('tbody').html("").append("<tr><td colspan='"+$table.find('th').size()+"'>No hay Pedidos Pendientes</td></tr>");
+general.noDataToShowInTable = function ($table, msg) {
+  msg = msg || "No hay resultados";
+  $table.find('tbody').html("").append("<tr><td colspan='"+$table.find('th').size()+"'>"+msg+"</td></tr>");
   $('.pagination').remove();
+};
+
+//return all tr elements in string for a json
+general.jsonToTableHtml = function (jsonData) {
+  var html = "";
+    for (var i = 0; i < jsonData.length; i++) {
+       html += drawRow(jsonData[i]);
+    }
+    return html;
+
+    function drawRow(rowData) {
+      var row = "<tr>";
+
+      $.each(rowData, function(i, data){
+        row += "<td>"+data+"</td>";
+      });
+
+      return row + "</tr>";
+  }
+
 };
 
 general.notification = function(number){
   if(number <= 0) return $("#notification").hide().text("");
   //show desktop notification
   if(number > parseInt($("#notification").text()) ) {
-    if(!document.hidden){
+    if(!document.hidden || localStorage.idrol == '1'){
       return;
     }
 
     var execute = function(){
       controller.navigation.loadView("main");
-      //var b = window.open("http://google.com","_blank");
       var windowAux = window.open("http://"+window.location.host+window.location.pathname+"app/view/exit.html","_blank");
       windowAux.close();
       closeNoti();
@@ -73,6 +93,11 @@ general.setPagination = function(table, limitResults, selectPage){
   }
   
   $(".pagination").remove();
+  
+  if( numberPages < 2){
+    return;
+  }
+  
   $table.before('<ul class="pagination pull-right"></ul>');
   $table.after('<ul class="pagination pull-right"></ul>');
 
@@ -80,6 +105,11 @@ general.setPagination = function(table, limitResults, selectPage){
   active = "";
   for (var i = 0; i < numberPages; i++) {
     active = (i == page-1) ? ' active': '';
+
+    if(i > 8){
+      active += " hide";
+    }
+
     pageButtons += '<li class="page'+(i+1)+active+'" ><a class="btn">'+(i+1)+'</a></li>';
   }
   var nextButton = '<li><a class="btn" aria-label="Next" data-next="true"><span aria-hidden="true" data-next="true">&raquo;</span></a></li>',
@@ -124,7 +154,7 @@ general.setPagination = function(table, limitResults, selectPage){
     }
 
     $(".pagination li").removeClass("active");
-    $(".page"+page).addClass("active");
+    $(".page"+page).addClass("active").removeClass("hide");
 
     $rows.hide();
 
@@ -143,42 +173,57 @@ general.setPagination = function(table, limitResults, selectPage){
   });
 };
 
-general.iconStatus = function (estado) {
-  var ico = "flag", color;
+general.iconStatus = {
+    html: function (estado) {
+    var ico = "flag", color;
 
-  switch (parseInt(estado)){
-    case 1:
-    ico = "flag";
-    color = "gray";
-    break;
-    case 2:
-    ico = "flag";
-    color = "orange";
-    break;
-    case 3:
-    ico = "flag";
-    color = "green";
-    break;
-    case 4:
-    ico = "repeat";
-    color = "red";
-    break;
-    case 5:
-    ico = "flag";
-    color = "green";
-    break;
-    case 6:
-    ico = "truck";
-    color = "green";
-    break;
-    case 7:
-    ico = "flag";
-    color = "red";
-    break;
-  } 
+    switch (parseInt(estado)){
+      case 1:
+      ico = "flag";
+      color = "gray";
+      break;
+      case 2:
+      ico = "flag";
+      color = "orange";
+      break;
+      case 3:
+      ico = "flag";
+      color = "green";
+      break;
+      case 4:
+      ico = "repeat";
+      color = "red";
+      break;
+      case 5:
+      ico = "flag";
+      color = "green";
+      break;
+      case 6:
+      ico = "truck";
+      color = "green";
+      break;
+      case 7:
+      ico = "flag";
+      color = "red";
+      break;
+    } 
 
-  return '<i class="fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
-};
+    return '<i class="status fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
+  },
+  addEvents: function(){
+    $(".status").click(function(){
+      var $iconParent = $(this).parent(),
+          status = $iconParent.attr("title");
+
+      $iconParent.find("span").remove().end()
+                 .append("<span class='text-muted' style='position:relative'>"+status+"</span>")
+                 .find("span").hide().slideDown(500);
+
+      setTimeout(function(){ $iconParent.find("span").slideUp(500)},3000);
+
+    });
+  }
+}
 
 //refrescar pedidos pendientes
 setInterval(function(){
@@ -192,7 +237,7 @@ setInterval(function(){
     controller.main.getOrdersPend();
   }
 
-}, 30000);
+}, 6030000);
 
 statusBar = {
   $div : $("#statusBar"),
@@ -212,7 +257,7 @@ statusBar = {
   }
 };
 
-window.alert = function(content){
+window.alert = function(content, callback){
   var msg, 
   title = "Mensaje";
 
@@ -224,10 +269,14 @@ window.alert = function(content){
     msg = content;
   }
 
+  if(typeof callback != "function"){
+    callback = function(){};
+  }
+
   $('#modalAlert')
-  .find(".modal-title").html(title).end()
-  .find("#textAlert").html(msg).end()
-  .modal('show');
+    .find(".modal-title").html(title).end()
+    .find("#textAlert").html(msg).end()
+    .modal('show').off('hide.bs.modal').on('hide.bs.modal', function(){callback()});
 };
 
 
