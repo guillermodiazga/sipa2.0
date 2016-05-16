@@ -665,7 +665,7 @@ function reportItem($arrData){
     $fchhasta = $arrData["dateEnd"];
     $usBuscado = "";
 
-    if($usBuscado){
+    if($idUser){
         $usBuscado = "and ped.idusuario= $idUser";
     }
 
