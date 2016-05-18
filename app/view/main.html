@@ -6,23 +6,29 @@
 </legend>
 <ul class="nav nav-tabs" >
     <li id="tab1" class="tabsMain active">
-        <a href="#"><i class="glyphicon glyphicon-inbox"></i> Entrada </a>
+        <a href="#"><i class="glyphicon glyphicon-inbox"></i> Pendientes Por Aprobar </a>
     </li>
-    <li id="tab2" class="tabsMain">
+    <li id="tab2" class="tabsMain" style="display: none;" >
         <a href="#"><i class="fa fa-check" aria-hidden="true"></i>Aprobados Recientemente</a>
     </li>
-    <li id="tab3" class="tabsMain">
+    <li id="tab3" class="tabsMain" style="display: none;">
         <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Pedidos Para Mañana</a>
     </li>
 </ul>
 <div id="container3" class="tabsContainers" style="display:none">
-    3
+    
 </div>
 <div id="container2" class="tabsContainers" style="display:none">
-    2
+    
 </div>
 <div id="container1" class="tabsContainers">
-    <div class="table-responsive" id="mainTableContainer">
+    
+</div>
+
+<script src="app/model/home/main.js" async='false'></script>
+<script src="app/controller/home/main.js" async='false'></script>
+
+<div class="table-responsive" id="mainTableTemplate" style="display:none">
         <table align="center" border="0" rules="" class="table table-striped" id="mainTable">
             <thead>
                 <tr>
@@ -46,8 +52,3 @@
             </tbody>
         </table>
     </div>
-</div>
-
-<script src="app/model/home/main.js" async='false'></script>
-<script src="app/controller/home/main.js" async='false'></script>
-

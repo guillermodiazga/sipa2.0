@@ -38,3 +38,16 @@ model.main.getHistoryOrder = function(id) {
         });
 };
 
+model.main.getOrdersToDashboard = function() {
+    return $.ajax('services/main.php',
+        {
+           type: "GET", async: false,
+           data:{f:'getOrdersToDashboard', idRol: localStorage.idrol, idUser: localStorage.id},
+           contentType: "application/json"
+        })
+        .then(function (data) {
+            return data;
+        });
+};
+
+

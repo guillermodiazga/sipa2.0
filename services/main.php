@@ -35,7 +35,7 @@ function getRecibidos($arrData){
 
         //usuario
     if($idRol == 1){
-        $estados = "and (ped.estado=2 or ped.estado=3 or ped.estado=4)";
+        $estados = "and (ped.estado=2  or ped.estado=4)";
         $userFilter = "and ped.idusuario = $idUser";
     }
 
@@ -692,6 +692,41 @@ function reportItem($arrData){
 
 };
 
+function getOrdersToDashboard($arrData)
+{
+    $user = $arrData["idUser"];
+    $idRol = $arrData["idRol"];
+    $antes = mktime(0, 0, 0, date("m")  , date("d")-5, date("Y"));
+    $mas = mktime(0, 0, 0, date("m")  , date("d")+5, date("Y"));
+    $mañana = date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
+    $fechantes = date("Y-m-d",$antes);
+    $fechamas = date('Y-m-d',$mas);
+
+    //rol 3
+    $filter = "and  ped.estado = 6 and ped.fchentrega='$mañana'";
+
+    if($idRol == 1){
+        $filter = "and  ped.estado = 3 and ped.idusuario=$user
+                   and (ped.fchentrega Between '$fechantes'  and '$fechamas')";
+    }
+     
+
+    $sql = "SELECT distinct  ped.id, ped.estado, tali.talimento, ped.fchentrega,
+                ped.hora, ali.nombre as alimento, ped.cantidad, ped.valorpedido, 
+                ped.direccion, ped.comentario, ped.fchreg, ppto.nombre as nomppto
+
+                FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto
+
+                WHERE ped.bitactivo=1 
+                    and ped.idtalimento=tali.id
+                    and ped.idalimento=ali.id
+                    and ped.idppto=ppto.id
+                       
+                    $filter
+    ";
+error_log($sql);
+    return queryTojson($sql);
+}
 //error_log($sql2);
 
 ?>

@@ -9,13 +9,26 @@ controller.main.getOrdersPend = function () {
 		general.notification(data.length);
 
 		if(localStorage.page == "main"){
-			controller.main.showDataInTable(data);
+			controller.main.showDataInTable(data, "mainTable", "container1");
 			general.stopUser.hide();
 		}
 	});
 };
 
-controller.main.showDataInTable = function (data) {
+controller.main.getOrdersToDashboard = function () {
+	general.stopUser.show();
+	model.main.getOrdersToDashboard().then(function(data){
+		//general.notification(data.length);
+		
+		var idContainer = (localStorage.idrol == 1) ? "container2" : "container3";
+		if(localStorage.page == "main"){
+			controller.main.showDataInTable(data, "mainTable2", idContainer);
+			general.stopUser.hide();
+		}
+	});
+};
+
+controller.main.showDataInTable = function (data, idTable, idContainer) {
 	var result = "",
 		approveOrders = "",
 		editOrder = "";
@@ -32,7 +45,7 @@ controller.main.showDataInTable = function (data) {
 	if(localStorage.idrol != 3){
 		editOrder = "<i class='editOrder yellow btn fa fa-pencil btn-default' title='Modificar Pedido'></i>";
 	}
-
+debugger
 	$.each(data, function(i, resp){
 		result += 
 			"<tr data-id='"+resp.id+"''>"+
@@ -57,8 +70,10 @@ controller.main.showDataInTable = function (data) {
 	            "<td>"+resp.comentario+"</td>"+
 	        "</tr>";
     });
+	$('#'+idContainer).html("");
+	$("#mainTableTemplate").clone().show().attr("id", "maxContainer"+idTable).find("table").attr("id", idTable).end().appendTo('#'+idContainer);
 
-    $('#mainTable tbody').html("").append(result);
+    $('#'+idTable+' tbody').html("").append(result);
     general.iconStatus.addEvents();
     general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 
@@ -73,9 +88,15 @@ controller.main.showDataInTable = function (data) {
 };
 
 controller.main.addEvents = function (){
+	if(localStorage.idrol == 1){
+		$("#tab2").show();
+	}
+	if(localStorage.idrol == 3){
+		$("#tab3").show();
+	}
 	$(".tabsMain").click(function(e){
 		var $e = $(e.target),
-			id = $e.parent().attr("id");
+			id = $e.parent().attr("id") || $e.parent().parent().attr("id");
 
 		$e.parent()
 			.siblings().removeClass("active").end()
@@ -88,9 +109,11 @@ controller.main.addEvents = function (){
 				$("#container1").show();
 				break;
 			case "tab2":
+				controller.main.getOrdersToDashboard();
 				$("#container2").show();
 				break;
 			case "tab3":
+				controller.main.getOrdersToDashboard();
 				$("#container3").show();
 				break;
 		}
