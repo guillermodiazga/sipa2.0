@@ -50,16 +50,16 @@ function getRecibidos($arrData){
     ppto.nombre as nomppto
     FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
     WHERE  
-    ped.bitactivo=1
-    and ped.idsecretaria=sec.id
-    and ped.idtalimento=tali.id
-    and ped.idalimento=ali.id
-    and ped.idppto=ppto.id
-    and ped.idusuario=us.id
-    and ped.estado=est.id
-    $estados
-    $userFilter
-    order By 1, 4 asc";
+        ped.bitactivo=1
+        and ped.idsecretaria=sec.id
+        and ped.idtalimento=tali.id
+        and ped.idalimento=ali.id
+        and ped.idppto=ppto.id
+        and ped.idusuario=us.id
+        and ped.estado=est.id
+        $estados
+        $userFilter
+        order By 1, 4 asc";
 
     return queryTojson($sql);
 }
@@ -146,17 +146,17 @@ function getItemsToNewOrder($arrData){
 function getPptoUserToNewOrder($arrData){
     $type = $arrData["type"];
     $user = $arrData["user"];
-    $sql = "SELECT  ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido 
-    FROM `persona-ppto` as rel,presupuesto as ppto, tipoalimento as tipo
-    WHERE
+    $sql = "
 
-    `idusuario`=$user 
-    and ppto.id=rel.idppto and 
-    tipo.idproveedor=ppto.idproveedor
-    and tipo.id=$type and
-    ppto.bitactivo=1 and
-    rel.bitactivo=1 and
-    ppto.idtalimento=$type ";
+    SELECT ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido
+    FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
+    WHERE rel.idusuario = $user
+    AND ppto.id = rel.idppto
+    AND tipo.idproveedor = ppto.idproveedor
+    AND tipo.id = $type
+    AND ppto.bitactivo =1
+    AND rel.bitactivo =1
+    AND ppto.idtalimento = $type";
 
     return queryTojson($sql);
 }; 
