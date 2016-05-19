@@ -276,8 +276,6 @@ function saveOrder($arrData){
     $result = mysql_query($sql2) or die("Query Error");
     $conexion->close($result);
 
-    saveHistoricStatus ($idOrder, 2, "", $log);
-
     response(true, "Pedido Guardado");
 };
 

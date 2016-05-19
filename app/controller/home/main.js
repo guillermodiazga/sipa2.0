@@ -87,7 +87,7 @@ controller.main.showDataInTable = function (data, idTable, idContainer) {
 	
     $('#'+idTable+' tbody').html("").append(result);
     general.iconStatus.addEvents();
-    general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
+    //general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 
   // $("#mainTableContainer").css("width", $(window).width()-20).css("height", $(window).height()-170)
 
@@ -138,7 +138,7 @@ controller.main.addEvents = function (){
 	});
 	if(localStorage.idrol != 1){
 		$("#aproveAll").show().off().click(function(){
-			var $orders = $("#mainTable tbody tr[data-id]"),
+			var $orders = $("#mainTable tbody tr[data-id]:visible"),
 				newStatus=3,
 				msg = "¿Desea Aprobar <b>"+$orders.length+"</b> Pedidos?"
 
@@ -212,7 +212,7 @@ controller.main.addEventsTable = function (){
 						general.notification(0);
 					}else{
 						general.notification(parseInt($("#notification").text())-1);
-						general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
+						//general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 					}
 
 				})
@@ -252,7 +252,7 @@ controller.main.addEventsTable = function (){
 						general.notification(0);
 					}else{
 						general.notification(parseInt($("#notification").text())-1);
-						general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
+						//general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 					}
 				})
 				.fail(function(e){

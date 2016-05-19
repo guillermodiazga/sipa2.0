@@ -34,7 +34,7 @@ controller.search.getQuery = function(jsonData) {
 		.done(function (data) {
 		    if( data.length > 0){
 		        //load data in view
-		       $("#results").html("").show();
+		       //$("#results").html("").show();
 		       var result = "";
 		       $.each(data, function(i, resp){
 		       		result += '<tr>'+
@@ -60,15 +60,7 @@ controller.search.getQuery = function(jsonData) {
 		       
 		       	$("#resultsTable")
 			       .find("tbody")
-			       .append(result).end()
-			       /*.DataTable(
-					    {
-							"initComplete": function( settings ) {
-							   //add events to zoom images
-							   alert("df");
-						    }
-						}
-			       	)*/;
+			       .html(result);
 
 			  general.zoomImg();
 		      general.iconStatus.addEvents();
@@ -230,7 +222,6 @@ controller.search.initEvents = function(){
 		.submit(function(e){
 			e.preventDefault();
 			general.stopUser.show();
-			$("legend").click();
 			var jsonData = controller.search.getFormData(this);
 			controller.search.getQuery(jsonData);
 		});
