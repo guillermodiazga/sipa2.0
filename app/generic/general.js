@@ -426,6 +426,84 @@ function validateText(texto){
 
   return true;
 }
+
+/** pushNotify:  show a notification in a specific element (div, span, p, etc) or default div #div-ms-status-notification
+ * Method: show()
+ *  @msg {string} message to add in notification
+ *  @title {string} title to add in notification
+ *  @time {number} millisecounds to shwo the notifdication
+ *  @onclick {function} millisecounds to shwo the notifdication
+ *  @$div {jQueryObject} altern element html to show data
+ **/
+ /*HTML Required
+<div id="div-ms-status-notification" class="status-notification panel panel-default" style="display:none">
+      <div class="panel-heading"> 
+        <i class="fa fa-bell" aria-hidden="true"></i>  <span id="title"></span> 
+        <button type="button" class="close" aria-hidden="true">&times;</button>
+      </div>
+      <div class="panel-body">
+        <span id="msg"></span>
+      </div>
+    </div> 
+*/
+var pushNotify = {
+  $divDefault: $("#div-ms-status-notification"),
+  $div: null,
+  timeOut: null,
+  show: function(msg, title, time, onclick, $div){
+    var _this = this;
+
+    _this.$div = ( $div ) ? $div : _this.$divDefault;
+
+    if(_this.$div.size() == 0){
+      console.log("$div is undefined");
+      return this;
+    }
+
+    if(typeof onclick === 'function'){
+      _this.$div.off().click(function(){onclick(); _this.$div.slideUp();});
+    }else{
+      _this.$div.off().click(function(){_this.$div.slideUp();});
+    }
+
+    _this.$div.slideDown().removeClass("panel-info panel-success").css({right: "0px"})
+      .find("#msg").html(msg || "No message to show").end()
+      .find("#title").html(title || "Notification").end()
+      .find("i").removeClass("green blue");
+
+    clearTimeout(_this.timeOut);
+    _this.timeOut = setTimeout(function(){
+                  _this.$div.slideUp();
+              },time || 3000);
+
+    return this;
+  },
+  hide: function(){
+    var _this = this;
+    _this.$div.slideUp();
+    return this;
+  },
+  info: function(){
+    var _this = this;
+    _this.$div.addClass("panel-info").removeClass("panel-success panel-default")
+      .find("i").addClass("blue").removeClass("green");
+
+    return this;
+  },
+  success: function(){
+    var _this = this;
+    _this.$div.removeClass("panel-info panel-default").addClass("panel-success")
+      .find("i").addClass("green").removeClass("blue");
+      
+    return this;
+  },
+  center: function(){
+    var _this = this;
+    _this.$div.css({right: "50%"});
+    return this;
+  }
+}
+
 /*
 function mensage (text,swNoCerrar) {
 
