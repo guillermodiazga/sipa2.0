@@ -61,7 +61,7 @@ controller.navigation.hideMainMenu = function () {
 
 controller.navigation.loadView = function (view, idElementToShow, callBack) {
     var idElementToShow = idElementToShow || "container";
-    $("#stopUser").show();
+    general.stopUser.show();
     $("#container-xl").html("").hide();
     if(localStorage.id){
         controller.navigation.showMainMenu();
@@ -79,7 +79,7 @@ controller.navigation.loadView = function (view, idElementToShow, callBack) {
     $.get('app/view/'+view+'.html?a='+Math.random())
     .done(function(data){
         $("#"+idElementToShow).html("").append(data);
-        $("#stopUser").hide();
+        general.stopUser.hide();
 
         if(callBack){
             callBack();
@@ -87,7 +87,7 @@ controller.navigation.loadView = function (view, idElementToShow, callBack) {
     })
     .fail(function(e){
         $("#container").html("Error: "+e.status+" "+e.statusText);
-        $("#stopUser").hide();
+        general.stopUser.hide();
     });
     
 }
@@ -122,7 +122,7 @@ controller.navigation.init = function (){
         controller.navigation.loadView('login');
     }else{
         controller.navigation.loadViewOnReload();
-        $("#userName").text(localStorage.name);
+        $(".userName").text(localStorage.name);
 
         if(localStorage.remenberMe != "true"){
             controller.session.checkSession();

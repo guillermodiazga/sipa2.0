@@ -17,7 +17,7 @@ model.main.getOrdersPend = function() {
 model.main.updateStatusOrder = function(id, status, msgStatus) {
     return $.ajax('services/main.php',
         {
-           type: "GET", async: false,
+           type: "POST", async: false,
            data:{f:'updateStatusOrder', idOrder: id, newStatus: status, msg: msgStatus, user: localStorage.id} ,
            contentType: "application/json"
         })
@@ -39,15 +39,16 @@ model.main.getHistoryOrder = function(id) {
 };
 
 model.main.getOrdersToDashboard = function() {
-    return $.ajax('services/main.php',
-        {
-           type: "GET", async: false,
-           data:{f:'getOrdersToDashboard', idRol: localStorage.idrol, idUser: localStorage.id},
-           contentType: "application/json"
-        })
-        .then(function (data) {
-            return data;
-        });
+  var idUser = (localStorage.idrol == 1) ? localStorage.id : "";
+  return $.ajax('services/main.php',
+      {
+         type: "GET", async: false,
+         data:{f:'getOrdersToDashboard', idRol: localStorage.idrol, idUser: idUser},
+         contentType: "application/json"
+      })
+      .then(function (data) {
+          return data;
+      });
 };
 
 

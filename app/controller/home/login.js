@@ -21,7 +21,7 @@ controller.login.loginEvent = function() {
 				    $("a[href='#"+localStorage.page+"'").parent().addClass("active");
     				localStorage.page='main';
 		        	controller.navigation.showMainMenu();
-		        	$("#userName").text(data[0].nombre);
+		        	$(".userName").text(data[0].nombre);
 
 		        	if(localStorage.remenberMe == "true"){
 						//save session from localStorage

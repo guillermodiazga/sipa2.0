@@ -102,7 +102,7 @@ controller.search.getQuery = function(jsonData) {
 
 					})
 					.fail(function(e){
-				        $("#stopUser").hide();
+				        general.stopUser.hide();
 					 	alert("Error: " + e.responseText);
 					});
 		      });
@@ -169,7 +169,7 @@ controller.search.loadDependencesList = function (){
 	        	alert("No se pudieron cargar los tipos de pedido");
 	        }
 
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		 }).fail(function(e){
 		 	alert("Error: " + e.responseText);
 		});
@@ -192,7 +192,7 @@ controller.search.loadOrderTypes = function (){
 	        	alert("No se pudieron cargar los tipos de pedido");
 	        }
 
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		 }).fail(function(e){
 		 	alert("Error: " + e.responseText);
 		});
@@ -229,7 +229,7 @@ controller.search.initEvents = function(){
 	$("#formSearch").off("submit")
 		.submit(function(e){
 			e.preventDefault();
-			$("#stopUser").show();
+			general.stopUser.show();
 			$("legend").click();
 			var jsonData = controller.search.getFormData(this);
 			controller.search.getQuery(jsonData);

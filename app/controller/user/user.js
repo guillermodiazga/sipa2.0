@@ -16,10 +16,10 @@ controller.user.loadDataUser = function() {
 		    }else{
 	        	alert("No se pudieron cargar las dependencias");
 	        }
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 	        controller.user.getDataUser();
 		 }).fail(function(e){
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		 	alert("Error: " + e.responseText);
 		});
 };
@@ -49,10 +49,10 @@ controller.user.getDataUser = function() {
 	        	alert("No se pudieron cargar las dependencias");
 	        }
 
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		 }).fail(function(e){
 		 	alert("Error: " + e.responseText);
-	        $("#stopUser").hide();
+	        general.stopUser.hide();
 		});
 };
 
@@ -76,10 +76,10 @@ controller.user.getFormData = function(form){
 };
 
 controller.user.save = function(jsonData){
-	$("#stopUser").show();
+	general.stopUser.show();
 	model.user.saveDataUser(jsonData)
 	.then(function (data) {
-		$("#stopUser").hide();
+		general.stopUser.hide();
 	    if( data.success){
 	        //load data in view
 	       alert(data.message);
@@ -90,7 +90,7 @@ controller.user.save = function(jsonData){
         $("#formUser").find("button[type='submit']").attr("disabled","disabled");
 	 })
 	.fail(function(jqXHR, textStatus){
-		$("#stopUser").hide();
+		general.stopUser.hide();
 	 	alert("Error: " + jqXHR.responseText + ", " + textStatus);
 	});
 };

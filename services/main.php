@@ -703,30 +703,34 @@ function getOrdersToDashboard($arrData)
     $fechamas = date('Y-m-d',$mas);
 
     //rol 3
-    $filter = "and  ped.estado = 6 and ped.fchentrega='$mañana'";
+    $filter = "and  ped.estado in (2, 3, 6) and ped.fchentrega='$mañana'";
 
     if($idRol == 1){
-        $filter = "and  ped.estado = 3 and ped.idusuario=$user
+        $filter = "and  ped.estado in (3, 6) and ped.idusuario=$user
                    and (ped.fchentrega Between '$fechantes'  and '$fechamas')";
     }
      
-
-    $sql = "SELECT distinct  ped.id, ped.estado, tali.talimento, ped.fchentrega,
-                ped.hora, ali.nombre as alimento, ped.cantidad, ped.valorpedido, 
-                ped.direccion, ped.comentario, ped.fchreg, ppto.nombre as nomppto
-
-                FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto
-
-                WHERE ped.bitactivo=1 
-                    and ped.idtalimento=tali.id
-                    and ped.idalimento=ali.id
-                    and ped.idppto=ppto.id
-                       
-                    $filter
+    $sql="SELECT   ped.estado , est.estado as descestado, sec.secretaria, ped.id, ped.idsecretaria, tali.talimento, ped.fchentrega, ped.hora, 
+        ali.nombre as alimento, ped.cantidad, ped.valorpedido, ped.idppto, ped.direccion, ped.comentario, ped.personarecibe, 
+        ppto.nombre as nomppto
+        FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
+        WHERE  
+            ped.bitactivo=1
+            and ped.idsecretaria=sec.id
+            and ped.idtalimento=tali.id
+            and ped.idalimento=ali.id
+            and ped.idppto=ppto.id
+            and ped.idusuario=us.id
+            and ped.estado=est.id
+                          
+            $filter
+        order By 1, 4 asc
     ";
+
 error_log($sql);
     return queryTojson($sql);
 }
 //error_log($sql2);
 
 ?>
+

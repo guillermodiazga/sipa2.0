@@ -12,6 +12,9 @@ controller.main.getOrdersPend = function () {
 			controller.main.showDataInTable(data, "mainTable", "container1");
 			general.stopUser.hide();
 		}
+	}).fail(function (e) {
+		alert(e.responseText);
+		general.stopUser.hide()
 	});
 };
 
@@ -25,6 +28,10 @@ controller.main.getOrdersToDashboard = function () {
 			controller.main.showDataInTable(data, "mainTable2", idContainer);
 			general.stopUser.hide();
 		}
+	})
+	.fail(function (e) {
+		alert(e.responseText);
+		general.stopUser.hide()
 	});
 };
 
@@ -33,11 +40,14 @@ controller.main.showDataInTable = function (data, idTable, idContainer) {
 		approveOrders = "",
 		editOrder = "";
 
+	$('#'+idContainer).html("");
+	$("#mainTableTemplate").clone().show().attr("id", "maxContainer"+idTable).find("table").attr("id", idTable).end().appendTo('#'+idContainer);
+
 	if(!data.length){
-		return general.noDataToShowInTable($('#mainTable'), "No hay Pedidos Pendientes");
+		return general.noDataToShowInTable($('#'+idTable));
 	}
 
-	if(localStorage.idrol != 1){
+	if(localStorage.idrol != 1 &&  idTable == "mainTable"){
 		approveOrders = "<i class='okOrder green btn btn-default fa fa-check ' title='Aprobar'></i>"+
 		      "<i class='rejectOrder red btn btn-default fa fa-times ' title='Rechazar Pedido'></i><br>";
 	}
@@ -45,8 +55,9 @@ controller.main.showDataInTable = function (data, idTable, idContainer) {
 	if(localStorage.idrol != 3){
 		editOrder = "<i class='editOrder yellow btn fa fa-pencil btn-default' title='Modificar Pedido'></i>";
 	}
-debugger
+
 	$.each(data, function(i, resp){
+		editOrder = (resp.estado == 2) ? editOrder : "";
 		result += 
 			"<tr data-id='"+resp.id+"''>"+
 	            "<td title='"+resp.descestado+"'>"+general.iconStatus.html(resp.estado)+"</td>"+
@@ -70,9 +81,7 @@ debugger
 	            "<td>"+resp.comentario+"</td>"+
 	        "</tr>";
     });
-	$('#'+idContainer).html("");
-	$("#mainTableTemplate").clone().show().attr("id", "maxContainer"+idTable).find("table").attr("id", idTable).end().appendTo('#'+idContainer);
-
+	
     $('#'+idTable+' tbody').html("").append(result);
     general.iconStatus.addEvents();
     general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
@@ -96,7 +105,7 @@ controller.main.addEvents = function (){
 	}
 	$(".tabsMain").click(function(e){
 		var $e = $(e.target),
-			id = $e.parent().attr("id") || $e.parent().parent().attr("id");
+			id = $e.attr("id") || $e.parent().attr("id") || $e.parent().parent().attr("id");
 
 		$e.parent()
 			.siblings().removeClass("active").end()
@@ -107,6 +116,7 @@ controller.main.addEvents = function (){
 		switch(id){
 			case "tab1":
 				$("#container1").show();
+				controller.main.getOrdersPend();
 				break;
 			case "tab2":
 				controller.main.getOrdersToDashboard();
@@ -119,9 +129,9 @@ controller.main.addEvents = function (){
 		}
 	});
 	$("#refreshResults").click(function(){
-		$("#stopUser").show();
-		statusBar.show("Cargando...").hide(1000);
-		controller.main.getOrdersPend();
+		general.stopUser.show();
+		statusBar.show("Cargando...").hide(2000);
+		$(".tabsMain").filter(".active").click();
 	});
 	if(localStorage.idrol != 1){
 		$("#aproveAll").show().off().click(function(){
@@ -167,7 +177,7 @@ controller.main.addEvents = function (){
 							alert("Se aprobaron "+$orders.length+" pedidos.")
 					})
 					.fail(function(e){
-				        $("#stopUser").hide();
+				        general.stopUser.hide();
 					 	alert("Error: " + e.responseText);
 					});
 			})
@@ -187,11 +197,11 @@ controller.main.addEventsTable = function (){
 		}
 
 		general.confirm("¿Desea Aprobar el Pedido "+idOrder+"?", function(){
-			$("#stopUser").show();
+			general.stopUser.show();
 			model.main.updateStatusOrder(idOrder, newStatus)
 				.done(function(resp){
 					$row.remove();
-			        $("#stopUser").hide();
+			        general.stopUser.hide();
 					statusBar.show("Pedido "+idOrder+" Aprobado.").hide(2000);
 
 					if($("#mainTable tbody tr[data-id]").size() == 0){
@@ -204,7 +214,7 @@ controller.main.addEventsTable = function (){
 
 				})
 				.fail(function(e){
-			        $("#stopUser").hide();
+			        general.stopUser.hide();
 				 	alert("Error: " + e.responseText);
 				});
 		})
@@ -227,11 +237,11 @@ controller.main.addEventsTable = function (){
 				alert("Debe ingresar la razon del rechazo.");
 				return $("td[data-id="+idOrder+"]").find(".rejectOrder").click();
 			}
-			$("#stopUser").show();
+			general.stopUser.show();
 			model.main.updateStatusOrder(idOrder, newStatus, $("#motivoRechazo").val())
 				.done(function(resp){
 					$row.remove();
-			        $("#stopUser").hide();
+			        general.stopUser.hide();
 					statusBar.show("Pedido "+idOrder+" Rechazado.").hide(2000);
 
 					if($("#mainTable tbody tr[data-id]").size() == 0){
@@ -243,7 +253,7 @@ controller.main.addEventsTable = function (){
 					}
 				})
 				.fail(function(e){
-			        $("#stopUser").hide();
+			        general.stopUser.hide();
 				 	alert("Error: " + e.responseText);
 				});
 		});
@@ -287,7 +297,7 @@ controller.main.addEventsTable = function (){
 
 			})
 			.fail(function(e){
-		        $("#stopUser").hide();
+		        general.stopUser.hide();
 			 	alert("Error: " + e.responseText);
 			});
 	});

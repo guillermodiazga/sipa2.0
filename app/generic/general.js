@@ -105,11 +105,6 @@ general.setPagination = function(table, limitResults, selectPage){
   active = "";
   for (var i = 0; i < numberPages; i++) {
     active = (i == page-1) ? ' active': '';
-
-    if(i > 8){
-      active += " hide";
-    }
-
     pageButtons += '<li class="page'+(i+1)+active+'" ><a class="btn">'+(i+1)+'</a></li>';
   }
   var nextButton = '<li><a class="btn" aria-label="Next" data-next="true"><span aria-hidden="true" data-next="true">&raquo;</span></a></li>',

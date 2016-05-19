@@ -58,7 +58,7 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 		    };
 
 
-			 $("#stopUser").hide();
+			 general.stopUser.hide();
 		}).fail(function(e){
 			alert("Error: " + e.responseText);
 		});
@@ -227,7 +227,7 @@ controller.newOrder.save = function(jsonData, swSaveDirect){
 		return;
 	}
 
-	$("#stopUser").show();
+	general.stopUser.show();
 	model.newOrder.saveNewOrder(jsonData)
 	.done(function (data, textStatus, jqXHR) {
 		if( data.success ){
@@ -242,14 +242,14 @@ controller.newOrder.save = function(jsonData, swSaveDirect){
 
 		    	alert(data.message, callBack);
 		    	
-		    	$("#stopUser").hide();
+		    	general.stopUser.hide();
 		    }else{
 		    	alert("No se pudo guardar " + textStatus + " " + data.message)
-		    	$("#stopUser").hide();
+		    	general.stopUser.hide();
 		    }
 		})
 	.fail(function(jqXHR, textStatus){
-		$("#stopUser").hide();
+		general.stopUser.hide();
 		alert("Error: " + jqXHR.responseText + ", " + textStatus);
 	});
 };
