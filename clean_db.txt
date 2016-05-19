@@ -1,0 +1,4 @@
+delete FROM presupuesto;
+delete FROM pedido;
+delete FROM historico_estados_ped;
+delete FROM `persona-ppto`;

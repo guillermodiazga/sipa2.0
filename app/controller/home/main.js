@@ -10,6 +10,7 @@ controller.main.getOrdersPend = function () {
 
 		if(localStorage.page == "main"){
 			controller.main.showDataInTable(data, "mainTable", "container1");
+			$("#tab1").find(".badge").text(data.length);
 			general.stopUser.hide();
 		}
 	}).fail(function (e) {
@@ -26,6 +27,8 @@ controller.main.getOrdersToDashboard = function () {
 		var idContainer = (localStorage.idrol == 1) ? "container2" : "container3";
 		if(localStorage.page == "main"){
 			controller.main.showDataInTable(data, "mainTable2", idContainer);
+			var tab = (localStorage.idrol==1)? 2 : 3;
+			$("#tab"+tab).find(".badge").text(data.length);
 			general.stopUser.hide();
 		}
 	})
@@ -306,6 +309,7 @@ controller.main.addEventsTable = function (){
 
 //---------------------------------------Constructor
 controller.main.getOrdersPend();
+controller.main.getOrdersToDashboard();
 controller.main.addEvents();
 
 

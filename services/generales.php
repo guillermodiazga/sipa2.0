@@ -3,6 +3,7 @@
  $ipClient = $REMOTE_ADDR;
 
 function queryTojson($sql, $swReturn=false){
+
     $conexion = new Conexion();
 
     $conexion->open();
@@ -19,7 +20,6 @@ function queryTojson($sql, $swReturn=false){
         return json_encode($rows);
     else
         print json_encode($rows);
-
 };
 
 
