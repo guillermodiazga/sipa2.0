@@ -4,6 +4,7 @@ var controller =  controller || {};
 controller.newOrder = {};
 
 controller.newOrder.loadDataToOrder = function() {
+	debugger
 	if(sessionStorage.idOrderToEdit){
 		var idOrderToEdit = sessionStorage.idOrderToEdit;
 		controller.newOrder.loadOrderToEdit(idOrderToEdit);

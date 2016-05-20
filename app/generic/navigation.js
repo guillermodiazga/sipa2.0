@@ -76,7 +76,7 @@ controller.navigation.loadView = function (view, idElementToShow, callBack) {
     localStorage.page = view;
     $("li[class=active]").removeClass("active");
     $("a[href='#"+localStorage.page+"'").parent().addClass("active");
-    $.get('app/view/'+view+'.html?a='+Math.random())
+    $.get('/app/view/'+view+'.html?a='+Math.random())
     .done(function(data){
         $("#"+idElementToShow).html("").append(data);
         general.stopUser.hide();

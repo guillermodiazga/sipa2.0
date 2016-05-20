@@ -274,9 +274,9 @@ controller.main.addEventsTable = function (){
 		general.printOrder(idOrder);
 	});
 
-	$(".editOrder").click(function(e){
+	$(".editOrder").off().click(function(e){
 		sessionStorage.idOrderToEdit = $(e.target).parent().data("id");
-		controller.navigation.loadView('neworder');
+		controller.navigation.loadView('newOrder');
 	});
 
 	$(".historyOrder").click(function(e){
