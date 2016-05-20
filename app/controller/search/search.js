@@ -109,7 +109,6 @@ controller.search.getQuery = function(jsonData) {
 
 	        general.stopUser.hide();
 		 }).fail(function(e){
-
 	        general.stopUser.hide();
 		 	alert("Error: " + e.responseText);
 		});
@@ -183,8 +182,6 @@ controller.search.loadOrderTypes = function (){
 		    }else{
 	        	alert("No se pudieron cargar los tipos de pedido");
 	        }
-
-	        general.stopUser.hide();
 		 }).fail(function(e){
 		 	alert("Error: " + e.responseText);
 		});
@@ -204,7 +201,7 @@ controller.search.loadPptoUserToSearch = function (){
 		       });
 		       $("#budget").append(items);
 		     }else{
-	        	alert("No hay presupuesto para este tipo de pedido");
+	        	pushNotify.show("No hay presupuesto para este tipo de pedido").info();
 	        }
 		 }).fail(function(e){
 		 	$("#budget").append(items);

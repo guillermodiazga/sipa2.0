@@ -35,6 +35,11 @@ general.jsonToTableHtml = function (jsonData) {
 };
 
 general.notification = function(number){
+  if(number)
+    $("#notification").show().text(number);
+  else
+    $("#notification").hide().text("");
+
   if(number <= 0) return $("#notification").hide().text("");
   //show desktop notification
   if(number > parseInt($("#notification").text()) ) {
@@ -54,20 +59,19 @@ general.notification = function(number){
     function closeNoti(){closeNotification(notif)};
   }
 
-  if(number)
-    $("#notification").show().text(number);
-  else
-   $("#notification").hide().text("");
+  
 
 };
 
 general.stopUser = {
   $div : $("#stopUser"),
   show: function(msg){
+    var _this = this;
+    debugger
     msg = msg || "Cargando...";
     html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
-    this.$div.html(html).show();
-    return this;
+    _this.$div.html(html).show();
+    return _this;
   },
   hide: function(delay){
     var _this = this;
@@ -76,7 +80,7 @@ general.stopUser = {
         _this.$div.hide();
       },delay);
     }else{
-      this.$div.hide();
+      _this.$div.hide();
     }
   }
 };
@@ -234,7 +238,7 @@ setInterval(function(){
     }
   }
 
-}, 5000);
+}, 60000);
 
 statusBar = {
   $div : $("#statusBar"),
@@ -439,14 +443,14 @@ function validateText(texto){
  **/
  /*HTML Required
 <div id="div-ms-status-notification" class="status-notification panel panel-default" style="display:none">
-      <div class="panel-heading"> 
-        <i class="fa fa-bell" aria-hidden="true"></i>  <span id="title"></span> 
-        <button type="button" class="close" aria-hidden="true">&times;</button>
-      </div>
-      <div class="panel-body">
-        <span id="msg"></span>
-      </div>
-    </div> 
+  <div class="panel-heading"> 
+    <i class="fa fa-bell" aria-hidden="true"></i>  <span id="title"></span> 
+    <button type="button" class="close" aria-hidden="true">&times;</button>
+  </div>
+  <div class="panel-body">
+    <span id="msg"></span>
+  </div>
+</div> 
 */
 var pushNotify = {
   $divDefault: $("#div-ms-status-notification"),
@@ -470,7 +474,7 @@ var pushNotify = {
 
     _this.$div.slideDown().removeClass("panel-info panel-success").css({right: "0px"})
       .find("#msg").html(msg || "No message to show").end()
-      .find("#title").html(title || "Notification").end()
+      .find("#title").html(title || "Notificación").end()
       .find("i").removeClass("green blue");
 
     clearTimeout(_this.timeOut);

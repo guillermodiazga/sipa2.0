@@ -170,3 +170,14 @@ body > div{
   overflow-x: hidden;
 }
 
+.status-notification{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  min-width: 200px;
+  z-index: 10001;
+}
+
+.label-as-badge {
+    border-radius: 1em!important;
+}

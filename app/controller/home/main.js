@@ -30,7 +30,7 @@ controller.main.getOrdersToDashboard = function () {
 		if(localStorage.page == "main"){
 			controller.main.showDataInTable(data, "mainTable2", idContainer);
 			var tab = (localStorage.idrol==1)? 2 : 3;
-			$("#tab"+tab).find(".badge").text(data.length);
+			$("#tab"+tab).find(".label-as-badge").text(data.length);
 			general.stopUser.hide();
 		}
 	})
@@ -206,10 +206,14 @@ controller.main.addEventsTable = function (){
 			model.main.updateStatusOrder(idOrder, newStatus)
 				.done(function(resp){
 					$row.remove();
+					debugger
 			        general.stopUser.hide();
 					statusBar.show("Pedido "+idOrder+" Aprobado.").hide(2000);
 
-					if($("#mainTable tbody tr[data-id]").size() == 0){
+					var numberRows = $("#mainTable tbody tr[data-id]:visible").size();
+					$("#tab1").find(".badge").text(numberRows);
+
+					if(numberRows == 0){
 						general.noDataToShowInTable($('#mainTable'));
 						general.notification(0);
 					}else{
@@ -248,8 +252,10 @@ controller.main.addEventsTable = function (){
 					$row.remove();
 			        general.stopUser.hide();
 					statusBar.show("Pedido "+idOrder+" Rechazado.").hide(2000);
+					var numberRows = $("#mainTable tbody tr[data-id]:visible").size();
+					$("#tab1").find(".badge").text(numberRows);
 
-					if($("#mainTable tbody tr[data-id]").size() == 0){
+					if(numberRows == 0){
 						general.noDataToShowInTable($('#mainTable'));
 						general.notification(0);
 					}else{
