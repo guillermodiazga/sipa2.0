@@ -5,6 +5,7 @@ controller.main = {};
 controller.main.pagesToShow = 10;
 
 controller.main.getOrdersPend = function () {
+	if(!localStorage.id)return;
 	model.main.getOrdersPend().then(function(data){
 		general.notification(data.length);
 
@@ -15,11 +16,12 @@ controller.main.getOrdersPend = function () {
 		}
 	}).fail(function (e) {
 		alert(e.responseText);
-		general.stopUser.hide()
+		general.stopUser.hide();
 	});
 };
 
 controller.main.getOrdersToDashboard = function () {
+	if(!localStorage.id)return;
 	general.stopUser.show();
 	model.main.getOrdersToDashboard().then(function(data){
 		//general.notification(data.length);
@@ -34,7 +36,7 @@ controller.main.getOrdersToDashboard = function () {
 	})
 	.fail(function (e) {
 		alert(e.responseText);
-		general.stopUser.hide()
+		general.stopUser.hide();
 	});
 };
 

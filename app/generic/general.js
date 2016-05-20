@@ -222,17 +222,19 @@ general.iconStatus = {
 
 //refrescar pedidos pendientes
 setInterval(function(){
-  if(!controller.main){
-    $.getScript("app/model/home/main.js",function(){
-      $.getScript("app/controller/home/main.js", function(){
-        controller.main.getOrdersPend();
+  if(localStorage.id){
+    if(!controller.main){
+      $.getScript("app/model/home/main.js",function(){
+        $.getScript("app/controller/home/main.js", function(){
+          controller.main.getOrdersPend();
+        });
       });
-    });
-  }else{
-    controller.main.getOrdersPend();
+    }else{
+      controller.main.getOrdersPend();
+    }
   }
 
-}, 60000);
+}, 5000);
 
 statusBar = {
   $div : $("#statusBar"),
