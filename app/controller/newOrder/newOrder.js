@@ -112,7 +112,7 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 			if( data.length > 0){
 		        //load data in view
 		        $("#itemList").html("");
-		        $("#txtToSearch").on("keyup change", function(){controller.newOrder.searchItem()}).focusin();
+		        $("#txtToSearch").off().on("keyup change", function(){controller.newOrder.searchItem()}).focusin();
 		        $.each(data, function(i, item){
 		        	var vlrConIva = Math.round(parseFloat(item.valor)*((parseFloat(item.iva)/100)+1));
 		        	$("#itemListTemplate")
@@ -344,7 +344,9 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 //add all events
 controller.newOrder.initEvents = function(){
 	$("#typeOrder").change(function(){
-		statusBar.show("Cargando...");
+		setTimeout(function(){
+			pushNotify.show("Cargando productos...").info();
+		},10);
 		//change items list
 		controller.newOrder.loadItemsToNewOrder();
 		controller.newOrder.loadPptoUserToNewOrder();
@@ -365,7 +367,7 @@ controller.newOrder.initEvents = function(){
 	});
 
 	$("#addItems").click(function(){
-
+		$("#txtToSearch").val("");
 	});
 
 };

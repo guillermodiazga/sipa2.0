@@ -657,39 +657,6 @@ function deleteOrder($arrData){
 
 }
 
-function reportItem($arrData){
-    $idUser = $arrData["idUser"];
-    $fchdesde = $arrData["dateIni"];
-    $fchhasta = $arrData["dateEnd"];
-    $usBuscado = "";
-
-    if($idUser){
-        $usBuscado = "and ped.idusuario= $idUser";
-    }
-
-    $sql = "SELECT CONCAT(ped.idalimento, '-', ali.nombre) as item,
-                   CONCAT(ped.idsecretaria, '-', sec.secretaria) as secretaria, 
-
-                    sum(ped.cantidad) as cantidad,
-
-                    sum(ped.valorpedido)  as valorpedido
-                         
-            FROM `pedido` as ped,  secretaria as sec, alimento as ali
-
-            WHERE 
-                ped.idalimento = ali.id and 
-                ped.bitactivo = 1 and 
-                ped.idsecretaria = sec.id and
-                ped.fchentrega Between '$fchdesde' and '$fchhasta' 
-                $usBuscado
-
-            group by 1, 2
-            order by ped.idalimento, ped.idsecretaria";
-
-    return queryTojson($sql);
-
-};
-
 function getOrdersToDashboard($arrData)
 {
     $user = $arrData["idUser"];
@@ -725,10 +692,90 @@ function getOrdersToDashboard($arrData)
         order By 1, 4 asc
     ";
 
-error_log($sql);
     return queryTojson($sql);
 }
-//error_log($sql2);
+
+function report1($arrData){
+    $idUser = $arrData["idUser"];
+    $fchdesde = $arrData["dateIni"];
+    $fchhasta = $arrData["dateEnd"];
+    $usBuscado = "";
+
+    if($idUser){
+        $usBuscado = "and ped.idusuario= $idUser";
+    }
+
+    $sql = "SELECT CONCAT(ped.idalimento, '-', ali.nombre) as item,
+                   CONCAT(ped.idsecretaria, '-', sec.secretaria) as secretaria, 
+
+                    sum(ped.cantidad) as cantidad,
+
+                    sum(ped.valorpedido)  as valorpedido
+                         
+            FROM `pedido` as ped,  secretaria as sec, alimento as ali
+
+            WHERE 
+                ped.idalimento = ali.id and 
+                ped.bitactivo = 1 and 
+                ped.idsecretaria = sec.id and
+                ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+                $usBuscado
+
+            group by 1, 2
+            order by ped.idalimento, ped.idsecretaria";
+
+    return queryTojson($sql);
+
+};
+
+function report2($arrData){
+    $idUser = $arrData["idUser"];
+    $fchdesde = $arrData["dateIni"];
+    $fchhasta = $arrData["dateEnd"];
+    $usBuscado = "";
+
+    if($idUser){
+        $usBuscado="and ped.idusuario=".$idUser;
+    }
+   
+
+    $sql = "SELECT  
+            ped.id,
+            ali.nombre as alimento,
+            ali.id as ali,
+            ped.cantidad,
+            ped.valorpedido,
+            ped.idppto,
+            ped.estado,
+            est.estado as nomestado,
+            sec.secretaria,
+            sec.id as idsec,
+            ped.idusuario,
+            us.nombre as usnam,
+            ppto.idsecretaria,
+            ped.fchentrega,
+            ppto.nombre,
+            ppto.valorini
+
+        FROM secretaria as sec, estados as est, pedido as ped, usuario as us, presupuesto as ppto, alimento as ali
+
+        WHERE  
+            ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+            and ped.idalimento=ali.id
+            and ped.idppto=ppto.id
+            and ped.idusuario=us.id
+            and  ped.estado=est.id
+            and ppto.idsecretaria=sec.id
+
+            $usBuscado
+
+        ORDER BY 1, 2 ";
+
+error_log($sql);
+    return queryTojson($sql);
+
+};
+//error_log($sql);
 
 ?>
 

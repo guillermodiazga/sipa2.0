@@ -44,9 +44,14 @@ controller.reports.initEvents = function(){
 			var callBack = false;
 
 			switch(html){
-				case "report-item":
+				case "report1":
 					callBack = function(){
-						controller.reports.reportItem.addEvents();
+						controller.reports.report1.addEvents();
+					}
+					break;
+				case "report2":
+					callBack = function(){
+						controller.reports.report2.addEvents();
 					}
 					break;
 
@@ -81,15 +86,15 @@ controller.reports.initEvents = function(){
 	});
 };
 
-controller.reports.reportItem = {
+controller.reports.report1 = {
 
 
 	addEvents: function(){
-		$("#report-item-form").submit(function(e){
+		$("#report1-form").submit(function(e){
 			e.preventDefault();
 			general.stopUser.show();
 
-			model.reports.reportItem($("#report-item-ini").val(), $("#report-item-end").val() )
+			model.reports.report1($("#report1-ini").val(), $("#report1-end").val() )
 				.done(function(data){
 					general.stopUser.hide();
 					if(data.length){
@@ -99,13 +104,13 @@ controller.reports.reportItem = {
 				        	html += "<tr><td class='merge'>"+data.item+"</td><td>"+data.secretaria+"</td><td class='sum sum1' data-value='"+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td><td class='sum sum2' data-value='"+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td></tr>";
 				        });
 
-						$("#report-item-table tbody").html(html);
-						controller.reports.reportItem.addMergeCells();
-						controller.reports.reportItem.addTotalInTable($("#report-item-table"));
-						controller.reports.reportItem.addSubtotales($("#report-item-table"));
+						$("#report1-table tbody").html(html);
+						controller.reports.report1.addMergeCells();
+						controller.reports.report1.addTotalInTable($("#report1-table"));
+						controller.reports.report1.addSubtotales($("#report1-table"));
 
 					}else{
-						general.noDataToShowInTable($("#report-item-table"));
+						general.noDataToShowInTable($("#report1-table"));
 					}					
 				})
 				.fail(function(e){
@@ -156,9 +161,9 @@ controller.reports.reportItem = {
 			counter = 0,
 			$element = null,
 			firstSub = false,
-			totalRows = $("#report-item-table tbody tr").size();
+			totalRows = $("#report1-table tbody tr").size();
 
-		$.each($("#report-item-table tbody tr"), function(i, e){
+		$.each($("#report1-table tbody tr"), function(i, e){
 			var $e = $(e),
 				$td = $e.find(".merge"),
 			    value = $td.text(),
@@ -195,6 +200,63 @@ controller.reports.reportItem = {
 
 }
 
+
+controller.reports.report2 = {
+
+
+	addEvents: function(){
+		$("#report2-form").submit(function(e){
+			e.preventDefault();
+			general.stopUser.show();
+
+			model.reports.report2($("#report2-ini").val(), $("#report2-end").val() )
+				.done(function(data){
+					general.stopUser.hide();
+					if(data.length){
+						var html = "";
+
+						$.each(data, function(i, data) {
+							debugger
+				        	html += "<tr>"+
+				        	"<td>"+data.id+"</td>"+
+				        	"<td>"+data.ali+"-"+data.alimento+"</td>"+
+				        	"<td class='sum sum1' data-value="+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td>"+
+				        	"<td class='sum sum2' data-value="+data.valorpedido+"'>"+formatMoney(data.valorpedido)+"</td>"+
+				        	"<td>"+data.fchentrega+"</td>"+
+				        	"<td>"+data.idppto+"</td>"+
+				        	"<td>"+data.idsec+"-"+data.usnam+"</td>"+
+				        	"<td>"+((data.valorpedido/data.valorini)*100)+"%</td>"+
+
+				        	"</tr>";
+				        });
+
+						$("#report2-table tbody").html(html);
+						controller.reports.report2.addTotalInTable($("#report2-table"));
+
+					}else{
+						general.noDataToShowInTable($("#report2-table"));
+					}					
+				})
+				.fail(function(e){
+					general.stopUser.hide();
+					alert("Error: " + e.responseText);
+				});
+		});
+	},
+
+	addTotalInTable: function($table){
+		var total1 = 0,
+			total2 = 0;
+
+		$.each($table.find(".sum"), function(i, e){
+			var $e = $(e);
+			total1 += ($e.hasClass("sum1")) ? parseInt($e.data("value")) : 0;
+			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
+		});
+		
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><thcolspan='4'></th></tr>")
+	}
+}
 
 
 
