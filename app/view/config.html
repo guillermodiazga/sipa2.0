@@ -1,0 +1,45 @@
+<form id="formNewOrder" action="#">
+	
+<legend id="reportHead">
+	<i class="fa fa-cogs"></i>
+	<span>Configuracion</span>
+	<span id="tabMain" class="tab btn" title="Ver reporte" style="display: none;">
+		<span class="name">Ver Todos </span>
+		<button type="button" class="close" ><span aria-hidden="true">&times;</span></button>
+	</span>
+</legend><br>
+<div id="tabSet" class="container text-center">
+	<div id="tabBodyMain" class="tabBody text-left">
+		<ul class="squareList">
+			<li data-html="report1">
+				<span class="fa fa-cogs" ></span> 
+				<span class="nameReport"> 1. Usuarios: </span>
+				<div>Crear y modificar usuarios</div>
+			</li>
+			<li data-html="report2">
+				<span class="fa fa-cogs" ></span> 
+				<span class="nameReport"> 2. Presupuesto</span>
+				<div>Crear y modificar presupuesto y sus asignaciones</div>
+			</li>
+			<li data-html="report3">
+				<span class="fa fa-cogs" ></span> 
+				<span class="nameReport"> 3. Productos</span>
+				<div>Crear y modificar productos</div>
+			</li>
+			<li data-html="report4">
+				<span class="fa fa-cogs" ></span> 
+				<span class="nameReport"> 4. Secretarias</span>
+				<div>Crear y modificar Secretarías</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<!----------------templates-->
+
+<div id="tabBodyTemplate" class="tabBody" style="display:none">
+	
+</div>
+
+<script src="app/model/config/config.js" async='false'></script>
+<script src="app/controller/config/config.js" async='false'></script>

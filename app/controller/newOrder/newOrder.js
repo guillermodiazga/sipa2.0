@@ -10,6 +10,9 @@ controller.newOrder.loadDataToOrder = function() {
 		$("legend span").html("Modificar Pedido: <b>"+idOrderToEdit+"<span id='deleteOrder' class='pull-right btn btn-danger' ><i class='fa fa-trash'></i> Anular Pedido</span>");
 		$("#deleteOrder").click(function(){controller.newOrder.deleteOrder(idOrderToEdit, $("#ppto").val(), $("#formNewOrder").attr("vlrtotalanterior"))});
 		sessionStorage.idOrderToEdit = '';
+		$(".btn-default[type='reset']").click(function() {
+			controller.navigation.loadView("main");
+		});
 
 	}else{
 		controller.newOrder.loadOrderTypes();

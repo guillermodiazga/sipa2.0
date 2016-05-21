@@ -59,23 +59,23 @@ controller.navigation.hideMainMenu = function () {
     $("#activNotifications").hide();
 }
 
-controller.navigation.loadView = function (view, idElementToShow, callBack) {
+controller.navigation.loadView = function (view, idElementToShow, callBack, container) {
     var idElementToShow = idElementToShow || "container";
     general.stopUser.show();
-    $("#container-xl").html("").hide();
     if(localStorage.id){
         controller.navigation.showMainMenu();
-        var container = $(".menuPpal .active").attr("data-container");
-        if(container === "true")
-            $("#container").parent().addClass("container");
-        else
-            $("#container").parent().removeClass("container");
     }else{
         view = 'login';
     }
     localStorage.page = view;
     $("li[class=active]").removeClass("active");
     $("a[href='#"+localStorage.page+"'").parent().addClass("active");
+    debugger
+    var container = (container === false) ? container : $(".menuPpal .active").attr("data-container");
+    if(container === "true")
+        $("#container").parent().addClass("container");
+    else
+        $("#container").parent().removeClass("container");
     $.get('app/view/'+view+'.html?a='+Math.random())
     .done(function(data){
         $("#"+idElementToShow).html("").append(data);

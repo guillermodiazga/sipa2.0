@@ -276,7 +276,7 @@ controller.main.addEventsTable = function (){
 
 	$(".editOrder").off().click(function(e){
 		sessionStorage.idOrderToEdit = $(e.target).parent().data("id");
-		controller.navigation.loadView('newOrder');
+		controller.navigation.loadView('newOrder', null, null, true);
 	});
 
 	$(".historyOrder").click(function(e){
