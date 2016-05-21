@@ -4,7 +4,6 @@ var controller =  controller || {};
 controller.newOrder = {};
 
 controller.newOrder.loadDataToOrder = function() {
-	debugger
 	if(sessionStorage.idOrderToEdit){
 		var idOrderToEdit = sessionStorage.idOrderToEdit;
 		controller.newOrder.loadOrderToEdit(idOrderToEdit);
@@ -115,7 +114,7 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 		        $("#itemList").html("");
 		        $("#txtToSearch").on("keyup change", function(){controller.newOrder.searchItem()}).focusin();
 		        $.each(data, function(i, item){
-		        	var vlrConIva = Math.floor(parseInt(item.valor)*((parseInt(item.iva)/100)+1));
+		        	var vlrConIva = Math.round(parseFloat(item.valor)*((parseFloat(item.iva)/100)+1));
 		        	$("#itemListTemplate")
 		        	.clone().show()
 		        	.attr("data-id", item.id)
@@ -184,22 +183,24 @@ controller.newOrder.selectedItem = function(element){
 	
 	//add events
 	$(".quantity").off().on("keyup change", function(e){
-		var element = e.target,
-		    aditionalValue = parseInt(element.value) || 0,
-		    quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0,
-		    individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value")),
+		$(this).val(Math.abs($(this).val()));
+		var element = this,
+		    quantity = parseFloat($(this).val()) || 0,
+		    individualValue  = parseFloat($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value")),
+		    aditionalValue = parseFloat($(element).parent().parent().parent().parent().find(".aditionalValue").attr("data-value")) || 0,
 		    totalValue = (quantity*individualValue)+aditionalValue;
-		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(totalValue)).data("totalValue", totalValue);
+		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(Math.round(totalValue))).data("totalValue", totalValue);
 
 	});
 
 	$(".aditionalValue").off().on("keyup change", function(e){
+		$(this).val(Math.abs($(this).val()));
 		var element = e.target,
-		    aditionalValue = parseInt(element.value) || 0,
-		    quantity  = parseInt($(element).parent().parent().find(".quantity").val()) || 0,
-		    individualValue = parseInt($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value")),
+		    aditionalValue = parseFloat(element.value) || 0,
+		    quantity  = parseFloat($(element).parent().parent().find(".quantity").val()) || 0,
+		    individualValue = parseFloat($(element).parent().parent().parent().parent().find(".individualValue").attr("data-value")),
 		    totalValue = (quantity*individualValue)+aditionalValue;
-		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(totalValue)).data("totalValue", totalValue);
+		$(element).parent().parent().find(".totalValue").text("$"+formatMoney(Math.round(totalValue))).data("totalValue", totalValue);
 
 	});
 
@@ -306,7 +307,7 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 			creationDate = moment(data.fchreg.substring(0,10), "L").format("Y-MM-DD");
 			controller.newOrder.loadOrderTypes(data.idtalimento);
 			$form
-				.attr("vlrtotalanterior", (parseInt(data.valorpedido) + parseInt(data.valoradic)))
+				.attr("vlrtotalanterior", (parseFloat(data.valorpedido) + parseFloat(data.valoradic)))
 				.attr("idordertoedit", idOrderToEdit)
 				.find("#typeOrder").attr("disabled", "disabled").end()
 				.find("#deliveryDate").val(data.fchentrega).end()
@@ -382,7 +383,7 @@ controller.newOrder.validateForm = function(jsonData) {
 	movilrecibe = jsonData[0]["celphone"],
 	personarecibe = jsonData[0]["nameReceive"],
 	msg = true,
-	saldo = parseInt($("#ppto").find("option:selected").data("saldo")),
+	saldo = parseFloat($("#ppto").find("option:selected").data("saldo")),
 	totalValue = $(".totalValue:visible").data("totalValue");
 
 
