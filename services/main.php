@@ -771,7 +771,73 @@ function report2($arrData){
 
         ORDER BY 1, 2 ";
 
-error_log($sql);
+    return queryTojson($sql);
+
+};
+
+function report3($arrData){
+    $idSec = $arrData["idSec"];
+    $fchdesde = $arrData["dateIni"];
+    $fchhasta = $arrData["dateEnd"];
+    $secre = "";
+
+    if($idSec){
+        $secre="and ped.idsecretaria=".$idSec;
+    }
+   
+
+    $sql = "SELECT ppto.idsecretaria, sec.secretaria, ped.idppto, ppto.nombre,
+            count(ped.id) as cantidad,
+            sum(DISTINCT ppto.valorini) as valorini, 
+             sum( ped.valorpedido+ped.valoradic) as valorped, 
+            SUM(CASE 
+            WHEN ped.estado = '5' 
+            THEN (ped.valorpedido+ped.valoradic)
+            END) as valorpag,
+
+            (ppto.valorini+ppto.valorNoRequerido)-ppto.valorpedido as saldo,
+
+            count(CASE 
+            WHEN ped.estado = '5' 
+            THEN (ped.id)
+            END) as cantidadpag
+             
+            FROM presupuesto as ppto, `pedido` as ped,  secretaria as sec
+
+            WHERE 
+            ped.`bitactivo`=1 and 
+            ped.idsecretaria=ppto.idsecretaria and
+            ped.idppto=ppto.id and
+            ppto.idsecretaria=sec.id and
+            ped.idsecretaria=sec.id and 
+            ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+            $secre
+             group by ped.idsecretaria, ped.idppto, ppto.nombre";
+
+    return queryTojson($sql);
+
+};
+
+function report4($arrData){
+    $idSec = $arrData["idSec"];
+    $secre = "";
+
+    if($idSec){
+        $secre="and  ppto.idsecretaria=".$idSec;
+    }
+   
+
+    $sql = "SELECT sec.secretaria,sec.id as idsecretaria, 
+                ppto.pedido,ppto.proyecto, ppto.nombre, ppto.valorini+ppto.valorNoRequerido as valorini, 
+                ppto.valorpedido, (SELECT sum(valorpedido) FROM `pedido` WHERE idppto=ppto.id and estado=5) valorpagado, prov.proveedor as nomprov 
+            FROM `presupuesto` as ppto, secretaria as sec, proveedor as prov
+            WHERE 
+            ppto.`bitactivo`=1 and
+            ppto.idproveedor=prov.id and
+            ppto.idsecretaria=sec.id
+$secre
+ order by  idsecretaria, ppto.proyecto ";
+
     return queryTojson($sql);
 
 };

@@ -54,6 +54,16 @@ controller.reports.initEvents = function(){
 						controller.reports.report2.addEvents();
 					}
 					break;
+				case "report3":
+					callBack = function(){
+						controller.reports.report3.addEvents();
+					}
+					break;
+				case "report4":
+					callBack = function(){
+						controller.reports.report4.addEvents();
+					}
+					break;
 
 			}
 
@@ -216,7 +226,6 @@ controller.reports.report2 = {
 						var html = "";
 
 						$.each(data, function(i, data) {
-							debugger
 				        	html += "<tr>"+
 				        	"<td>"+data.id+"</td>"+
 				        	"<td>"+data.ali+"-"+data.alimento+"</td>"+
@@ -225,7 +234,7 @@ controller.reports.report2 = {
 				        	"<td>"+data.fchentrega+"</td>"+
 				        	"<td>"+data.idppto+"</td>"+
 				        	"<td>"+data.idsec+"-"+data.usnam+"</td>"+
-				        	"<td>"+((data.valorpedido/data.valorini)*100)+"%</td>"+
+				        	"<td>"+((data.valorpedido/data.valorini)*100).toFixed(2)+"%</td>"+
 
 				        	"</tr>";
 				        });
@@ -254,11 +263,123 @@ controller.reports.report2 = {
 			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
 		});
 		
-		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><thcolspan='4'></th></tr>")
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><th colspan='4'></th></tr>")
 	}
 }
 
+controller.reports.report3 = {
 
+
+	addEvents: function(){
+		$("#report3-form").submit(function(e){
+			e.preventDefault();
+			general.stopUser.show();
+
+			model.reports.report3($("#report3-ini").val(), $("#report3-end").val() )
+				.done(function(data){
+					general.stopUser.hide();
+					if(data.length){
+						var html = "";
+
+						$.each(data, function(i, data) {
+				        	html += "<tr>"+
+				        	"<td>"+data.idsecretaria+"-"+data.secretaria+"</td>"+
+				        	"<td>"+data.idppto+"-"+data.nombre+"</td>"+
+				        	"<td class='sum sum1' data-value="+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td>"+
+				        	"<td class='sum sum2' data-value="+data.valorini+"'>$"+formatMoney(data.valorini)+"</td>"+
+				        	"<td class='sum sum3' data-value="+data.valorped+"'>$"+formatMoney(data.valorped)+"</td>"+
+				        	"<td class='sum sum4' data-value="+data.saldo+"'>$"+formatMoney(data.saldo)+"</td>"+
+				        	"</tr>";
+				        });
+
+						$("#report3-table tbody").html(html);
+						controller.reports.report3.addTotalInTable($("#report3-table"));
+
+					}else{
+						general.noDataToShowInTable($("#report3-table"));
+					}					
+				})
+				.fail(function(e){
+					general.stopUser.hide();
+					alert("Error: " + e.responseText);
+				});
+		});
+	},
+
+	addTotalInTable: function($table){
+		var total1 = 0,
+			total2 = 0,
+			total3 = 0,
+			total4 = 0;
+
+		$.each($table.find(".sum"), function(i, e){
+			var $e = $(e);
+			total1 += ($e.hasClass("sum1")) ? parseInt($e.data("value")) : 0;
+			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
+			total3 += ($e.hasClass("sum3")) ? parseInt($e.data("value")) : 0;
+			total4 += ($e.hasClass("sum4")) ? parseInt($e.data("value")) : 0;
+		});
+		
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><th>$"+formatMoney(total3)+"</th><th>$"+formatMoney(total4)+"</th></tr>")
+	}
+}
+
+controller.reports.report4 = {
+
+
+	addEvents: function(){
+		//$("#report4-form").submit(function(e){
+			//e.preventDefault();
+			general.stopUser.show();
+
+			model.reports.report4()
+				.done(function(data){
+					general.stopUser.hide();
+					if(data.length){
+						var html = "";
+
+						$.each(data, function(i, data) {
+				        	html += "<tr>"+
+				        	"<td>"+data.idsecretaria+"-"+data.secretaria+"</td>"+
+				        	"<td>"+data.proyecto+"</td>"+
+				        	"<td>"+data.pedido+"</td>"+
+				        	"<td>"+data.nombre+"</td>"+
+				        	"<td class='sum sum1' data-value="+data.valorini+"'>$"+formatMoney(data.valorini)+"</td>"+
+				        	"<td class='sum sum2' data-value="+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td>"+
+				        	"<td class='sum sum3' data-value="+(data.valorini-data.valorpedido)+"'>$"+formatMoney(data.valorini-data.valorpedido)+"</td>"+
+
+				        	"</tr>";
+				        });
+
+						$("#report4-table tbody").html(html);
+						controller.reports.report4.addTotalInTable($("#report4-table"));
+
+					}else{
+						general.noDataToShowInTable($("#report4-table"));
+					}					
+				})
+				.fail(function(e){
+					general.stopUser.hide();
+					alert("Error: " + e.responseText);
+				});
+		//});
+	},
+
+	addTotalInTable: function($table){
+		var total1 = 0,
+			total2 = 0,
+			total3 = 0;
+
+		$.each($table.find(".sum"), function(i, e){
+			var $e = $(e);
+			total1 += ($e.hasClass("sum1")) ? parseInt($e.data("value")) : 0;
+			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
+			total3 += ($e.hasClass("sum3")) ? parseInt($e.data("value")) : 0;
+		});
+		
+		$table.find("tbody").append("<tr class='info'><th colspan='4'>Total: </th><th>$"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><th>$"+formatMoney(total3)+"</th></tr>")
+	}
+}
 
 //---------------------------------------Constructor
 //add Events
