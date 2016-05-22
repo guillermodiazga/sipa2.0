@@ -69,7 +69,7 @@ general.stopUser = {
     var _this = this;
     msg = msg || "Cargando...";
     html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
-    _this.$div.html(html).show();
+    _this.$div.html(html).show().off();
     return _this;
   },
   hide: function(delay){
@@ -261,7 +261,9 @@ window.alert = function(content, callback){
   var msg, 
   title = "Mensaje",
   $div = $('#modalAlert'),
-  $divTitle = $div.find(".modal-title");
+  $divTitle = $div.find(".modal-title"),
+  $divHeader = $div.find(".modal-header"),
+  $button = $div.find("#okConfirm");
 
   if(typeof content == "object"){
     title = content.title;
@@ -279,21 +281,32 @@ window.alert = function(content, callback){
     .find(".modal-title").html(title).end()
     .find("#textAlert").html(msg).end()
     .modal('show').off('hide.bs.modal').on('hide.bs.modal', function(){callback()});
+
+  $divHeader.removeAttr("class").addClass("label-primary modal-header");
+  $button.removeAttr("class").addClass("btn btn-primary");
   
   this.info = function(){
     $divTitle.html("Información");
+    $divHeader.addClass("label-info");
+    $button.addClass("btn-info");
   };
 
-  this.error = function(){
+  this.danger = function(){
     $divTitle.html("Error");
+    $divHeader.addClass("label-danger");
+    $button.addClass("btn-danger");
   };
 
   this.warning = function(){
     $divTitle.html("Advertencia");
+    $divHeader.addClass("label-warning");
+    $button.addClass("btn-warning");
   };
 
   this.success = function(){
     $divTitle.html("Mensaje");
+    $divHeader.addClass("label-success");
+    $button.addClass("btn-success");
   };
 
   return this;
@@ -408,7 +421,7 @@ general.zoomImg = function(){
             .removeClass("zoomImg")
             .addClass("imgZoomInContainer")
             .addClass("img-responsive")
-            .attr("width", "60%")
+            .attr("width", "40%")
             .fadeIn()
             .appendTo("body");
 
@@ -416,12 +429,10 @@ general.zoomImg = function(){
             .show()
             .find(".close").remove().end()
             .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
-            .find(".close")
             .click(function(){
               $(this)
-                  .parent()
                   .hide()
-                  .end()
+                  .find(".close")
                   .remove();
           
               $(".imgZoomInContainer").remove();
