@@ -206,18 +206,18 @@ general.iconStatus = {
       break;
     } 
 
-    return '<i class="status fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
+    return '<i class="status btn fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
   },
   addEvents: function(){
     $(".status").click(function(){
       var $iconParent = $(this).parent(),
           status = $iconParent.attr("title");
 
-      $iconParent.find("span").remove().end()
-                 .append("<span class='text-muted' style='position:relative'>"+status+"</span>")
-                 .find("span").hide().slideDown(500);
+      $iconParent.find("small").remove().end()
+                 .append("<small class='label label-info' style='position:relative; left:-10px;top:0px; z-index:100'>"+status+"</small>")
+                 .find("small").hide().slideDown(500);
 
-      setTimeout(function(){ $iconParent.find("span").slideUp(500)},3000);
+      setTimeout(function(){ $iconParent.find("small").slideUp(500)},3000);
 
     });
   }

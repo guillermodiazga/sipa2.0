@@ -88,6 +88,7 @@ controller.main.showDataInTable = function (data, idTable, idContainer) {
 	
     $('#'+idTable+' tbody').html("").append(result);
     general.iconStatus.addEvents();
+
     //general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 
   // $("#mainTableContainer").css("width", $(window).width()-20).css("height", $(window).height()-170)
@@ -289,7 +290,7 @@ controller.main.addEventsTable = function (){
 
 		        general.stopUser.hide();
 
-		        var title = "<legend>Estados del Pedido: "+idOrder+"</legend>",
+		        var title = "Cambios de estado del pedido: "+idOrder+"",
 		        	html = "<div class='table-responsive' ><table class='table table-striped' >"+
 		        		   "<tr><th>Estado</th><th>Fecha y Hora</th><th>Comentario</th></tr>";
 

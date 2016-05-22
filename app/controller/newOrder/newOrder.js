@@ -366,7 +366,7 @@ controller.newOrder.initEvents = function(){
 		if( isDataValid === true) {
 			controller.newOrder.save(jsonData);
 		}else{
-			alert(isDataValid);
+			alert(isDataValid).warning();
 		}
 	});
 

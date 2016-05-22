@@ -183,5 +183,9 @@ body > div{
 }
 
 .modal-header {
-  color: #FFFFFF;
+  color: #FFFFFF!important;
+}
+
+.table>tfoot>tr>td {
+  padding: 1px!important;
 }

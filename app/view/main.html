@@ -35,7 +35,7 @@
         <table align="center" border="0" rules="" class="table table-striped" id="mainTable">
             <thead>
                 <tr>
-                    <th>Estado</th>
+                    <th onclick='$.each($(".status"),function(i, e){var $e=$(e); setTimeout(function(){$e.click()},i*500);});'>Estado</th>
                     <th></th>
                     <th class='hide'>Sec</th>
                     <th>#</th>
