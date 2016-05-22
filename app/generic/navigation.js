@@ -70,8 +70,10 @@ controller.navigation.loadView = function (view, idElementToShow, callBack, cont
     localStorage.page = view;
     $("li[class=active]").removeClass("active");
     $("a[href='#"+localStorage.page+"'").parent().addClass("active");
-    debugger
+    
     var container = (container === false) ? container : $(".menuPpal .active").attr("data-container");
+
+    if(view == 'login'){container = "true"}
     if(container === "true")
         $("#container").parent().addClass("container");
     else

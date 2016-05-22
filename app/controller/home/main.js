@@ -15,7 +15,7 @@ controller.main.getOrdersPend = function () {
 			general.stopUser.hide();
 		}
 	}).fail(function (e) {
-		alert(e.responseText);
+		console.log(e.responseText);
 		general.stopUser.hide();
 	});
 };
@@ -56,12 +56,12 @@ controller.main.showDataInTable = function (data, idTable, idContainer) {
 		      "<i class='rejectOrder red btn btn-default fa fa-times ' title='Rechazar Pedido'></i><br>";
 	}
 
-	if(localStorage.idrol != 3){
-		editOrder = "<i class='editOrder yellow btn fa fa-pencil btn-default' title='Modificar Pedido'></i>";
-	}
-
 	$.each(data, function(i, resp){
-		editOrder = (resp.estado == 2) ? editOrder : "";
+		
+		if(localStorage.idrol != 3){
+			editOrder = "<i class='editOrder yellow btn fa fa-pencil btn-default' title='Modificar Pedido'></i>";
+			editOrder = (resp.estado == 2 || resp.estado == 4) ? editOrder : "";
+		}
 		result += 
 			"<tr data-id='"+resp.id+"''>"+
 	            "<td title='"+resp.descestado+"'>"+general.iconStatus.html(resp.estado)+"</td>"+

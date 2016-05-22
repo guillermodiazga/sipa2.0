@@ -4,17 +4,7 @@
 
 function queryTojson($sql, $swReturn=false){
 
-    $conexion = new Conexion();
-
-    $conexion->open();
-
-    $result = mysql_query($sql) or die('Error query: '.$sql);
-    $rows = array();
-    while($r = mysql_fetch_assoc($result)) {
-        $rows[] = $r;
-    }
-    
-    $conexion->close($result);
+    $rows = executeQuery($sql);
 
     if($swReturn)
         return json_encode($rows);
@@ -22,6 +12,23 @@ function queryTojson($sql, $swReturn=false){
         print json_encode($rows);
 };
 
+function executeQuery($sql)
+{
+   
+    $conexion = new Conexion();
+
+    $conexion->open();
+
+    $result = mysql_query($sql) or die('Error query: '.mysql_error()." sql:".$sql);
+    $rows = array();
+    while($r = mysql_fetch_assoc($result)) {
+        $rows[] = $r;
+    }
+    
+    $conexion->close($result);
+
+    return $rows;
+}
 
 
 //formateos
@@ -109,5 +116,15 @@ function php_fix_raw_query() {
 # optionally return result array
     return $arr;
 }
+
+function sendMail($para, $mensaje){
+    $cabeceras = "Content-type: text/html ". "\r\n" .
+    "From: Admin Sipa<admin@sipa.com>" . "\r\n" .
+    "Reply-To:  admin@dg4apps.com";
+
+    $asunto    = "Notificación Sipa: ";
+    
+    mail($para, $asunto, $mensaje, $cabeceras);
+};
 
 ?>

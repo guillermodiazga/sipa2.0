@@ -24,7 +24,6 @@ function response ($resp, $msg){
     echo json_encode($jsondata);
 }
 
-
 function getRecibidos($arrData){
     $idRol = $arrData["idRol"];
     $idUser = $arrData["idUser"];
@@ -115,6 +114,11 @@ function saveHistoricStatus ($idOrder, $newStatus, $msg, $log){
     $result = mysql_query($sql) or die("Query Error".$sql);
 
     $conexion->close($result);
+
+    //solo enviar mail si se aprueba o rechaza
+    if($newStatus == 3 || $newStatus == 4 || $newStatus == 6){
+        buildEmail($idOrder);
+    }
 
 };
 
@@ -841,6 +845,34 @@ $secre
     return queryTojson($sql);
 
 };
+
+
+function buildEmail($numOrder)
+{
+    $sql = "SELECT pedido.id, pedido.estado, estados.estado, usuario.nombre, usuario.mail
+            FROM pedido, estados, usuario
+            WHERE pedido.estado = estados.id
+            AND usuario.id = pedido.idusuario
+            AND pedido.id =$numOrder";
+
+    $array = executeQuery($sql);     
+
+    $id = $array[0]["id"];
+    $nombre = $array[0]["nombre"];
+    $mail = $array[0]["mail"];
+    $estado = $array[0]["estado"];
+
+    $mensaje   = 
+                "<h1>Hola ".$nombre."!</h1>".
+                "<p>El estado del pedido # ".$id." ha cambiado a <b>".$estado.".</b></p>".
+                "<br>".
+                "<p>Por favor ingresa al siguiente link para ver mas detalles: <a href='sipa.dg4apps.com'>sipa.dg4apps.com<a/></p>".
+                "<br><br><br><br>".
+                "<img width='100' src='sipa.dg4apps.com/img/logo.png'><img width='80' src='dg4apps.com/img/logo.png'>";
+
+    sendMail($mail, $mensaje);
+}
+
 //error_log($sql);
 
 ?>

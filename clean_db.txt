@@ -3,7 +3,6 @@ delete FROM pedido;
 delete FROM historico_estados_ped;
 delete FROM `persona-ppto`;
 
-ALTER TABLE  `alimento` AUTO_INCREMENT =1;
 
 ALTER TABLE  `historico_estados_ped` AUTO_INCREMENT =1;
 

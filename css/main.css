@@ -181,3 +181,7 @@ body > div{
 .label-as-badge {
     border-radius: 1em!important;
 }
+
+.modal-header {
+  color: #FFFFFF;
+}
