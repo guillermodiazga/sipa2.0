@@ -183,7 +183,7 @@ controller.main.addEvents = function (){
 					})
 					.fail(function(e){
 				        general.stopUser.hide();
-					 	alert("Error: " + e.responseText);
+					 	alert("Error: " + e.responseText).danger();
 					});
 			})
 		});
@@ -224,7 +224,7 @@ controller.main.addEventsTable = function (){
 				})
 				.fail(function(e){
 			        general.stopUser.hide();
-				 	alert("Error: " + e.responseText);
+				 	alert("Error: " + e.responseText).danger();
 				});
 		})
 	});
@@ -265,7 +265,7 @@ controller.main.addEventsTable = function (){
 				})
 				.fail(function(e){
 			        general.stopUser.hide();
-				 	alert("Error: " + e.responseText);
+				 	alert("Error: " + e.responseText).danger();
 				});
 		});
 	});
@@ -282,35 +282,7 @@ controller.main.addEventsTable = function (){
 
 	$(".historyOrder").click(function(e){
 		var idOrder = $(e.target).parent().data("id");
-		
-		general.stopUser.show();
-
-		model.main.getHistoryOrder(idOrder)
-			.done(function(resp){
-
-		        general.stopUser.hide();
-
-		        var title = "Cambios de estado del pedido: "+idOrder+"",
-		        	html = "<div class='table-responsive' ><table class='table table-striped' >"+
-		        		   "<tr><th>Estado</th><th>Fecha y Hora</th><th>Comentario</th></tr>";
-
-		        $.each(resp, function(i, data) {
-		        	html += "<tr><td>"+data.estado+"</td><td>"+data.log+"</td><td>"+data.comentario+"</td></tr>";
-		        });
-
-		        html += "</table></div>";
-
-		        if(!resp.length){
-		        	html="<legend>No hay cambios de estado del pedido: "+idOrder+"</legend>";
-		        }
-
-		        alert({msg: html, title:title});
-
-			})
-			.fail(function(e){
-		        general.stopUser.hide();
-			 	alert("Error: " + e.responseText);
-			});
+		general.showHistoryStatusOrder(idOrder);
 	});
 
 };

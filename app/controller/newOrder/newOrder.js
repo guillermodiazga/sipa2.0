@@ -32,11 +32,11 @@ controller.newOrder.deleteOrder = function(idOrder, ppto, vlrtotalanterior ){
 									controller.navigation.loadView('main');
 							    }
 				general.stopUser.hide();
-				alert(data.message, callBack);
+				alert(data.message, callBack).success();
 			})
 			.fail(function(e){
 				general.stopUser.hide();
-				alert("Error: " + e.responseText);
+				alert("Error: " + e.responseText).danger();
 			});
 	});
 
@@ -63,7 +63,7 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 
 			 general.stopUser.hide();
 		}).fail(function(e){
-			alert("Error: " + e.responseText);
+			alert("Error: " + e.responseText).danger();
 		});
 };
 
@@ -81,10 +81,11 @@ controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 		        	items += "<option data-saldo="+(item.valorini-item.valorpedido)+" value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
 		        });
 		        $("#ppto").append(items);
-		        controller.newOrder.loadItemsToNewOrder();
+		        if(!idppto)
+		        	controller.newOrder.loadItemsToNewOrder();
 
 		    }else{
-		    	alert("No hay presupuesto para este tipo de pedido");
+		    	alert("No hay presupuesto para este tipo de pedido").warning();
 		    	$("#addItems").attr("disabled","disabled");
 		    	$(".deletedItem:visible").click();
 		    	$("#ppto").html("").val("");
@@ -93,7 +94,7 @@ controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 		    statusBar.hide();
 		}).fail(function(e){
 			$("#ppto").append(items);
-			alert("Error: " + e.responseText);
+			alert("Error: " + e.responseText).danger();
 			$("#addItems").attr("disabled","disabled");
 			statusBar.hide();
 		});
@@ -149,11 +150,11 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 				}
 
 		    }else{
-		    	alert("No se pudieron cargar los items")
+		    	alert("No se pudieron cargar los items").warning();
 		    }
 		    statusBar.hide();
 		}).fail(function(e){
-			alert("Error: " + e.responseText);
+			alert("Error: " + e.responseText).danger();
 			statusBar.hide();
 		});
 	}
@@ -247,17 +248,17 @@ controller.newOrder.save = function(jsonData, swSaveDirect){
 							    }
 				}
 
-		    	alert(data.message, callBack);
+		    	alert(data.message, callBack).success();
 		    	
 		    	general.stopUser.hide();
 		    }else{
-		    	alert("No se pudo guardar " + textStatus + " " + data.message)
+		    	alert("No se pudo guardar " + textStatus + " " + data.message).danger();
 		    	general.stopUser.hide();
 		    }
 		})
 	.fail(function(jqXHR, textStatus){
 		general.stopUser.hide();
-		alert("Error: " + jqXHR.responseText + ", " + textStatus);
+		alert("Error: " + jqXHR.responseText + ", " + textStatus).danger();
 	});
 };
 
@@ -340,7 +341,7 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 				
 		}).fail(function(e){
 			    general.stopUser.hide();
-				alert("Error: " + e.responseText);
+				alert("Error: " + e.responseText).danger();
 		});
 };
 

@@ -96,17 +96,17 @@ function updateStatusOrder($arrData){
     $conexion->close($result);
  
     for ($i=0; $i < sizeof($array); $i++) { 
-        saveHistoricStatus ($array[$i], $newStatus, $msg, $log);
+        saveHistoricStatus ($array[$i], $newStatus, $msg, $log, $user);
     }
 
     response(true, "Pedido Actualizado");
 
 };
 
-function saveHistoricStatus ($idOrder, $newStatus, $msg, $log){
+function saveHistoricStatus ($idOrder, $newStatus, $msg, $log, $iduser){
 
-    $sql = "INSERT INTO `historico_estados_ped` (`id`, `pedido`, `newestado`, `comentario`, `log`)
-            VALUES ( NULL , $idOrder, '$newStatus', '$msg', '$log' );";
+    $sql = "INSERT INTO `historico_estados_ped` (`id`, `pedido`, `newestado`, `iduser`, `comentario`, `log`)
+            VALUES ( NULL , $idOrder, '$newStatus', $iduser, '$msg', '$log' );";
 
     $conexion = new Conexion();
     $conexion->open();
@@ -222,7 +222,7 @@ function updateOrder($arrData){
     $result = mysql_query($sql2) or die("Query Error");
     $conexion->close($result);
 
-    saveHistoricStatus ($idOrder, 2, "Modificacion", $log);
+    saveHistoricStatus ($idOrder, 2, "Modificacion", $log, $idUser);
 
     response(true, "Pedido Actualizado");
 
@@ -661,8 +661,9 @@ function loadDataOrder($arrData){
 function deleteOrder($arrData){
     $vlrtotalanterior = $arrData["vlrtotalanterior"];
     $ppto = $arrData["ppto"];
+    $iduser = $arrData['idUser'];
 
-    $log = date("d/m/Y - G:i")." user: ".$arrData['idUser'];
+    $log = date("d/m/Y - G:i")." user: ".$iduser;
     $sql = "UPDATE `pedido` SET `bitactivo` =0, estado=1 WHERE `id` ='".$arrData['idOrder']."' LIMIT 1;"; 
 
      $sql2 = "UPDATE  `presupuesto` 
@@ -675,7 +676,7 @@ function deleteOrder($arrData){
     $result = mysql_query($sql2) or die("Query Error ".$sql2);
     $conexion->close($result);
 
-    saveHistoricStatus ($arrData['idOrder'], 1, "Anulado", $log);
+    saveHistoricStatus ($arrData['idOrder'], 1, "Anulado", $log, $iduser);
     response(true, "Pedido ".$arrData['idOrder']." Anulado");
 
 }
@@ -868,7 +869,7 @@ $secre
 
 function buildEmail($numOrder)
 {
-    $sql = "SELECT pedido.id, pedido.estado, estados.estado, usuario.nombre, usuario.mail
+    $sql = "SELECT pedido.id, pedido.estado, estados.estado, usuario.nombre, usuario.mail, usuario.bitrecibemail
             FROM pedido, estados, usuario
             WHERE pedido.estado = estados.id
             AND usuario.id = pedido.idusuario
@@ -880,6 +881,11 @@ function buildEmail($numOrder)
     $nombre = $array[0]["nombre"];
     $mail = $array[0]["mail"];
     $estado = $array[0]["estado"];
+    $bitrecibemail = $array[0]["bitrecibemail"];
+
+    if($bitrecibemail == 0){
+        return;
+    }
 
     $mensaje   = 
                 "<h1>Hola ".$nombre."!</h1>".

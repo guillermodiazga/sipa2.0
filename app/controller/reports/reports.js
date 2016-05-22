@@ -9,15 +9,14 @@ controller.reports.initEvents = function(){
 	$("#tabMain").click(function(){
 		$(".tabBody").hide();
 		$("#tabBodyMain").show();
-		$(".tab").removeClass("open-tab");
-		$(this).addClass("open-tab");
+		$(".tab").removeClass("open-tab active");
+		$(this).addClass("open-tab active");
 	});
 
 	$(".squareList li").click(function(){
 		var $this = $(this),
 		nameReport = $this.find(".nameReport").text(),
 		html = $this.attr("data-html");
-
 		
 		if( $("#tab"+html).size() <= 0){//if is a new tab to open
 
@@ -25,9 +24,10 @@ controller.reports.initEvents = function(){
 			$("#tabMain")
 				.clone()
 				.hide()
-				.find(".name").text(nameReport+" ").end()
+				.find(".name").html(nameReport+" "+'<button type="button" class="close" ><span aria-hidden="true">&times;</span></button>').end()
 				.attr("id", "tab"+html)
-				.appendTo("#"+$("#tabMain").parent().attr("id"))
+				.removeClass("open-tab")
+				.appendTo($("#tabMain").parent())
 				.slideDown()
 				.find(".close").show();
 
@@ -69,30 +69,34 @@ controller.reports.initEvents = function(){
 
 			controller.navigation.loadView(html, "tabBody"+html, callBack);
 
-			$("#tab"+html).click(function(){
+			$("#tab"+html).click(function(e){
 				$(".tabBody").hide();
 				$("#tabBody"+html).show();
-				$(".tab").removeClass("open-tab");
-				$("#tab"+html).addClass("open-tab");
-
-				$(this).find(".close").click(function(){
-					$("#tab"+html).remove();
-					$("#tabBody"+html).remove();
-					$(".tabBody:first").show();
-
-					if($(".tab").size() == 1){
-						$(".tab").hide();
-					}
-				});
+				$(".tab").removeClass("active open-tab");
+				$("#tab"+html).addClass("active");
+				debugger
 			});
+			
+			$("#tab"+html).find(".close").click(function(){
+				$("#tab"+html).remove();
+				$("#tabBody"+html).remove();
+				$(".tabBody:first").show();
+				$("#tabMain").addClass("active");
+
+				if($(".tab").size() == 1){
+					$(".tab").hide();
+				}
+			});
+
 		}else{//if the tab already exists
 			$(".tabBody").hide();
 			$("#tabBody"+html).show();
+			$(".tab").removeClass("active open-tab");
 		}
 
 		$("#tabMain").show().find(".close").hide();
-		$(".tab").removeClass("open-tab");
-		$("#tab"+html).addClass("open-tab");
+		$(".tab").removeClass("active open-tab");
+		$("#tab"+html).addClass("active");
 	});
 };
 
@@ -111,7 +115,7 @@ controller.reports.report1 = {
 						var html = "";
 
 						$.each(data, function(i, data) {
-				        	html += "<tr><td class='merge'>"+data.item+"</td><td>"+data.secretaria+"</td><td class='sum sum1' data-value='"+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td><td class='sum sum2' data-value='"+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td></tr>";
+				        	html += "<tr><td class='merge'>"+data.item+"</td><td>"+data.secretaria+"</td><td class='sum sum1 text-right' data-value='"+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td><td class='sum sum2 text-right' data-value='"+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td></tr>";
 				        });
 
 						$("#report1-table tbody").html(html);
@@ -140,7 +144,7 @@ controller.reports.report1 = {
 			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
 		});
 		
-		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th></tr>")
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th class='text-right'>"+formatMoney(total1)+"</th><th class='text-right'>$"+formatMoney(total2)+"</th></tr>")
 	},
 
 	addSubtotales: function($table){
@@ -177,7 +181,7 @@ controller.reports.report1 = {
 			var $e = $(e),
 				$td = $e.find(".merge"),
 			    value = $td.text(),
-			    trSubtotal = "<tr class='success'><th colspan=2>Subtotal:</th><th class='total1'></th><th  class='total2'></th></tr>";
+			    trSubtotal = "<tr class='success'><th colspan=2>Subtotal:</th><th class='total1 text-right'></th><th  class='total2 text-right'></th></tr>";
 
 			if(i+1 == totalRows){
 				$element.attr("rowspan", counter+1);
@@ -229,8 +233,8 @@ controller.reports.report2 = {
 				        	html += "<tr>"+
 				        	"<td>"+data.id+"</td>"+
 				        	"<td>"+data.ali+"-"+data.alimento+"</td>"+
-				        	"<td class='sum sum1' data-value="+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td>"+
-				        	"<td class='sum sum2' data-value="+data.valorpedido+"'>"+formatMoney(data.valorpedido)+"</td>"+
+				        	"<td class='sum sum1 text-right' data-value="+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td>"+
+				        	"<td class='sum sum2 text-right' data-value="+data.valorpedido+"'>"+formatMoney(data.valorpedido)+"</td>"+
 				        	"<td>"+data.fchentrega+"</td>"+
 				        	"<td>"+data.idppto+"</td>"+
 				        	"<td>"+data.idsec+"-"+data.usnam+"</td>"+
@@ -263,7 +267,7 @@ controller.reports.report2 = {
 			total2 += ($e.hasClass("sum2")) ? parseInt($e.data("value")) : 0;
 		});
 		
-		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><th colspan='4'></th></tr>")
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th class='text-right'>"+formatMoney(total1)+"</th><th class='text-right'>$"+formatMoney(total2)+"</th><th colspan='4'></th></tr>")
 	}
 }
 
@@ -285,10 +289,10 @@ controller.reports.report3 = {
 				        	html += "<tr>"+
 				        	"<td>"+data.idsecretaria+"-"+data.secretaria+"</td>"+
 				        	"<td>"+data.idppto+"-"+data.nombre+"</td>"+
-				        	"<td class='sum sum1' data-value="+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td>"+
-				        	"<td class='sum sum2' data-value="+data.valorini+"'>$"+formatMoney(data.valorini)+"</td>"+
-				        	"<td class='sum sum3' data-value="+data.valorped+"'>$"+formatMoney(data.valorped)+"</td>"+
-				        	"<td class='sum sum4' data-value="+data.saldo+"'>$"+formatMoney(data.saldo)+"</td>"+
+				        	"<td class='sum sum1 text-right' data-value="+data.cantidad+"'>"+formatMoney(data.cantidad)+"</td>"+
+				        	"<td class='sum sum2 text-right' data-value="+data.valorini+"'>$"+formatMoney(data.valorini)+"</td>"+
+				        	"<td class='sum sum3 text-right' data-value="+data.valorped+"'>$"+formatMoney(data.valorped)+"</td>"+
+				        	"<td class='sum sum4 text-right' data-value="+data.saldo+"'>$"+formatMoney(data.saldo)+"</td>"+
 				        	"</tr>";
 				        });
 
@@ -320,7 +324,7 @@ controller.reports.report3 = {
 			total4 += ($e.hasClass("sum4")) ? parseInt($e.data("value")) : 0;
 		});
 		
-		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th>"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><th>$"+formatMoney(total3)+"</th><th>$"+formatMoney(total4)+"</th></tr>")
+		$table.find("tbody").append("<tr class='info'><th colspan='2'>Total: </th><th class='text-right'>"+formatMoney(total1)+"</th><th class='text-right'>$"+formatMoney(total2)+"</th><th class='text-right'>$"+formatMoney(total3)+"</th><th class='text-right'>$"+formatMoney(total4)+"</th></tr>")
 	}
 }
 
@@ -344,9 +348,9 @@ controller.reports.report4 = {
 				        	"<td>"+data.proyecto+"</td>"+
 				        	"<td>"+data.pedido+"</td>"+
 				        	"<td>"+data.nombre+"</td>"+
-				        	"<td class='sum sum1' data-value="+data.valorini+"'>$"+formatMoney(data.valorini)+"</td>"+
-				        	"<td class='sum sum2' data-value="+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td>"+
-				        	"<td class='sum sum3' data-value="+(data.valorini-data.valorpedido)+"'>$"+formatMoney(data.valorini-data.valorpedido)+"</td>"+
+				        	"<td class='sum sum1 text-right' data-value="+data.valorini+"'>$"+formatMoney(data.valorini)+"</td>"+
+				        	"<td class='sum sum2 text-right' data-value="+data.valorpedido+"'>$"+formatMoney(data.valorpedido)+"</td>"+
+				        	"<td class='sum sum3 text-right' data-value="+(data.valorini-data.valorpedido)+"'>$"+formatMoney(data.valorini-data.valorpedido)+"</td>"+
 
 				        	"</tr>";
 				        });
@@ -377,7 +381,7 @@ controller.reports.report4 = {
 			total3 += ($e.hasClass("sum3")) ? parseInt($e.data("value")) : 0;
 		});
 		
-		$table.find("tbody").append("<tr class='info'><th colspan='4'>Total: </th><th>$"+formatMoney(total1)+"</th><th>$"+formatMoney(total2)+"</th><th>$"+formatMoney(total3)+"</th></tr>")
+		$table.find("tbody").append("<tr class='info'><th colspan='4'>Total: </th><th class='text-right'>$"+formatMoney(total1)+"</th><th class='text-right'>$"+formatMoney(total2)+"</th><th class='text-right'>$"+formatMoney(total3)+"</th></tr>")
 	}
 }
 
