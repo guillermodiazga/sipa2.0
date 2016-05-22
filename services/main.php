@@ -150,17 +150,36 @@ function getItemsToNewOrder($arrData){
 function getPptoUserToNewOrder($arrData){
     $type = $arrData["type"];
     $user = $arrData["user"];
+    $idppto = $arrData["idppto"];
+    $typeFilter = "";
+    $idpptoFilter = "";
+    $userFilter = "";
+
+    if($type != "false"){
+        $typeFilter = "AND ppto.idtalimento = $type";
+    }
+
+    if($idppto){
+        $idpptoFilter = "AND ppto.id = '$idppto'";
+    }else{
+       $userFilter = "AND rel.idusuario = $user";
+    }
+        
     $sql = "
 
-    SELECT ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido
-    FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
-    WHERE rel.idusuario = $user
-    AND ppto.id = rel.idppto
-    AND tipo.idproveedor = ppto.idproveedor
-    AND tipo.id = $type
-    AND ppto.bitactivo =1
-    AND rel.bitactivo =1
-    AND ppto.idtalimento = $type";
+        SELECT ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido
+        FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
+        WHERE 
+        ppto.id = rel.idppto 
+        AND tipo.idproveedor = ppto.idproveedor
+        AND tipo.id = ppto.idtalimento
+        AND ppto.bitactivo =1
+        AND rel.bitactivo =1
+        $userFilter
+        $typeFilter
+        $idpptoFilter ";
+
+        error_log($sql);
 
     return queryTojson($sql);
 }; 

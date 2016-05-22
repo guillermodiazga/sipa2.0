@@ -53,7 +53,7 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 		        });
 		        $("#typeOrder").append(items);  
 		    }else{
-		    	alert("No se pudieron cargar los tipos de pedido");
+		    	alert("No se pudieron cargar los tipos de pedido").danger();
 		    }
 
 		    if(idTypeOrder){
@@ -67,11 +67,11 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 		});
 };
 
-controller.newOrder.loadPptoUserToNewOrder = function (){
+controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 	var typeOrder = $("#typeOrder").val();
 	statusBar.show("Cargando presupuesto...");
-	if(typeOrder){
-		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), localStorage.id)
+	if(typeOrder || idppto){
+		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), localStorage.id, idppto)
 		.done(function (data) {
 			$("#ppto").html("");
 			if( data.length > 0){
@@ -309,6 +309,7 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 			var $form = $("#formNewOrder"),
 			creationDate = moment(data.fchreg.substring(0,10), "L").format("Y-MM-DD");
 			controller.newOrder.loadOrderTypes(data.idtalimento);
+			controller.newOrder.loadPptoUserToNewOrder(data.idppto);
 			$form
 				.attr("vlrtotalanterior", (parseFloat(data.valorpedido) + parseFloat(data.valoradic)))
 				.attr("idordertoedit", idOrderToEdit)
@@ -322,7 +323,7 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 				.find("#nameReceive").val(data.personarecibe).end()
 				.find("#telephone").val(data.telfjorecibe).end()
 				.find("#celphone").val(data.movilrecibe).end()
-				.find("#ppto").attr("disabled", "disabled").append("<option value='"+data.idppto+"'>"+data.idppto+" - No esta permitido cambiar el presupuesto</option>").val(data.idppto);
+				.find("#ppto").attr("disabled", "disabled").val(data.idppto);
 				
 		//Add item
 				$("#addItems").removeAttr("disabled");

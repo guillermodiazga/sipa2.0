@@ -27,11 +27,11 @@ model.newOrder.getItemsToNewOrder = function(typeOrder ) {
         });
 };
 
-model.newOrder.getPptoUserToNewOrder = function(typeOrder, userId ) {
+model.newOrder.getPptoUserToNewOrder = function(typeOrder, userId, idppto ) {
     return $.ajax('services/main.php',
         {
            type: "GET", async: true,
-           data:{f:'getPptoUserToNewOrder', type: typeOrder, user: userId} ,
+           data:{f:'getPptoUserToNewOrder', type: typeOrder, user: userId, idppto: idppto} ,
            contentType: "application/json"
         })
         .done(function (data) {
