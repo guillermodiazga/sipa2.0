@@ -443,7 +443,12 @@ general.zoomImg = function(){
 };
 
 general.printOrder = function(idOrder){
-    window.open("http://"+location.host+"/"+location.pathname+"/sipa_legacy/remision.php?ped="+idOrder, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
+  var type = 1;
+  if(localStorage.idrol == 3){
+    type = "2" ;
+  }
+    window.open("http://"+location.host+"/"+location.pathname+"/sipa_legacy/remision.php?ped="+idOrder+"&type="+type, "noimporta",'width=800, height=600, scrollbars =yes, top=150, status=no, toolbar=no, titlebar=no, menubar=no, urlbar=no');
+  }
 }
 
 general.showHistoryStatusOrder = function (idOrder) {

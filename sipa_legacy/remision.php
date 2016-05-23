@@ -18,10 +18,17 @@ session_start();?>
 		<meta http-equiv="Expires" content="0"/>
 
 	</head>
+	<style type="text/css">
+		table{
+			font-size : small !important;
+			color : black;
+		}
+	</style>
 
-	<BODY STYLE="font-family:arial,helvetica,'Arial'" onload="window.print()"> 
+	<BODY STYLE="font-family:arial,helvetica,'Arial'" "> 
 		<?php
 		$ped=$_GET['ped'];
+		$type=$_GET['type'];
 		if ($ped=='') {
 			include("formlogin.php"); 
 			include ("funciones.php");
@@ -124,11 +131,11 @@ session_start();?>
 
 								<tr><td>Se&ntilde;ores<br><b><?echo $row['proveedor']?></b><br><?echo $row['direccion']?> (Comutador: <?echo $row['telprov']?>)<br> Medell&iacute;n 
 									<p align=justify>Cordial saludo, favor proceder de acuerdo al contrato <?echo $row['contrato']?>, y suministrar la siguiente solicitud de servicio, teniendo en cuenta la calidad de los productos y oportunidad en la entrega.
-										<br>Gracias por la atenci&oacute;n.</p>
+										<br></p>
 									</td></tr>
 									<tr><td align=center>
 
-										<table  border=2 cellspacing=0>
+										<table  border=1 cellspacing=0>
 
 											<tr><th colspan=2><font size=3><?echo ($row['secretaria'])?> - Solicitud Nro.:<font size=3><?echo $row['id']?> </th></tr>
 											<tbody bgcolor='#ffffff' style='font-size:50'>
@@ -146,9 +153,9 @@ session_start();?>
 											<tr><td <?echo $fonttable?>><b>Tel Fijo: </b><?echo format_tel_num($row['telfjorecibe'])?>;<b> Movil: </b> <?echo format_cel_num($row['movilrecibe'])?></td></tr>
 
 
-											<tr><td rowspan=3><b>Detalle: </td><td><p align=justify><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></p></td></tr>
-											<tr><td><b>Cantidad:</b> <?echo number_format($row['cantidad'], 0, '', '.')?>; <b>Vr./U sin IVA:</b> $<?echo number_format(round($row['valor'],0), 0, '', '.')?>; <b>Vr. Total: </b> $<?echo number_format($row['valorpedido'], 0, '', '.')?></td></tr>
-											<tr><td><b>Nro. del Proyecto-Pedido: <?echo ($row['idppto'])?></td></tr>
+											<tr><td rowspan=3><b>Detalle: </td><td><small align=justify><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr><small>
+											<tr><td><b>Cantidad:</b> <?echo number_format($row['cantidad'], 0, '', '.')?>; <b>Vr./U sin IVA:</b> $<?echo number_format(round($row['valor'],0), 0, '', '.')?>; <b>Vr. Total: </b> $<?echo number_format($row['valorpedido'], 0, '', '.')?></td></tr></small>
+											<tr><td><b>Nro. del Pedido-Proyecto: <?echo ($row['idppto'])?></td></tr>
 
 											<tr><td rowspan=2><b>Interventor <br> Operativo:</td><td><b><?echo ($row['nombre'])?></td></tr>
 											<tr><td><b>Tel Fijo: </b> <?echo format_tel_num($row['telefono'])?>; <b>Movil: </b><?echo format_cel_num($row['movil'])?>; <br><b>Mail: </b><?echo $row['mail']?></td></tr>
@@ -163,7 +170,7 @@ session_start();?>
 
 										<?//Remisi&oacute;n?>
 										<tr><td>
-											<table  border=1 rules=groups cellspacing=0>
+											<table  border=1 rules=groups cellspacing=0 <?if($type==1){echo "style='display:none'";}?>>
 
 												<tr><td colspan=2 align=center>
 
@@ -190,9 +197,9 @@ session_start();?>
 
 												<tr><td colspan=3><hr noshade="noshade" size="1" valign=top/>
 
-													<tr><td rowspan=3><b>Detalle: </td><td><p align=justify><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></p></td></tr>
+													<tr><td rowspan=3><b>Detalle: </td><td><small align='justify' ><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr>
 													<tr><td><b>Cantidad:</b> <?echo number_format($row['cantidad'], 0, '', '.')?>; <b>Vr./U sin IVA:</b> $<?echo number_format(round($row['valor'],0), 0, '', '.')?>; <b>Vr. Total: </b> $<?echo number_format($row['valorpedido'], 0, '', '.')?></td></tr>
-													<tr><td><b>Nro. del Proyecto-Pedido: <?echo ($row['idppto'])?></td></tr>
+													<tr><td><b>Nro. del Pedido-Proyecto: <?echo ($row['idppto'])?></td></tr>
 
 													<tr><td colspan=3><hr noshade="noshade" size="1" valign=top/>
 

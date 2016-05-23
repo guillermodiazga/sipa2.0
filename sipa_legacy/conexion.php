@@ -2,13 +2,14 @@
 /*header('Access-Control-Allow-Origin: *');
 //header('Access-Control-Allow-Methods: GET, POST'); 
 */
-$servidor = "mysql.hostinger.co";
-$usuario="u321971772_read";
-$clave="sistemas123$$";
+$servidor = "127.0.0.1";
+$usuario="root";
+$clave="admin";
 
 $con = mysql_connect($servidor, $usuario, $clave);
 mysql_set_charset('utf8');
-$db= "u321971772_sipa";
+$db= "sipa";
+//$db= "u321971772_sipa";
 
 If($con){
 	echo "";
