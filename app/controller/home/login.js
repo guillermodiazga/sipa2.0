@@ -6,14 +6,16 @@ controller.login = {};
 controller.login.loginEvent = function() {
     $("#formLogin").submit(function(e){
     	e.preventDefault();
-    	
+    	general.stopUser.show();
     	var user = this.user.value,
     		pass = this.pass.value;
 
 	    model.login.in(user, pass)
 		    .then(function (data) {
 		        if( data.length > 0 && data[0].bitactivo == 1){
-		        	$("#formLogin").slideUp();
+		        	$("#formLogin").fadeOut();
+		        	$("#container").fadeIn();
+		        	general.stopUser.hide();
 		        	//save data in memory
 		        	controller.login.setDataUser(data, localStorage);
 		        	//Load dashboard

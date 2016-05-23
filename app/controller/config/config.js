@@ -97,7 +97,7 @@ controller.config.initEvents = function(){
 	});
 };
 
-controller.reports.report1 = {
+controller.config.config1 = {
 
 
 	addEvents: function(){

@@ -29,19 +29,19 @@
       Activar Notificaciones de Escritorio
     </span>
     <!-- Fixed navbar -->
-    <nav  class="navbar navbar-primay ">
-      <div class="container">
-        <div class="navbar-header menuPpal" style="display:none">
+    <nav  class="navbar navbar-primay menuPpal" style="display:none">
+      <div class="container" >
+        <div class="navbar-header " >
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#main">            
+          <a class="navbar-brand" href="#">            
             <img src="img/logo.png" height="150%">
           </a> 
-          <a class="navbar-brand hidden-xs" href="#main">            
+          <a class="navbar-brand hidden-xs" href="#">            
             <img src="img/logo-cliente.png" height="150%" title="H y B Servicios" class="pull-left">
           </a>
           <span class="userName visible-xs alert alert-info">Welcome!</span>
@@ -54,6 +54,7 @@
             <li data-container="false"><a href="#search"><span class="fa fa-search"></span> Consultar</a></li>
             <li data-container="true"><a href="#reports"><span class="fa fa-bar-chart"></span> Reportes</a></li>
             <li data-container="true"><a href="#config"><span class="fa fa-cogs"></span> Configuración</a></li>
+            <li data-container="true"><a href="#help"><span class="fa fa-phone"></span> Ayuda</a></li>
             
             <li data-container="true">
 
@@ -67,9 +68,9 @@
     </nav>
 
     <!-- Begin page content -->
-    <div class="container">
-      <div id="container"></div>
-    </div>
+    <div class="container" id="container" style="display: none"></div>
+
+    <div id="containerLogin"></div>
     
     <div id="stopUser">
       <div><i class="fa fa-circle-o-notch fa-spin"></i></span> Cargando...</div>
