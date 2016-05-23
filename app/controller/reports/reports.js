@@ -2,8 +2,6 @@ var controller =  controller || {};
 
 controller.reports = {};
 
-
-
 //add all events
 controller.reports.initEvents = function(){
 	$("#tabMain").click(function(){
@@ -74,7 +72,6 @@ controller.reports.initEvents = function(){
 				$("#tabBody"+html).show();
 				$(".tab").removeClass("active open-tab");
 				$("#tab"+html).addClass("active");
-				debugger
 			});
 			
 			$("#tab"+html).find(".close").click(function(){

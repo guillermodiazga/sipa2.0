@@ -13,6 +13,7 @@ controller.login.loginEvent = function() {
 	    model.login.in(user, pass)
 		    .then(function (data) {
 		        if( data.length > 0 && data[0].bitactivo == 1){
+		        	$("#formLogin").slideUp();
 		        	//save data in memory
 		        	controller.login.setDataUser(data, localStorage);
 		        	//Load dashboard
@@ -33,7 +34,7 @@ controller.login.loginEvent = function() {
 		        	alert("Usuario o contraseña incorrecto!")
 		        }
 		    }).fail(function(e){
-		    	alert("Error: " + e.responseText);
+		    	alert("Error: " + e.responseText).warning();
 		    });
     });
 };
