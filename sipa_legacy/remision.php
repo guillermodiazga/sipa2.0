@@ -25,7 +25,7 @@ session_start();?>
 		}
 	</style>
 
-	<BODY STYLE="font-family:arial,helvetica,'Arial'" "> 
+	<BODY STYLE="font-family:arial,helvetica,'Arial'" " onload="window.print()"> 
 		<?php
 		$ped=$_GET['ped'];
 		$type=$_GET['type'];

@@ -291,5 +291,3 @@ controller.main.addEventsTable = function (){
 controller.main.getOrdersPend();
 controller.main.getOrdersToDashboard();
 controller.main.addEvents();
-
-
