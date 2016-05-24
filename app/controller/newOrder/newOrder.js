@@ -79,9 +79,9 @@ controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 		        var items = "",
 		        vlrtotalanterior = parseFloat($("#formNewOrder").attr("vlrtotalanterior")) || 0;
 		        $.each(data, function(i, item){
-		        	var saldo = 
-		        	items += "<option data-saldo="+(item.valorini-item.valorpedido)+(vlrtotalanterior)
-		        			+" value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido+vlrtotalanterior)+"</option>";
+		        	var saldo = parseFloat(item.valorini-item.valorpedido+vlrtotalanterior);
+		        	items += "<option data-saldo="+saldo
+		        			+" value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(saldo)+"</option>";
 		        });
 		        $("#ppto").append(items);
 		        if(!idppto)
