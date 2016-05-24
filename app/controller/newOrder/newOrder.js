@@ -77,8 +77,9 @@ controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 			if( data.length > 0){
 		        //load data in view
 		        var items = "",
-		        vlrtotalanterior = parseFloat($("#formNewOrder").attr("vlrtotalanterior"));
+		        vlrtotalanterior = parseFloat($("#formNewOrder").attr("vlrtotalanterior")) || 0;
 		        $.each(data, function(i, item){
+		        	var saldo = 
 		        	items += "<option data-saldo="+(item.valorini-item.valorpedido)+(vlrtotalanterior)
 		        			+" value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido+vlrtotalanterior)+"</option>";
 		        });

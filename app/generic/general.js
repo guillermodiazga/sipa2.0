@@ -34,6 +34,32 @@ general.jsonToTableHtml = function (jsonData) {
 
 };
 
+general.loading = {
+  time: null,
+  show: function(containerSelector, seconds){
+    var _this = this;
+
+    _this.time = setInterval(function(){
+        createAndMoveDiv();
+      },200
+    );
+
+    function createAndMoveDiv(){
+      $container = $(containerSelector);
+      $div = $("<div class'label label-primary'><div>")
+        .appendTo($container)
+        .css({"background-color": "#337AB7", "width": "1rem", "height": "1rem", position: "absolute", left: "0", opacity: 0.3})
+        .animate({"left": $container.width(), opacity: 1}, seconds || 5000, function(){$(this).remove()});
+    }
+    return _this;
+  },
+  stop: function(){
+    var _this = this;
+    clearInterval(_this.time);
+    return _this;
+  }
+
+}
 general.notification = function(number){
   if(number)
     $("#notification").show().text(number);
@@ -66,6 +92,7 @@ general.notification = function(number){
 general.stopUser = {
   $div : $("#stopUser"),
   show: function(msg){
+    general.loading.show("#stopUser");
     var _this = this;
     msg = msg || "Cargando...";
     html = '<div><i class="fa fa-circle-o-notch fa-spin"></i></span> '+msg+'</div>';
@@ -73,6 +100,7 @@ general.stopUser = {
     return _this;
   },
   hide: function(delay){
+    general.loading.stop();
     var _this = this;
     if(!isNaN(delay)){
       setTimeout(function(){
@@ -525,6 +553,7 @@ var pushNotify = {
   $div: null,
   timeOut: null,
   show: function(msg, title, time, onclick, $div){
+    general.loading.show("#div-ms-status-notification > .panel-body #msg", 2000);
     var _this = this;
 
     _this.$div = ( $div ) ? $div : _this.$divDefault;
@@ -553,6 +582,7 @@ var pushNotify = {
     return this;
   },
   hide: function(){
+    general.loading.stop()
     var _this = this;
     _this.$div.slideUp();
     return this;
@@ -577,6 +607,7 @@ var pushNotify = {
     return this;
   }
 }
+
 
 /*
 function mensage (text,swNoCerrar) {
