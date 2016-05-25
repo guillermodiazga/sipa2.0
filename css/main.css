@@ -172,11 +172,10 @@ body > #container{
 }
 
 .status-notification{
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
-  min-width: 200px;
-  z-index: 10001;
+    position: fixed;
+    bottom: 0px;
+    z-index: 1060;
+    min-width:200px;
 }
 
 .label-as-badge {
@@ -190,3 +189,4 @@ body > #container{
 .table>tfoot>tr>td {
   padding: 1px!important;
 }
+
