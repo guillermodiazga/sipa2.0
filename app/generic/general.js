@@ -391,6 +391,7 @@ $.ajaxSetup({
       complete: function(xhr, stat) {
         // hide dialog // works
         //$("#stopUser").hide();
+        debugger
       },
       success: function(result,status,xhr) {
         // not showing the alert
@@ -400,7 +401,11 @@ $.ajaxSetup({
       },
       fail: function(result,status,xhr) {
         // not showing the alert
-        $("#stopUser").hide();
+        debugger
+        if(status.status == 0){
+          $("#stopUser").hide();
+          alert("Opps!<br>Parece que se perdio la conexión a internet.").warning();
+        }
       }
     });
 
@@ -465,7 +470,9 @@ general.zoomImg = function(){
           
               $(".imgZoomInContainer").remove();
 
-           });
+            });
+
+
       });
       
 };

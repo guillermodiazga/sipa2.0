@@ -86,7 +86,7 @@ controller.navigation.loadView = function (view, idElementToShow, callBack, swCl
         $("#container").removeClass("container");
     }
     $.get('app/view/'+view+'.html?a='+Math.random())
-    .done(function(data){
+    .done(function(data, e){
         $("#"+idElementToShow).html("").append(data);
         general.stopUser.hide();
         $("#"+idElementToShow).fadeIn();
@@ -98,6 +98,7 @@ controller.navigation.loadView = function (view, idElementToShow, callBack, swCl
     .fail(function(e){
         $("#container").html("Error: "+e.status+" "+e.statusText);
         general.stopUser.hide();
+        $("#"+idElementToShow).fadeIn();
     });
     
 }

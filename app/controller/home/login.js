@@ -36,6 +36,7 @@ controller.login.loginEvent = function() {
 		        	alert("Usuario o contraseña incorrecto!")
 		        }
 		    }).fail(function(e){
+		    	general.stopUser.hide();
 		    	alert("Error: " + e.responseText).warning();
 		    });
     });
