@@ -347,11 +347,15 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 //add all events
 controller.newOrder.initEvents = function(){
 	$("#typeOrder").change(function(){
+		//Clear items selected
+		$("#items").html("");
+		
+		if($(this).val() == "false"){
+			return false;
+		}
 		//change items list
 		controller.newOrder.loadItemsToNewOrder();
 		controller.newOrder.loadPptoUserToNewOrder();
-		//Clear items selected
-		$("#items").html("");
 	});
 
 	$("#formNewOrder").submit(function(e){
@@ -376,6 +380,7 @@ controller.newOrder.initEvents = function(){
 controller.newOrder.validateForm = function(jsonData) {
 	var fecha = jsonData[0]["deliveryDate"],
 	hora = jsonData[0]["deliveryTime"],
+	typeOrder = jsonData[0]["typeOrder"],
 	cantidad = jsonData[0]["quantity"],
 	idItem = jsonData[0]["idItem"],
 	direccion = jsonData[0]["address"],
@@ -388,6 +393,10 @@ controller.newOrder.validateForm = function(jsonData) {
 	saldo = parseFloat($("#ppto").find("option:selected").data("saldo")),
 	totalValue = $(".totalValue:visible").data("totalValue");
 
+
+	if(typeOrder == "false"){
+		return msg = "Selecciona un tipo de pedido antes de enviar.";
+	}
 
 	if($(".totalValue:visible").size() && totalValue > saldo){
 		return msg = "El valor total del pedido supera el presupuesto seleccionado";
