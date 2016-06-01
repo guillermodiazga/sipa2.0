@@ -33,6 +33,7 @@ controller.login.loginEvent = function() {
 						controller.session.checkSession();
 					}
 		        }else{
+		        	general.stopUser.hide();
 		        	alert("Usuario o contraseña incorrecto!")
 		        }
 		    }).fail(function(e){
