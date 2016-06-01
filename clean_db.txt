@@ -10,5 +10,5 @@ ALTER TABLE  `persona-ppto` AUTO_INCREMENT =1;
 
 ALTER TABLE  `pedido` AUTO_INCREMENT =1;
 
-
+--crear alimento`
 INSERT INTO `u321971772_sipa`.`alimento` (`id`, `nombre`, `descripcion`, `idtalimento`, `valor`, `iva`, `bitactivo`) VALUES (NULL, 'Menú 1 - Sopa de  Frijoles', 'Frijoles: 1 porción x 300grsr; Arroz blanco : 1 porción x 110 gr en cocido; Chicharrón carnudo y pulpo: 1 porción x 100 grs en cocido; Huevo cocido o frito: 1 unid tipo A; Patacón: 1 unid x 60 gr; Arepa redonda: 1 unid x 40 gr; Ensalada a base de:  (repollo, zanahoria, tomate y pepino, cilantro) 100 grs. Postre: bocadillo 1 porción x 30 gr; Jugo de fruta en empaque individual tetrapack, ó en botella por 250ml. Todos los gramajes son en cocido.', '1', '7783', '16', '1');
