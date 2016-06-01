@@ -127,6 +127,10 @@ controller.search.loadDependencesList = function (){
 		       		items += "<option value='"+item.id+"'>"+item.secretaria+"</option>";
 		       });
 		       $("#dependence").append(items);
+
+		       if(localStorage.idrol == 1){
+		       	$("#dependence").val(localStorage.idsecretaria).attr("disabled", "disabled");
+		       }
 		      
 		    }else{
 	        	alert("No se pudieron cargar los tipos de pedido");

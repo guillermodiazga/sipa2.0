@@ -15,7 +15,7 @@ controller.main.getOrdersPend = function () {
 			general.stopUser.hide();
 		}
 	}).fail(function (e) {
-		console.log(e.responseText);
+		console.log(e.statusText);
 		general.stopUser.hide();
 	});
 };
@@ -34,7 +34,7 @@ controller.main.getOrdersToDashboard = function () {
 		}
 	})
 	.fail(function (e) {
-		alert(e.responseText);
+		alert(e.statusText);
 		general.stopUser.hide();
 	});
 };
@@ -183,7 +183,7 @@ controller.main.addEvents = function (){
 					})
 					.fail(function(e){
 				        general.stopUser.hide();
-					 	alert("Error: " + e.responseText).danger();
+					 	alert("Error: " + e.statusText).danger();
 					});
 			})
 		});
@@ -224,7 +224,7 @@ controller.main.addEventsTable = function (){
 				})
 				.fail(function(e){
 			        general.stopUser.hide();
-				 	alert("Error: " + e.responseText).danger();
+				 	alert("Error: " + e.statusText).danger();
 				});
 		})
 	});
@@ -265,7 +265,7 @@ controller.main.addEventsTable = function (){
 				})
 				.fail(function(e){
 			        general.stopUser.hide();
-				 	alert("Error: " + e.responseText).danger();
+				 	alert("Error: " + e.statusText).danger();
 				});
 		});
 	});

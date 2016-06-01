@@ -35,30 +35,46 @@ general.jsonToTableHtml = function (jsonData) {
 };
 
 general.loading = {
-  time: null,
   show: function(containerSelector, seconds){
-    var _this = this;
+    var _this = this,
+        time=containerSelector.replace("#","");
 
-    _this.time = setInterval(function(){
+    time = time.split(" ")[0];
+    
+    if(_this[time])
+      clearInterval(_this[time]);
+
+    _this[time] = setInterval(function(){
         createAndMoveDiv();
       },200
     );
 
     function createAndMoveDiv(){
       $container = $(containerSelector);
-      $div = $("<div class'label label-primary'><div>")
+      $div = $("<div class'loading label label-primary'><div>")
         .appendTo($container)
         .css({"background-color": "#337AB7", "width": "1rem", "height": "1rem", position: "absolute", left: "0", opacity: 0.3})
         .animate({"left": $container.width(), opacity: 1}, seconds || 5000, function(){$(this).remove()});
     }
     return _this;
   },
-  stop: function(){
-    var _this = this;
-    clearInterval(_this.time);
+  stop: function(containerSelector){
+    var _this = this,
+        time=containerSelector.replace("#","");
+    
+    time = time.split(" ")[0];
+    clearInterval(_this[time]);
     return _this;
-  }
+  },
+  hide: function (containerSelector) {
+    var _this = this,
+        time=containerSelector.replace("#","");
 
+    time = time.split(" ")[0];
+    clearInterval(_this[time]);
+   $(containerSelector).find(".loading").remove(); 
+   return _this;
+  }
 }
 general.notification = function(number){
   if(number)
@@ -100,7 +116,7 @@ general.stopUser = {
     return _this;
   },
   hide: function(delay){
-    general.loading.stop();
+    general.loading.stop("#stopUser");
     var _this = this;
     if(!isNaN(delay)){
       setTimeout(function(){
@@ -388,10 +404,12 @@ $.ajaxSetup({
         // show loading dialog // works
         //$("#stopUser").show();
       },
-      complete: function(xhr, stat) {
+      complete: function(xhr, status) {
         // hide dialog // works
-        //$("#stopUser").hide();
-        debugger
+        if(xhr.status == 0){
+          general.stopUser.hide();
+          alert("Opps!<br>Parece que se perdio la conexión a internet.").warning();
+        }
       },
       success: function(result,status,xhr) {
         // not showing the alert
@@ -401,13 +419,9 @@ $.ajaxSetup({
       },
       fail: function(result,status,xhr) {
         // not showing the alert
-        debugger
-        if(status.status == 0){
-          $("#stopUser").hide();
-          alert("Opps!<br>Parece que se perdio la conexión a internet.").warning();
-        }
+        console.log("error: "+status);
       }
-    });
+});
 
 function currentDate () {
 	var now = new Date();
@@ -458,8 +472,9 @@ general.zoomImg = function(){
             .fadeIn()
             .appendTo("body");
 
+        general.stopUser.show();
+        general.loading.hide("#stopUser");
         $("#stopUser")
-            .show()
             .find(".close").remove().end()
             .append('<button type="button" class="close"><span aria-hidden="true">×</span></button>')
             .click(function(){
@@ -471,9 +486,8 @@ general.zoomImg = function(){
               $(".imgZoomInContainer").remove();
 
             });
-
-
       });
+  
       
 };
 
@@ -560,6 +574,7 @@ var pushNotify = {
   $div: null,
   timeOut: null,
   show: function(msg, title, time, onclick, $div){
+    debugger
     general.loading.show("#div-ms-status-notification > .panel-body #msg", 2000);
     var _this = this;
 
@@ -589,7 +604,7 @@ var pushNotify = {
     return this;
   },
   hide: function(){
-    general.loading.stop()
+    general.loading.stop("#div-ms-status-notification > .panel-body #msg");
     var _this = this;
     _this.$div.slideUp();
     return this;
