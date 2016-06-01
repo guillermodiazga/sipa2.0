@@ -135,7 +135,7 @@ controller.main.addEvents = function (){
 	});
 	$("#refreshResults").click(function(){
 		general.stopUser.show();
-		statusBar.show("Cargando...").hide(2000);
+		pushNotify.show("Cargando...").info().hide(2000);
 		$(".tabsMain").filter(".active").click();
 	});
 	if(localStorage.idrol != 1){
@@ -208,7 +208,7 @@ controller.main.addEventsTable = function (){
 					$row.remove();
 					debugger
 			        general.stopUser.hide();
-					statusBar.show("Pedido "+idOrder+" Aprobado.").hide(2000);
+					pushNotify.show("Pedido "+idOrder+" Aprobado.").success().hide(2000);
 
 					var numberRows = $("#mainTable tbody tr[data-id]:visible").size();
 					$("#tab1").find(".badge").text(numberRows);
@@ -251,7 +251,7 @@ controller.main.addEventsTable = function (){
 				.done(function(resp){
 					$row.remove();
 			        general.stopUser.hide();
-					statusBar.show("Pedido "+idOrder+" Rechazado.").hide(2000);
+					pushNotify.show("Pedido "+idOrder+" Rechazado.").success().hide(2000);
 					var numberRows = $("#mainTable tbody tr[data-id]:visible").size();
 					$("#tab1").find(".badge").text(numberRows);
 

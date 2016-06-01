@@ -182,14 +182,14 @@ general.setPagination = function(table, limitResults, selectPage){
       if($element.data("next") ==  true){
         page = parseInt($(".pagination li.active:first").text())+1;
         if(page > numberPages ){
-          statusBar.show("Pagina "+page+" no existe").hide(20000);
+          pushNotify.show("Pagina "+page+" no existe").hide(20000);
           return;
         } 
         
       }else{
         page = parseInt($(".pagination li.active:first").text())-1;
         if(page < 1 ){
-          statusBar.show("Pagina "+page+" no existe").hide(20000);
+          pushNotify.show("Pagina "+page+" no existe").hide(20000);
           return;
         }
       }
@@ -574,7 +574,6 @@ var pushNotify = {
   $div: null,
   timeOut: null,
   show: function(msg, title, time, onclick, $div){
-    debugger
     general.loading.show("#div-ms-status-notification > .panel-body #msg", 2000);
     var _this = this;
 
@@ -603,10 +602,18 @@ var pushNotify = {
 
     return this;
   },
-  hide: function(){
+  hide: function(time){
     general.loading.stop("#div-ms-status-notification > .panel-body #msg");
     var _this = this;
-    _this.$div.slideUp();
+
+    if(!isNaN(time)){
+      clearTimeout(_this.timeOut);
+      _this.timeOut = setTimeout(function(){
+                  _this.$div.slideUp();
+      },time || 3000);
+    }else{
+      _this.$div.slideUp();
+    }
     return this;
   },
   info: function(){

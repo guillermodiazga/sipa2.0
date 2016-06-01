@@ -176,9 +176,7 @@ controller.search.loadPptoUserToSearch = function (){
 		       		items += "<option value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(item.valorini-item.valorpedido)+"</option>";
 		       });
 		       $("#budget").append(items);
-		     }else{
-	        	pushNotify.show("No hay presupuesto para este tipo de pedido").info();
-	        }
+		     }
 		 }).fail(function(e){
 		 	$("#budget").append(items);
 		 	alert("Error: " + e.responseText);

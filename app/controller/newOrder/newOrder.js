@@ -69,7 +69,6 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 
 controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 	var typeOrder = $("#typeOrder").val();
-	statusBar.show("Cargando presupuesto...");
 	if(typeOrder || idppto){
 		model.newOrder.getPptoUserToNewOrder($("#typeOrder").val(), localStorage.id, idppto)
 		.done(function (data) {
@@ -94,12 +93,10 @@ controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 		    	$("#ppto").html("").val("");
 		    	controller.newOrder.showCurrentDate();
 		    }
-		    statusBar.hide();
 		}).fail(function(e){
 			$("#ppto").append(items);
 			alert("Error: " + e.responseText).danger();
 			$("#addItems").attr("disabled","disabled");
-			statusBar.hide();
 		});
 	}
 };
@@ -112,7 +109,7 @@ controller.newOrder.showCurrentDate = function (){
 
 controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 	var typeOrder = typeOrder || $("#typeOrder").val();
-	statusBar.show("Cargando Productos...");
+	pushNotify.show("Cargando Productos y presupuesto...").info().hide(2000);
 	if(typeOrder){
 		model.newOrder.getItemsToNewOrder(typeOrder)
 		.done(function (data) {
@@ -155,10 +152,8 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 		    }else{
 		    	alert("No se pudieron cargar los items").warning();
 		    }
-		    statusBar.hide();
 		}).fail(function(e){
 			alert("Error: " + e.responseText).danger();
-			statusBar.hide();
 		});
 	}
 	
@@ -352,9 +347,6 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 //add all events
 controller.newOrder.initEvents = function(){
 	$("#typeOrder").change(function(){
-		setTimeout(function(){
-			pushNotify.show("Cargando productos...").info();
-		},10);
 		//change items list
 		controller.newOrder.loadItemsToNewOrder();
 		controller.newOrder.loadPptoUserToNewOrder();
