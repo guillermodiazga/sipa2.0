@@ -190,3 +190,10 @@ body > #container{
   padding: 1px!important;
 }
 
+.table{
+  background-color: #ffffff!important;
+}
+
+.modal{
+  background-color: rgba(255,255,255,0.8)!important;
+}
