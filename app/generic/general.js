@@ -408,7 +408,7 @@ $.ajaxSetup({
         // hide dialog // works
         if(xhr.status == 0){
           general.stopUser.hide();
-          alert("Opps!<br>Parece que se perdio la conexión a internet.").warning();
+          pushNotify.show("Opps!<br>Parece que se perdio la conexión a internet.").info().hide(20000);
         }
       },
       success: function(result,status,xhr) {
