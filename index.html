@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="SIPA: Sistema de pedidos de Alimentacion">
+    <meta name="author" content="dg4apps.com">
     <link rel="icon" href="icon.ico">
     <link rel="stylesheet" href="css/main.css">
 
     <title>SIPA</title>
 
     <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/vendor/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/vendor/font-awesome.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <!-- Custom styles for this template -->
     <link href="css/vendor/sticky-footer-navbar.css" rel="stylesheet">
@@ -90,8 +90,18 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="lib/vendor/jquery.min.js"></script>
     <script src="lib/vendor/bootstrap.min.js"></script>
+
+    <!--App -->
+    <script src="app/generic/navigation.js"></script>
+    <script src="app/generic/session.js" ></script>
+    <script src="app/generic/general.js"></script>
+    <script src="app/generic/WebNotifications.js"></script>
+    <script src="app/model/home/main.js"></script>
+
+    <script src="lib/vendor/moment.js"></script>
+    <script src="lib/vendor/moment-range.js"></script>
 
 
 
@@ -150,18 +160,8 @@
   <div class="panel-body">
     <span id="msg"></span>
   </div>
-</div> 
+</div>  
 
-    
-<!--App -->
-<script src="app/generic/navigation.js"></script>
-<script src="app/generic/session.js" ></script>
-<script src="app/generic/general.js"></script>
-<script src="app/generic/WebNotifications.js"></script>
-<script src="app/model/home/main.js"></script>
-
-<script src="lib/vendor/moment.js"></script>
-<script src="lib/vendor/moment-range.js"></script>
 <script type="text/javascript">
 moment.locale('es', {
     months : "enero_febrero_marzo_abril_mayo_junio_julio_agosto_septiembre_octubre_noviembre_diciembre".split("_"),
