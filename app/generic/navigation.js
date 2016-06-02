@@ -85,7 +85,8 @@ controller.navigation.loadView = function (view, idElementToShow, callBack, swCl
     else{
         $("#container").removeClass("container");
     }
-    $.get('app/view/'+view+'.html?a='+Math.random())
+   // $.get('app/view/'+view+'.html?a='+Math.random())
+    $.get('app/view/'+view+'.html')
     .done(function(data, e){
         $("#"+idElementToShow).html("").append(data);
         general.stopUser.hide();
