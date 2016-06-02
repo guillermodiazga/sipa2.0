@@ -197,6 +197,12 @@ controller.search.initEvents = function(){
 			controller.search.getQuery(jsonData);
 		});
 
+	$("#exportExcel").click(function(){
+		$('#resultsTable tbody tr').show();
+		general.exportToExcel($('#resultsTable'));
+		$('.page1').click();
+	});
+
 };
 
 

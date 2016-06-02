@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 
 include("conexion.php");
 include("generales.php");
+date_default_timezone_set('America/Bogota');
 
     //-----------------------------------Recibir funcion a ejecutar y datos
 
@@ -118,6 +119,11 @@ function saveHistoricStatus ($idOrder, $newStatus, $msg, $log, $iduser){
     //solo enviar mail si se aprueba o rechaza
     if($newStatus == 3 || $newStatus == 4 || $newStatus == 6){
         buildEmail($idOrder);
+    }
+
+    //Send mail to proveedor
+    if($newStatus == 3){
+        sendMailProv($idOrder);
     }
 
 };
@@ -898,7 +904,22 @@ function buildEmail($numOrder)
     sendMail($mail, $mensaje);
 }
 
-//error_log($sql);
+function sendMailProv($id){
 
+    $mail = "comprasylogística.hb@gmail.com". ",". "cquinterob@outlook.com";
+
+    $mensaje   = 
+                "<h1>Hola!</h1>".
+                "<p>El estado del pedido # ".$id." ha cambiado a <b>Aprobado</b></p>".
+                "<br>".
+                "<p>Por favor ingresa al siguiente link para ver mas detalles: <a href='sipa.dg4apps.com'>sipa.dg4apps.com<a/></p>".
+                "<br><br><br><br>".
+                "<img width='100' src='sipa.dg4apps.com/img/logo.png'><img width='80' src='dg4apps.com/img/logo.png'>";
+
+     sendMail($mail, $mensaje);
+}
+
+
+//error_log($sql);
 ?>
 
