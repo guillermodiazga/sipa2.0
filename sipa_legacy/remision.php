@@ -175,7 +175,7 @@ session_start();?>
 
 													<table align=center border=0 width="630" cellspacing=0>
 
-														<tr><td align=center bgcolor='#ffffff' rowspan=3><img width=110 height=90 src='images/logo-cliente.png'></td><td ><b>Direccion: </b><?echo $row['direccion']?><br> <b> Comutador: </b><?echo $row['telprov']?><br><b>E-mail: </b><?echo $row['email']?></td><td align=left><b>Remisi&oacute;n Nro. </b>_________</td></tr>
+														<tr><td align=center bgcolor='#ffffff' rowspan=3><img width=110 height=90 src='images/logo-cliente.png?1'></td><td ><b>Direccion: </b><?echo $row['direccion']?><br> <b> Comutador: </b><?echo $row['telprov']?><br><b>E-mail: </b><?echo $row['email']?></td><td align=left><b>Remisi&oacute;n Nro. </b>_________</td></tr>
 														<tr><td colspan=2><hr noshade="noshade" size="1"/> 
 														</td></tr>
 														<tr><td align=left colspan=1>Se&ntilde;ores:<br> <b>Municipio de Medell&iacute;n </b><br> <?echo ($row['secretaria'])?> </td><td><b>Pedido:</b><?echo $row['id']?><br><b>Fecha: </b><?echo ($row['fchentrega'])?> <br><b>Hora: </b><?echo ($row['hora'])?> </td></tr>

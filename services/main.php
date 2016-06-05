@@ -906,7 +906,7 @@ function buildEmail($numOrder)
 
 function sendMailProv($id){
 
-    $mail = "comprasylogística.hb@gmail.com". ",". "cquinterob@outlook.com";
+    $mail = "comprasylogistica.hb@gmail.com". ",". "cquinterob@outlook.com". ",". "adriana.torresbautista@hotmail.com";
 
     $mensaje   = 
                 "<h1>Hola!</h1>".
