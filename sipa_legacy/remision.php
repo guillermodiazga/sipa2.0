@@ -20,8 +20,7 @@ session_start();?>
 			color : black;
 		}
 	</style>
-	<!-->window.print()<-->
-	<BODY STYLE="font-family:arial,helvetica,'Arial'" " onload=""> 
+	<BODY STYLE="font-family:arial,helvetica,'Arial'" " onload="window.print()"> 
 		<?php
 		$ped=$_GET['ped'];
 		$type=$_GET['type'];
