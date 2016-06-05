@@ -3,11 +3,7 @@ session_start();?>
 
 
 <head>
-	<LINK REL="stylesheet" TYPE="text/css" HREF="estilos.css"> 
-		<Title>.::SIPA::.</Title>
-		<script type="text/javascript" src="menu.js"></script>
-		<script src="SpryAssets/SpryMenuBar.js" type="text/javascript"></script>
-		<link href="SpryAssets/SpryMenuBarHorizontal.css" rel="stylesheet" type="text/css">
+		<Title>SIPA - Pedido <?echo $_GET['ped']?></Title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 
 		<!-- HTTP 1.1 -->
@@ -24,8 +20,8 @@ session_start();?>
 			color : black;
 		}
 	</style>
-
-	<BODY STYLE="font-family:arial,helvetica,'Arial'" " onload="window.print()"> 
+	<!-->window.print()<-->
+	<BODY STYLE="font-family:arial,helvetica,'Arial'" " onload=""> 
 		<?php
 		$ped=$_GET['ped'];
 		$type=$_GET['type'];
@@ -137,7 +133,7 @@ session_start();?>
 
 										<table  border=1 cellspacing=0>
 
-											<tr><th colspan=2><font size=3><?echo ($row['secretaria'])?> - Solicitud Nro.:<font size=3><?echo $row['id']?> </th></tr>
+											<tr><th colspan=2><font size=3><?echo ($row['secretaria'])?> - Despacho Nro.<font size=3><?echo $row['id']?> </th></tr>
 											<tbody bgcolor='#ffffff' style='font-size:50'>
 
 												<colgroup>
@@ -146,7 +142,11 @@ session_start();?>
 											</colgroup>
 
 
-											<tr><td rowspan=2><b>Entrega:</td><td><b>Fecha: </b><?echo fch_mysql_fchlarga($row['fchentrega'])?>; <b>Hora: </b><?echo ($row['hora'])?></td></tr>
+											<tr>
+												<td rowspan=2><b>Entrega:</td>
+												<td><b>Fecha: </b><?echo fch_mysql_fchlarga($row['fchentrega'])?>; <b>Hora: </b><?echo ($row['hora'])?>
+												</td>
+											</tr>
 											<tr><td><b>Direcci&oacute;n: </b><?echo ($row['direcc'])?>; <b>Evento:</b> <?echo ($row['evento'])?></td></tr>
 
 											<tr><td rowspan=2><b>Recibe:</td><td><b><?echo ($row['personarecibe'])?></td></tr>
@@ -181,7 +181,7 @@ session_start();?>
 														</td></tr>
 														<tr><td align=left colspan=1>Se&ntilde;ores:<br> <b>Municipio de Medell&iacute;n </b><br> <?echo ($row['secretaria'])?> </td><td><b>Pedido:</b><?echo $row['id']?><br><b>Fecha: </b><?echo ($row['fchentrega'])?> <br><b>Hora: </b><?echo ($row['hora'])?> </td></tr>
 
-														<tr><td colspan=3><hr noshade="noshade" size="1" valign=top/>
+														<tr><td colspan=3><br></td></tr>
 
 														</table>
 														
@@ -199,39 +199,38 @@ session_start();?>
 
 													<tr><td rowspan=3><b>Detalle: </td><td><small align='justify' ><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr>
 													<tr><td><b>Cantidad:</b> <?echo number_format($row['cantidad'], 0, '', '.')?>; <b>Vr./U sin IVA:</b> $<?echo number_format(round($row['valor'],0), 0, '', '.')?>; <b>Vr. Total: </b> $<?echo number_format($row['valorpedido'], 0, '', '.')?></td></tr>
-													<tr><td><b>Nro. del Pedido-Proyecto: <?echo ($row['idppto'])?></td></tr>
+													<tr><td><b>Nro. del Pedido-Proyecto: <?echo ($row['idppto'])?><br></td></tr>
+														<tr>
+															<td rowspan=2><b>Recibido:</td><td>
+						
+																<tr>
+																	<td>
+																		<table border=0 rules=cols class="borderCustom" width='100%'>
+																		<tr>
+																			<td rowspan=3><br>______________________<font color=ffffff>_</font><br>
+																				<font size=1><?echo ($row['personarecibe'])?></b><br>
+																					<font size=1>CC:</font>
+																				</td>
+																			<td rowspan=3 width="40%" valign=bottom>_________________________<br>
+																				<font size=1>V.B. <?echo ($row['nombre'])?><br>
+																				<font size=1>Solicitado</font>
+																			</td>
 
-													<tr><td colspan=3><hr noshade="noshade" size="1" valign=top/>
+																			<td rowspan=3 valign=top width="40%" align=left><font size=1>Despachado:</font>
+																			</td>
+																			<td rowspan=3 valign=top width="40%" align=left><font size=1>Transportado:</font>
+																			</td>
+																			<td rowspan=3 valign=top width="40%" align=left><font size=1>Entregado:</font>
+																			</td>
+																		</tr>
 
-														<tr><td rowspan=2><b>Recibido:</td><td>
-															<table  cellspacing=0 border=1 rules=groups >
-																<colgroup>
+																	    </table >
+																	</td>
+																</tr>
 
-																<col >
-																<col bgcolor='#ffffff' border=1 rules=cols >
-																<col bgcolor='#ffffff'  >
-															</colgroup>
-															<tr><td>
-																<table border=0 rules=cols>
-																	<tr>
-
-																		<td rowspan=3><br>_______________________<font color=ffffff>_</font><br><font size=1><?echo ($row['personarecibe'])?></b><br><font size=1>CC:</font></td>
-																		<td rowspan=3 width="40%" valign=bottom>__________________________<br><font size=1>V.B. <?echo ($row['nombre'])?><br><font size=1><br></font></td>
-																	</tr>
-																	<tr><td></td>
-																		<td rowspan=3 valign=top width="40%" align=left><font size=1>Despachado:</font></td>
-																		<td></td>
-																		<td rowspan=3 valign=top width="40%" align=left><font size=1>Transportado:</font></td>
-																	</tr>
-
-
-
-																</table>
-															</td></tr>
-														</table >
-
-													</td></tr>
-												</table>
+															</td>
+														</tr>
+													</table>
 
 
 <?}//fin while
@@ -242,3 +241,11 @@ include 'desconexion.php';
 }
 
 ?>
+<style type="text/css">
+	.borderCustom{
+		border-style: solid;
+    	border-width: 1px;
+    	border-bottom: none;
+    	border-color: #000000;
+	}
+</style>
