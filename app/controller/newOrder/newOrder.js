@@ -304,6 +304,11 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 		.done(function (data) {
 			data = data[0];
 			general.stopUser.hide();
+
+			if(!data){
+				alert("Pedido no Existe");
+				controller.navigation.loadView("main");
+			}
 			//load data in view
 			var $form = $("#formNewOrder"),
 			creationDate = moment(data.fchreg.substring(0,10), "L").format("Y-MM-DD");
