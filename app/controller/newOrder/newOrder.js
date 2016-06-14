@@ -58,10 +58,9 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 
 		    if(idTypeOrder){
 		    	$("#formNewOrder").find("#typeOrder").val(idTypeOrder);
-		    };
-
-
-			 general.stopUser.hide();
+		    }else{
+				general.stopUser.hide();
+		    }
 		}).fail(function(e){
 			alert("Error: " + e.responseText).danger();
 		});
@@ -83,8 +82,9 @@ controller.newOrder.loadPptoUserToNewOrder = function (idppto){
 		        			+" value='"+item.id+"'>"+item.id+"-"+item.nombre+"- Saldo: $"+formatMoney(saldo)+"</option>";
 		        });
 		        $("#ppto").append(items);
-		        if(!idppto)
+		        if(!idppto){
 		        	controller.newOrder.loadItemsToNewOrder();
+		        }
 
 		    }else{
 		    	alert("No hay presupuesto para este tipo de pedido").warning();
