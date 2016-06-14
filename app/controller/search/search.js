@@ -9,15 +9,15 @@ controller.search.getFormData = function(form){
 
 	data.numberOrderFrom = $form.find("#numberOrderFrom").val();
 	data.numberOrderTo = $form.find("#numberOrderTo").val();
-	data.typeOrder = $form.find("#typeOrder").val();
+	data.typeOrder = $form.find("#typeOrder").val()  || "*";
 	data.creationDateFrom = $form.find("#creationDateFrom").val();
 	data.creationDateFrom = $form.find("#creationDateFrom").val();
 	data.creationDateTo = $form.find("#creationDateTo").val();
 	data.deliveryDateFrom = $form.find("#deliveryDateFrom").val();
 	data.deliveryDateTo = $form.find("#deliveryDateTo").val();
-	data.dependence = $form.find("#dependence").val();
-	data.budget = $form.find("#budget").val();
-	data.statusOrder = $form.find("#statusOrder").val();
+	data.dependence = $form.find("#dependence").val() || "*";
+	data.budget = $form.find("#budget").val()  || "*";
+	data.statusOrder = $form.find("#statusOrder").val()  || "*";
 
 	data.orderBy = $("#resultsTable th[data-order-this = true]").attr("data-order-by") || "";
 	data.orderAsc = $("#resultsTable th[data-order-this = true]").attr("data-order-asc") || "true";
