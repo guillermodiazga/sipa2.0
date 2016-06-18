@@ -460,6 +460,12 @@ controller.newOrder.validateForm = function(jsonData) {
 }
 
 controller.newOrder.validateDeliveryDate = function (date, hour){
+
+	//No validar hora para modificar cuando sea el interventor
+	if(localStorage.idrol == 2){
+		return true;
+	}
+
 	var deliveryDate = moment(date+" "+hour, "YYYY-MM-DD H:m"),
 	today = moment(),
 	diferencia = deliveryDate.diff(today,"hours"),
@@ -474,11 +480,11 @@ controller.newOrder.validateDeliveryDate = function (date, hour){
 	//pedido el sabdo para dia lunes
 	if(numberDayToday == 7 && numberDayDelivery == 1)
 		minHoursToRelease = 24+8;
-
+/*
 	//Si es hecho el viernes paar entregar el lunes
 	if(numberDayToday == 5 && numberDayDelivery == 1)
 		minHoursToRelease = 72+8;
-
+*/
 	//Pedido con menos de 24 horas de anticipacion
 	if(diferencia < minHoursToRelease)
 		return false;
