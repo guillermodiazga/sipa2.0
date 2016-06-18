@@ -149,7 +149,7 @@ function getTypesOrders($arrData){
 
 function getItemsToNewOrder($arrData){
     $type = $arrData["type"];
-    $sql = "SELECT * FROM  `alimento` where bitactivo=1 and idtalimento = ".$type." ORDER BY  `alimento`.`nombre` ASC ";
+    $sql = "SELECT * FROM  `alimento` where bitactivo=1 and idtalimento = ".$type." ORDER BY  `alimento`.`id` ASC ";
     return queryTojson($sql);
 };
 
