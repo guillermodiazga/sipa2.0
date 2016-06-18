@@ -40,7 +40,7 @@ controller.search.getQuery = function(jsonData) {
 		       		result += '<tr>'+
 		       					'<td data-id='+resp.id+'><i class="historyOrder btn btn-default fa fa-history blue" title="Ver historico de estados del Pedido"></i>'+
 		       					'<i class="printOrder btn btn-default fa fa-print purple" title="Imprimir Pedido"></i></td>'+
-		       					'<td title="'+resp.nomestado+'">'+general.iconStatus.html(resp.estado)+'</td>'+
+		       					'<td title="'+resp.nomestado+'">'+general.iconStatus.html(resp.estado, resp.nomestado)+'</td>'+
 		       					'<td>'+resp.id+'</td>'+
 		       					'<td>'+resp.idsecretaria+'-'+resp.secretaria+'</td>'+
 		       					'<td>'+resp.usnam+'</td>'+

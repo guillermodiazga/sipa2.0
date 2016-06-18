@@ -216,7 +216,7 @@ general.setPagination = function(table, limitResults, selectPage){
 };
 
 general.iconStatus = {
-    html: function (estado) {
+    html: function (estado, text) {
     var ico = "flag", color;
 
     switch (parseInt(estado)){
@@ -250,7 +250,12 @@ general.iconStatus = {
       break;
     } 
 
-    return '<i class="status btn fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
+    var ico = '<i class="status btn fa fa-2x fa-'+ico+' '+color+'" aria-hidden="true"></i>';
+
+    if(text)
+      ico += '<small class="label label-info">'+text+'</small>';
+    
+    return ico;
   },
   addEvents: function(){
     $(".status").click(function(){
