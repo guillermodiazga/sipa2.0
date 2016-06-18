@@ -304,7 +304,6 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 	model.newOrder.loadDataOrder(idOrderToEdit)
 		.done(function (data) {
 			data = data[0];
-			general.stopUser.hide();
 
 			if(!data){
 				alert("Pedido no existe o no estas autorizado para modificarlo.");
