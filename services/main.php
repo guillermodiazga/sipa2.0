@@ -651,12 +651,19 @@ function loadCatalogo($arrData){
 function loadDataOrder($arrData){
     $idOrder = $arrData["idOrder"];
     $idUser = $arrData["idUser"];
+    $idRol = $arrData["idRol"];
+    $filterUser = "";
+
+    if($idRol == 1){
+        $filterUser = " ped.idusuario = $idUser and ";
+    }
     
     $sql = "SELECT us.nombre, ped.idusuario,ped.fchreg, ped.valoradic, est.estado as estad, est.id as idestad, ped.evento, ped.personarecibe, ped.telfjorecibe, ped.movilrecibe, ped.fchentrega, ped.hora, ped.cantidad, ped.direccion, ped.idtalimento, ped.valorpedido, ped.idppto, ped.comentario, tip.talimento, ali.id as iditem, ali.nombre as item, ped.idalimento
     FROM pedido as ped, tipoalimento  as tip , usuario as us, alimento as ali, estados as est
     WHERE 
         ped.id = $idOrder and
-        us.id = $idUser and
+        us.id = ped.idusuario and
+        $filterUser
         ped.idtalimento=tip.id and
         ped.idalimento=ali.id and
         est.id=ped.estado";

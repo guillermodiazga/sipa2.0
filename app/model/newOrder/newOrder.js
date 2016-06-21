@@ -53,7 +53,7 @@ model.newOrder.loadDataOrder = function(idOrder) {
     return $.ajax('services/main.php',
         {
            type: "GET", async: true,
-           data:{f:'loadDataOrder', idOrder: idOrder, idUser: localStorage.id},
+           data:{f:'loadDataOrder', idOrder: idOrder, idUser: localStorage.id, idRol: localStorage.idrol},
            contentType: "application/json"
         })
 };

@@ -48,7 +48,7 @@ controller.navigation.hideOptionsMainMenuByRol = function () {
     //ocultar menu de configuracion y edicion de pedidos
     if(localStorage.idrol == 1){
         $(".menuPpal").find("a[href='#config']").parent().hide();
-        $(".menuPpal").find("a[href='#editOrder']").parent().hide();
+        //$(".menuPpal").find("a[href='#editOrder']").parent().hide();
     }
 
     if(localStorage.idrol != 1){

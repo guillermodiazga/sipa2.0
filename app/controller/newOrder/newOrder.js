@@ -299,6 +299,7 @@ controller.newOrder.getFormData = function(form){
 
 //Edit Order
 controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
+	$("#container").hide();
 	general.stopUser.show();
 	model.newOrder.loadDataOrder(idOrderToEdit)
 		.done(function (data) {
@@ -306,9 +307,11 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 			general.stopUser.hide();
 
 			if(!data){
-				alert("Pedido no Existe");
-				controller.navigation.loadView("main");
+				alert("Pedido no existe o no estas autorizado para modificarlo.");
+				return controller.navigation.loadView("main");
 			}
+
+
 			//load data in view
 			var $form = $("#formNewOrder"),
 			creationDate = moment(data.fchreg.substring(0,10), "L").format("Y-MM-DD");
@@ -341,6 +344,19 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 							.find(".aditionalValue").val(data.valoradic).change();
 					}
 				);
+
+		$("#container").show();
+
+		//pedido anulado
+		if (data.idestad == 1){
+			controller.newOrder.readOnly($form);
+			alert("Este pedido ya fue anulado")
+		}
+
+		//esta para despacho
+		if (data.idestad == 6){
+			alert("<b><i  class='fa fa-2x fa-truck green'/> Ojo! </b><br><br>Este pedido ya esta listo para despacho, antes de modificarlo, por favor comunicate con H&B telefónicamente para confirmar disponibilidad.").warning();
+		}
 				
 		}).fail(function(e){
 			    general.stopUser.hide();
@@ -348,6 +364,18 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 		});
 };
 
+controller.newOrder.readOnly = function($form){
+	$form
+	.find("input").attr("disabled", "disabled").end()
+	.find("button").attr("disabled", "disabled").end()
+	.find("select").attr("disabled", "disabled");
+	
+	$("#deleteOrder").attr("disabled", "disabled");
+	$("#addItems").remove();
+	$(".quantity").attr("disabled", "disabled");
+	$(".aditionalValue").attr("disabled", "disabled");
+	$(".deletedItem").attr("disabled", "disabled");
+}
 
 //add all events
 controller.newOrder.initEvents = function(){
@@ -472,15 +500,15 @@ controller.newOrder.validateDeliveryDate = function (date, hour){
 	numberDayDelivery = deliveryDate.format("d"),
 	numberDayToday = today.format("d"),
 	minHoursToRelease = 24;
-
+/*
 	//pedido el sabdo para dia lunes
 	if(numberDayToday == 6 && numberDayDelivery == 1)
 		minHoursToRelease = 48+8;
 
-	//pedido el sabdo para dia lunes
+	//pedido el domingo para dia lunes
 	if(numberDayToday == 7 && numberDayDelivery == 1)
 		minHoursToRelease = 24+8;
-/*
+
 	//Si es hecho el viernes paar entregar el lunes
 	if(numberDayToday == 5 && numberDayDelivery == 1)
 		minHoursToRelease = 72+8;
