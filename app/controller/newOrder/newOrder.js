@@ -125,7 +125,7 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 		        	.attr("data-value", vlrConIva)
 		        	.removeAttr("id")
 		        	.find(".img").attr("src", "img/items/" + item.id + ".png").end()
-		        	.find(".nameItem").text(item.id + "-" + item.nombre).end()
+		        	.find(".nameItem").text(item.nombre).end()
 		        	.find(".description").text(item.descripcion).end()
 		        	.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
 		        	.find(".valor").text("$"+formatMoney(vlrConIva)).end()
@@ -359,8 +359,8 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 		}
 				
 		}).fail(function(e){
-			    general.stopUser.hide();
-				alert("Error: " + e.responseText).danger();
+		    general.stopUser.hide();
+			alert("Error: " + e.responseText).danger();
 		});
 };
 
@@ -490,9 +490,9 @@ controller.newOrder.validateForm = function(jsonData) {
 controller.newOrder.validateDeliveryDate = function (date, hour){
 
 	//No validar hora para modificar cuando sea el interventor
-	if(localStorage.idrol == 2){
+	/*if(localStorage.idrol == 2){
 		return true;
-	}
+	}*/
 
 	var deliveryDate = moment(date+" "+hour, "YYYY-MM-DD H:m"),
 	today = moment(),
