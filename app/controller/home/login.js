@@ -81,6 +81,8 @@ controller.login.initEvents = function (){
 		});		
 	}
 
+	general.stopUser.hide();
+
 };
 
 //---------------------------------------Constructor

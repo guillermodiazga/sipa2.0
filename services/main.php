@@ -149,7 +149,14 @@ function getTypesOrders($arrData){
 
 function getItemsToNewOrder($arrData){
     $type = $arrData["type"];
-    $sql = "SELECT * FROM  `alimento` where bitactivo=1 and idtalimento = ".$type." ORDER BY  `alimento`.`id` ASC ";
+
+    if($type != "*"){
+        $type = " and idtalimento = ".$type;
+    }else{
+        $type = "";
+    }
+
+    $sql = "SELECT * FROM  `alimento` where bitactivo=1 $type ORDER BY  `alimento`.`id` ASC ";
     return queryTojson($sql);
 };
 

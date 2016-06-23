@@ -95,6 +95,8 @@ controller.reports.initEvents = function(){
 		$(".tab").removeClass("active open-tab");
 		$("#tab"+html).addClass("active");
 	});
+
+	general.stopUser.hide();
 };
 
 controller.reports.report1 = {
@@ -122,13 +124,15 @@ controller.reports.report1 = {
 
 					}else{
 						general.noDataToShowInTable($("#report1-table"));
-					}					
+					}	
+					general.stopUser.hide();				
 				})
 				.fail(function(e){
 					general.stopUser.hide();
 					alert("Error: " + e.responseText);
 				});
 		});
+		general.stopUser.hide();
 	},
 
 	addTotalInTable: function($table){
@@ -252,6 +256,7 @@ controller.reports.report2 = {
 					alert("Error: " + e.responseText);
 				});
 		});
+		general.stopUser.hide();
 	},
 
 	addTotalInTable: function($table){
@@ -305,6 +310,7 @@ controller.reports.report3 = {
 					alert("Error: " + e.responseText);
 				});
 		});
+		general.stopUser.hide();
 	},
 
 	addTotalInTable: function($table){
@@ -363,7 +369,7 @@ controller.reports.report4 = {
 					general.stopUser.hide();
 					alert("Error: " + e.responseText);
 				});
-		//});
+		general.stopUser.hide();
 	},
 
 	addTotalInTable: function($table){

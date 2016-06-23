@@ -90,7 +90,7 @@ controller.navigation.loadView = function (view, idElementToShow, callBack, swCl
     $.get('app/view/'+view+'.html')
     .done(function(data, e){
         $("#"+idElementToShow).html("").append(data);
-        general.stopUser.hide();
+        //general.stopUser.hide();
         $("#"+idElementToShow).fadeIn();
 
         if(callBack){

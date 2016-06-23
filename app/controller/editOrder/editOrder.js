@@ -9,6 +9,9 @@ controller.editOrder.initEvents = function(){
 		sessionStorage.idOrderToEdit = $("#idOrder").val();
 		controller.navigation.loadView('newOrder', null, null, true);
 	});
+
+	general.stopUser.hide();
+        
 };
 
 //---------------------------------------Constructor
