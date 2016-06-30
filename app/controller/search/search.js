@@ -47,7 +47,7 @@ controller.search.getQuery = function(jsonData) {
 		       					'<td>'+resp.talimento+'</td>'+
 		       					'<td><img class="thumbnail zoomImg" width="50" src="img/items/'+resp.idalimento+'.png"></td><td>'+resp.alimento+'</td>'+
 		       					'<td>'+resp.cantidad+'</td>'+
-		       					'<td> $'+formatMoney(resp.valorpedido)+'</td>'+
+		       					'<td> $'+formatMoney(valorpedido)+'</td>'+
 		       					'<td>'+formatDate(resp.fchentrega)+'</td>'+
 		       					'<td>'+resp.hora+'</td>'+
 		       					'<td>'+resp.direccion+'</td>'+
