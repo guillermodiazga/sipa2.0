@@ -37,6 +37,7 @@ controller.search.getQuery = function(jsonData) {
 		       //$("#results").html("").show();
 		       var result = "";
 		       $.each(data, function(i, resp){
+		       		var valorpedido = ( resp.estado != 1)? resp.valorpedido : 0;
 		       		result += '<tr>'+
 		       					'<td data-id='+resp.id+'><i class="historyOrder btn btn-default fa fa-history blue" title="Ver historico de estados del Pedido"></i>'+
 		       					'<i class="printOrder btn btn-default fa fa-print purple" title="Imprimir Pedido"></i></td>'+
