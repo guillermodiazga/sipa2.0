@@ -521,7 +521,7 @@ function getGeneralSearch($arrData){
 
     ORDER BY $orderBy $asc
 
-    limit 0, 100
+    limit 0, 1000
     ";
 
     error_log($sql);

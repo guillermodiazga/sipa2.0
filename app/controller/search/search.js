@@ -45,7 +45,7 @@ controller.search.getQuery = function(jsonData) {
 		       					'<td>'+resp.idsecretaria+'-'+resp.secretaria+'</td>'+
 		       					'<td>'+resp.usnam+'</td>'+
 		       					'<td>'+resp.talimento+'</td>'+
-		       					'<td><img class="thumbnail zoomImg" width="50" src="img/items/'+resp.idalimento+'.png"></td><td>'+resp.idalimento+'-'+resp.alimento+'</td>'+
+		       					'<td><img class="thumbnail zoomImg" width="50" src="img/items/'+resp.idalimento+'.png"></td><td>'+resp.alimento+'</td>'+
 		       					'<td>'+resp.cantidad+'</td>'+
 		       					'<td> $'+formatMoney(resp.valorpedido)+'</td>'+
 		       					'<td>'+formatDate(resp.fchentrega)+'</td>'+
