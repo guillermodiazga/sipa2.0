@@ -17,11 +17,13 @@ controller.search.getFormData = function(form){
 	data.deliveryDateTo = $form.find("#deliveryDateTo").val();
 	data.dependence = $form.find("#dependence").val() || "*";
 	data.budget = $form.find("#budget").val()  || "*";
-	data.statusOrder = $form.find("#statusOrder").val()  || "*";
-
 	data.orderBy = $("#resultsTable th[data-order-this = true]").attr("data-order-by") || "";
 	data.orderAsc = $("#resultsTable th[data-order-this = true]").attr("data-order-asc") || "true";
 	data.page = $("#pagination").find("li[class=active]").find("a").attr("data-page") || "0";
+	var statusOrder = JSON.stringify($form.find("#statusOrder").val()).replace("[",'').replace("]",'');
+	statusOrder = statusOrder.replace(/"/g,"");
+	data.statusOrder = (statusOrder.indexOf("*") != -1 )? "*" :  statusOrder;
+	debugger
 
 	jsonData.push(data);
 

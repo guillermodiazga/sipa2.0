@@ -71,6 +71,7 @@ session_start();?>
 				ped.movilrecibe,
 				ped.cantidad,
 				ped.valorpedido,
+				ali.nombre nombrealimento,
 				ali.descripcion,
 				ali.valor,
 				sec.secretaria,
@@ -152,7 +153,7 @@ session_start();?>
 											<tr><td <?echo $fonttable?>><b>Tel Fijo: </b><?echo format_tel_num($row['telfjorecibe'])?>;<b> Movil: </b> <?echo format_cel_num($row['movilrecibe'])?></td></tr>
 
 
-											<tr><td rowspan=3><b>Detalle: </td><td><small align=justify><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr><small>
+											<tr><td rowspan=3><b>Detalle: </td><td><small align=justify><b>Item:</b> <?echo ($row['nombrealimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr><small>
 											<tr><td><b>Cantidad:</b> <?echo number_format($row['cantidad'], 0, '', '.')?>; <b>Vr./U sin IVA:</b> $<?echo number_format(round($row['valor'],0), 0, '', '.')?>; <b>Vr. Total: </b> $<?echo number_format($row['valorpedido'], 0, '', '.')?></td></tr></small>
 											<tr><td><b>Nro. del Pedido-Proyecto: <?echo ($row['idppto'])?></td></tr>
 
@@ -196,7 +197,7 @@ session_start();?>
 
 												<tr><td colspan=3><hr noshade="noshade" size="1" valign=top/>
 
-													<tr><td rowspan=3><b>Detalle: </td><td><small align='justify' ><b>Item:</b> <?echo ($row['idalimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr>
+													<tr><td rowspan=3><b>Detalle: </td><td><small align='justify' ><b>Item:</b> <?echo ($row['nombrealimento'])?>: <?echo ($row['descripcion']);if($row['comentario']!=''){echo "<br>Nota: ".($row['comentario']);}?></small></td></tr>
 													<tr><td><b>Cantidad:</b> <?echo number_format($row['cantidad'], 0, '', '.')?>; <b>Vr./U sin IVA:</b> $<?echo number_format(round($row['valor'],0), 0, '', '.')?>; <b>Vr. Total: </b> $<?echo number_format($row['valorpedido'], 0, '', '.')?></td></tr>
 													<tr><td><b>Nro. del Pedido-Proyecto: <?echo ($row['idppto'])?><br></td></tr>
 														<tr>

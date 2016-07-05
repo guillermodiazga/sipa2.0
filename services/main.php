@@ -447,7 +447,7 @@ function getGeneralSearch($arrData){
         $orderId = " and ped.id between $numberOrderFrom and $numberOrderTo ";
 
     if ( $statusOrder != '*' )
-        $estadov =" and ped.estado = $statusOrder ";
+        $estadov =" and ped.estado in ($statusOrder) ";
 
     if ( $budget != '*' )
         $pptov = " and ped.idppto = '$budget' ";
