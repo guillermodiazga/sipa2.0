@@ -23,7 +23,6 @@ controller.search.getFormData = function(form){
 	var statusOrder = JSON.stringify($form.find("#statusOrder").val()).replace("[",'').replace("]",'');
 	statusOrder = statusOrder.replace(/"/g,"");
 	data.statusOrder = (statusOrder.indexOf("*") != -1 )? "*" :  statusOrder;
-	debugger
 
 	jsonData.push(data);
 
