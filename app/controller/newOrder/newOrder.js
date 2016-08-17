@@ -349,13 +349,16 @@ controller.newOrder.loadOrderToEdit = function(idOrderToEdit){
 		//pedido anulado
 		if (data.idestad == 1){
 			controller.newOrder.readOnly($form);
-			alert("Este pedido ya fue anulado")
+			alert("Este pedido ya fue anulado");
+
 		}
 
 		//esta para despacho
 		if (data.idestad == 6){
 			alert("<b><i  class='fa fa-2x fa-truck green'/> Ojo! </b><br><br>Este pedido ya esta listo para despacho, antes de modificarlo, por favor comunicate con H&B telefónicamente para confirmar disponibilidad.").warning();
 		}
+
+		general.stopUser.hide();
 				
 		}).fail(function(e){
 		    general.stopUser.hide();
