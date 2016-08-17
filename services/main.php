@@ -180,7 +180,8 @@ function getPptoUserToNewOrder($arrData){
         
     $sql = "
 
-        SELECT ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido
+        SELECT ppto.id, ppto.nombre, ppto.valorini, 
+        (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido
         FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
         WHERE 
         ppto.id = rel.idppto 
@@ -873,7 +874,7 @@ function report4($arrData){
 
     $sql = "SELECT sec.secretaria,sec.id as idsecretaria, 
                 ppto.pedido,ppto.proyecto, ppto.nombre, ppto.valorini+ppto.valorNoRequerido as valorini, 
-                ppto.valorpedido, (SELECT sum(valorpedido) FROM `pedido` WHERE idppto=ppto.id and estado=5) valorpagado, prov.proveedor as nomprov 
+                (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido, prov.proveedor as nomprov 
             FROM `presupuesto` as ppto, secretaria as sec, proveedor as prov
             WHERE 
             ppto.`bitactivo`=1 and
