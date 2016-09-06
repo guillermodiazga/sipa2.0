@@ -28,6 +28,7 @@ function response ($resp, $msg){
 function getRecibidos($arrData){
     $idRol = $arrData["idRol"];
     $idUser = $arrData["idUser"];
+    $count = $arrData["count"];
 
         //Interventor
     $estados = "and (ped.estado=2 or ped.estado=7)";
@@ -45,6 +46,7 @@ function getRecibidos($arrData){
         $userFilter = "";
     }
 
+
     $sql="SELECT   ped.estado , est.estado as descestado, sec.secretaria, ped.id, ped.idsecretaria, tali.talimento, ped.fchentrega, ped.hora, 
     ali.nombre as alimento, ped.cantidad, ped.valorpedido, ped.idppto, ped.direccion, ped.comentario, ped.personarecibe, 
     ppto.nombre as nomppto
@@ -60,6 +62,22 @@ function getRecibidos($arrData){
         $estados
         $userFilter
         order By 1, 4 asc";
+
+    if($count == 'true'){
+         $sql="SELECT   count(ped.id) count
+        FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
+        WHERE  
+            ped.bitactivo=1
+            and ped.idsecretaria=sec.id
+            and ped.idtalimento=tali.id
+            and ped.idalimento=ali.id
+            and ped.idppto=ppto.id
+            and ped.idusuario=us.id
+            and ped.estado=est.id
+            $estados
+            $userFilter";
+
+    }
 
     return queryTojson($sql);
 }

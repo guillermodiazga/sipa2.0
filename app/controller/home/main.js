@@ -7,7 +7,7 @@ controller.main.pagesToShow = 10;
 controller.main.getOrdersPend = function () {
 	if(!localStorage.id)return;
 	model.main.getOrdersPend().then(function(data){
-		general.notification(data.length);
+		general.notification(data.length || data[0].count);
 
 		if(localStorage.page == "main"){
 			controller.main.showDataInTable(data, "mainTable", "container1");
@@ -21,7 +21,7 @@ controller.main.getOrdersPend = function () {
 };
 
 controller.main.getOrdersToDashboard = function () {
-	if(!localStorage.id)return;
+	if(!localStorage.id || localStorage.idrol == 2)return;
 	model.main.getOrdersToDashboard().then(function(data){
 		//general.notification(data.length);
 		
@@ -89,7 +89,7 @@ controller.main.showDataInTable = function (data, idTable, idContainer) {
     $('#'+idTable+' tbody').html("").append(result);
     general.iconStatus.addEvents();
 
-    //general.setPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
+    //general.pPagination("#mainTable", controller.main.pagesToShow, parseInt($(".pagination li.active:first").text()));
 
   // $("#mainTableContainer").css("width", $(window).width()-20).css("height", $(window).height()-170)
 

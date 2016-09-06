@@ -3,15 +3,20 @@ var model =  model || {};
 model.main = {};
 
 model.main.getOrdersPend = function() {
+  var count = true;
+  if(localStorage.page === 'main'){
+    count = false;
+  }
     return $.ajax('services/main.php',
         {
            type: "GET", async: false,
-           data:{f:'getRecibidos', idUser: localStorage.id, idRol: localStorage.idrol} ,
+           data:{f:'getRecibidos', idUser: localStorage.id, idRol: localStorage.idrol, count: count} ,
            contentType: "application/json"
         })
         .then(function (data) {
             return data;
         });
+  
 };
 
 model.main.updateStatusOrder = function(id, status, msgStatus) {

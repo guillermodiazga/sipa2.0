@@ -40,7 +40,7 @@ general.loading = {
         time=containerSelector.replace("#","");
 
     time = time.split(" ")[0];
-    
+/*    
     if(_this[time])
       clearInterval(_this[time]);
 
@@ -55,23 +55,23 @@ general.loading = {
         .appendTo($container)
         .css({"background-color": "#337AB7", "width": "1rem", "height": "1rem", position: "absolute", left: "0", opacity: 0.3})
         .animate({"left": $container.width(), opacity: 1}, seconds || 5000, function(){$(this).remove()});
-    }
+    }*/
     return _this;
   },
   stop: function(containerSelector){
     var _this = this,
         time=containerSelector.replace("#","");
     
-    time = time.split(" ")[0];
-    clearInterval(_this[time]);
+    //time = time.split(" ")[0];
+    //clearInterval(_this[time]);
     return _this;
   },
   hide: function (containerSelector) {
     var _this = this,
         time=containerSelector.replace("#","");
 
-    time = time.split(" ")[0];
-    clearInterval(_this[time]);
+    //time = time.split(" ")[0];
+    //clearInterval(_this[time]);
    $(containerSelector).find(".loading").remove(); 
    return _this;
   }
@@ -273,7 +273,7 @@ general.iconStatus = {
 }
 
 //refrescar pedidos pendientes
-setInterval(function(){
+var getNewOrders = function(){
   if(localStorage.id){
     if(!controller.main){
       $.getScript("app/model/home/main.js",function(){
@@ -286,7 +286,9 @@ setInterval(function(){
     }
   }
 
-}, 60000);
+};
+
+setInterval(getNewOrders, 240000);
 
 statusBar = {
   $div : $("#statusBar"),
