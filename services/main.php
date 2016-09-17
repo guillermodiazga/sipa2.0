@@ -1,4 +1,4 @@
-<?
+<?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -11,12 +11,19 @@ date_default_timezone_set('America/Bogota');
 $arrData = php_fix_raw_query();
 $function = $arrData['f'];
 
-
-    //Ejecutar funcion que ingresa por url
+//Ejecutar funcion que ingresa por url
 call_user_func($function, $arrData);
 
 
     //----------------------------------------------funciones
+
+/*Login*/
+function login($arrData){
+    $id = $arrData["user"];
+    $pass = $arrData["pass"];
+    $sql = "SELECT * FROM  `usuario` where id = '".$id."' and password = '".$pass."'";
+    return queryTojson($sql);
+};
 
 function response ($resp, $msg){
     $jsondata = array();
@@ -52,34 +59,34 @@ function getRecibidos($arrData){
     ppto.nombre as nomppto
     FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
     WHERE  
-        ped.bitactivo=1
-        and ped.idsecretaria=sec.id
-        and ped.idtalimento=tali.id
-        and ped.idalimento=ali.id
-        and ped.idppto=ppto.id
-        and ped.idusuario=us.id
-        and ped.estado=est.id
-        $estados
-        $userFilter
-        order By 1, 4 asc";
+    ped.bitactivo=1
+    and ped.idsecretaria=sec.id
+    and ped.idtalimento=tali.id
+    and ped.idalimento=ali.id
+    and ped.idppto=ppto.id
+    and ped.idusuario=us.id
+    and ped.estado=est.id
+    $estados
+    $userFilter
+    order By 1, 4 asc";
 
     if($count == 'true'){
-         $sql="SELECT   count(ped.id) count
-        FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
-        WHERE  
-            ped.bitactivo=1
-            and ped.idsecretaria=sec.id
-            and ped.idtalimento=tali.id
-            and ped.idalimento=ali.id
-            and ped.idppto=ppto.id
-            and ped.idusuario=us.id
-            and ped.estado=est.id
-            $estados
-            $userFilter";
+       $sql="SELECT   count(ped.id) count
+       FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
+       WHERE  
+       ped.bitactivo=1
+       and ped.idsecretaria=sec.id
+       and ped.idtalimento=tali.id
+       and ped.idalimento=ali.id
+       and ped.idppto=ppto.id
+       and ped.idusuario=us.id
+       and ped.estado=est.id
+       $estados
+       $userFilter";
 
-    }
+   }
 
-    return queryTojson($sql);
+   return queryTojson($sql);
 }
 
 function getHistoryOrder($arrData){
@@ -106,14 +113,12 @@ function updateStatusOrder($arrData){
 
 
     $conexion = new Conexion();
-    $conexion->open();
-    $result = mysql_query($sql) or die("Query Error");
+    $result = $conexion->mysqli->query($sql) or die("Query Error");
 
     $array = explode(",", $id);
 
 
-    $conexion->close($result);
- 
+
     for ($i=0; $i < sizeof($array); $i++) { 
         saveHistoricStatus ($array[$i], $newStatus, $msg, $log, $user);
     }
@@ -125,14 +130,12 @@ function updateStatusOrder($arrData){
 function saveHistoricStatus ($idOrder, $newStatus, $msg, $log, $iduser){
 
     $sql = "INSERT INTO `historico_estados_ped` (`id`, `pedido`, `newestado`, `iduser`, `comentario`, `log`)
-            VALUES ( NULL , $idOrder, '$newStatus', $iduser, '$msg', '$log' );";
+    VALUES ( NULL , $idOrder, '$newStatus', $iduser, '$msg', '$log' );";
 
     $conexion = new Conexion();
-    $conexion->open();
 
-    $result = mysql_query($sql) or die("Query Error".$sql);
+    $result = $conexion->mysqli->query($sql) or die("Query Error".$sql);
 
-    $conexion->close($result);
 
     //solo enviar mail si se aprueba o rechaza
     if($newStatus == 3 || $newStatus == 4 || $newStatus == 6){
@@ -147,18 +150,13 @@ function saveHistoricStatus ($idOrder, $newStatus, $msg, $log, $iduser){
 };
 
 /*----------------------------------------------------------Generic*/       
-function login($arrData){
-    $id = $arrData["user"];
-    $pass = $arrData["pass"];
-    $sql = "SELECT * FROM  `usuario` where id = '".$id."' and password = '".$pass."'";
-    return queryTojson($sql);
-};
+
 
 
 /*----------------------------------------------------------New Order*/
 function getTypesOrders($arrData){
     $filter = "";
-    if($arrData["idTypeOrder"] != ''){
+    if(isset($arrData["idTypeOrder"]) && $arrData["idTypeOrder"] != ''){
         $filter = " and id=".$arrData['idTypeOrder'];
     }
     $sql = "SELECT id, talimento FROM `tipoalimento` where bitactivo=1 $filter ORDER BY 2";
@@ -181,7 +179,8 @@ function getItemsToNewOrder($arrData){
 function getPptoUserToNewOrder($arrData){
     $type = $arrData["type"];
     $user = $arrData["user"];
-    $idppto = $arrData["idppto"];
+    $idppto = false;
+    if(isset($arrData["idppto"])){$idppto = $arrData["idppto"];}
     $typeFilter = "";
     $idpptoFilter = "";
     $userFilter = "";
@@ -193,66 +192,70 @@ function getPptoUserToNewOrder($arrData){
     if($idppto){
         $idpptoFilter = "AND ppto.id = '$idppto'";
     }else{
-       $userFilter = "AND rel.idusuario = $user";
-    }
-        
-    $sql = "
+     $userFilter = "AND rel.idusuario = $user";
+ }
 
-        SELECT ppto.id, ppto.nombre, ppto.valorini, 
-        (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido
-        FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
-        WHERE 
-        ppto.id = rel.idppto 
-        AND tipo.idproveedor = ppto.idproveedor
-        AND tipo.id = ppto.idtalimento
-        AND ppto.bitactivo =1
-        AND rel.bitactivo =1
-        $userFilter
-        $typeFilter
-        $idpptoFilter ";
+ $sql = "
 
-        error_log($sql);
+ SELECT ppto.id, ppto.nombre, ppto.valorini, 
+ (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido
+ FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
+ WHERE 
+ ppto.id = rel.idppto 
+ AND tipo.idproveedor = ppto.idproveedor
+ AND tipo.id = ppto.idtalimento
+ AND ppto.bitactivo =1
+ AND rel.bitactivo =1
+ $userFilter
+ $typeFilter
+ $idpptoFilter ";
 
-    return queryTojson($sql);
+ error_log($sql);
+
+ return queryTojson($sql);
 }; 
 
 function updateOrder($arrData){
+    $arrData = $arrData;
+
     foreach( $arrData as $key => $val){
         $key = urldecode($key);
         $val = urldecode($val);
         $arrKeys = explode("[", $key);
-        $nameKey = str_replace("]", "", $arrKeys[2]);
-        $$nameKey = $val;
+        if(isset($arrKeys[2])){
+
+            $nameKey = str_replace("]", "", $arrKeys[2]);
+            $$nameKey = $val;
+        }
     }
+
 
     $log = date("d/m/Y - G:i")." User:  ".$idUser;
 
     $sql = "UPDATE `pedido` SET 
-                `fchentrega` =  '$deliveryDate',
-                `hora` = '$deliveryTime',
-                `direccion`='$address',
-                `evento`='$nameEvent',
-                `personarecibe`='$nameReceive',
-                `movilrecibe`='$celphone',
-                `telfjorecibe`='$telephone',
-                `valorpedido` =  (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
-                `valoradic` =  $aditionalValue,
-                `idalimento` = '$idItem',
-                `comentario` = '$comment',
-                `estado` = 2,
-                `cantidad` = '$quantity',
-                `bitactivo` =1
-            WHERE `id`= $idOrder";
+    `fchentrega` =  '$deliveryDate',
+    `hora` = '$deliveryTime',
+    `direccion`='$address',
+    `evento`='$nameEvent',
+    `personarecibe`='$nameReceive',
+    `movilrecibe`='$celphone',
+    `telfjorecibe`='$telephone',
+    `valorpedido` =  (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
+    `valoradic` =  $aditionalValue,
+    `idalimento` = '$idItem',
+    `comentario` = '$comment',
+    `estado` = 2,
+    `cantidad` = '$quantity',
+    `bitactivo` =1
+    WHERE `id`= $idOrder";
     
     $sql2 = "UPDATE  `presupuesto` 
-            SET  `valorpedido` =  (valorpedido - $vlrtotalanterior) + ( (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue)
-            WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
+    SET  `valorpedido` =  (valorpedido - $vlrtotalanterior) + ( (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue)
+    WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
 
     $conexion = new Conexion();
-    $conexion->open();
-    $result = mysql_query($sql) or die("Query Error");
-    $result = mysql_query($sql2) or die("Query Error");
-    $conexion->close($result);
+    $result = $conexion->mysqli->query($sql);
+    $result = $conexion->mysqli->query($sql2);
 
     saveHistoricStatus ($idOrder, 2, "Modificacion", $log, $idUser);
 
@@ -261,64 +264,69 @@ function updateOrder($arrData){
 }
 
 function saveOrder($arrData){
+    $arrData = $arrData;
 
     foreach( $arrData as $key => $val){
         $key = urldecode($key);
         $val = urldecode($val);
         $arrKeys = explode("[", $key);
-        $nameKey = str_replace("]", "", $arrKeys[2]);
-        $$nameKey = $val;
+        if(isset($arrKeys[2])){
+            
+            $nameKey = str_replace("]", "", $arrKeys[2]);
+            $$nameKey = $val;
+        }
     }
+
 
     $log = date("d/m/Y - G:i");
 
     $sql = "
-        INSERT INTO `pedido` (
-            `id` ,
-            `idsecretaria` ,
-            `idusuario` ,
-            `idppto` ,
-            `fchreg` ,
-            `fchentrega` ,
-            `hora` ,
-            `idtalimento` ,
-            `idalimento` ,
-            `comentario` ,
-            `personarecibe` ,
-            `telfjorecibe` ,
-            `movilrecibe` ,
-            `direccion` ,
-            `evento` ,
-            `cantidad` ,
-            `valorpedido` ,
-            `valoradic` ,
-            `iplog` ,
-            `bitactivo`,
-            `estado` 
-            )
-        VALUES (
-            NULL , 
-            (SELECT idsecretaria  FROM `presupuesto` WHERE id = '$ppto'),
-            '$idUser',
-            '$ppto',
-            '$log',
-            '$deliveryDate',
-            '$deliveryTime',
-            $typeOrder,
-            $idItem,
-            '$comment',
-            '$nameReceive',
-            '$telephone',
-            '$celphone',
-            '$address',
-            '$nameEvent',
-            $quantity,
-            (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
-            $aditionalValue,
-            '$REMOTE_ADDR',
-            '1',
-            2
-        );";
+    INSERT INTO `pedido` (
+    `id` ,
+    `idsecretaria` ,
+    `idusuario` ,
+    `idppto` ,
+    `fchreg` ,
+    `fchentrega` ,
+    `hora` ,
+    `idtalimento` ,
+    `idalimento` ,
+    `comentario` ,
+    `personarecibe` ,
+    `telfjorecibe` ,
+    `movilrecibe` ,
+    `direccion` ,
+    `evento` ,
+    `cantidad` ,
+    `valorpedido` ,
+    `valoradic` ,
+    `iplog` ,
+    `bitactivo`,
+    `estado` 
+    )
+    VALUES (
+    NULL , 
+    (SELECT idsecretaria  FROM `presupuesto` WHERE id = '$ppto'),
+    '$idUser',
+    '$ppto',
+    '$log',
+    '$deliveryDate',
+    '$deliveryTime',
+    $typeOrder,
+    $idItem,
+    '$comment',
+    '$nameReceive',
+    '$telephone',
+    '$celphone',
+    '$address',
+    '$nameEvent',
+    $quantity,
+    (((SELECT valor FROM  `alimento` where id = $idItem )* $quantity) * (((SELECT iva FROM  `alimento` where id = $idItem)+100)/100))+$aditionalValue,
+    $aditionalValue,
+    '',
+    '1',
+    2
+    );";
 
     $sql2 = "
     UPDATE  `presupuesto` 
@@ -326,10 +334,8 @@ function saveOrder($arrData){
     WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
 
     $conexion = new Conexion();
-    $conexion->open();
-    $result = mysql_query($sql) or die("Query Error");
-    $result = mysql_query($sql2) or die("Query Error");
-    $conexion->close($result);
+    $result = $conexion->mysqli->query($sql) or die("Query Error");
+    $result1 = $conexion->mysqli->query($sql2) or die("Query Error");
 
     response(true, "Pedido Guardado");
 };
@@ -337,7 +343,7 @@ function saveOrder($arrData){
 
 /*----------------------------------------------------------User*/
 function getListDependences(){
-    $sql = "SELECT id, secretaria FROM `secretaria` where bitactivo=1";
+    $sql = "SELECT id, secretaria FROM secretaria where bitactivo=1";
     return queryTojson($sql);
 }
 
@@ -360,12 +366,15 @@ function getDataUser($arrData){
 
 function saveDataUser($arrData){
     //Create vars with jsonData
-    foreach( $arrData as $key => $val){
+   foreach( $arrData as $key => $val){
         $key = urldecode($key);
         $val = urldecode($val);
         $arrKeys = explode("[", $key);
-        $nameKey = str_replace("]", "", $arrKeys[2]);
-        $$nameKey = $val;
+        if(isset($arrKeys[2])){
+            
+            $nameKey = str_replace("]", "", $arrKeys[2]);
+            $$nameKey = $val;
+        }
     }
 
     if($password != "password")
@@ -384,11 +393,9 @@ function saveDataUser($arrData){
         WHERE `usuario`.`id` ='$id' ");
 
     $conexion = new Conexion();
-    $conexion->open();
-    $result = mysql_query($sql) or die("Query Error");
+    $result = $conexion->mysqli->query($sql) or die("Query Error");
     response(true, "Datos Actualizados");
 
-    $conexion->close($result);
 }
 
 
@@ -418,19 +425,19 @@ function getPptoUserSearch($arrData){
         $user = " ";
         $tipoalimentoPpto = " ";
     }else{
-     $user = " `idusuario` = $user and ";
- }
+       $user = " `idusuario` = $user and ";
+   }
 
- $sql = "SELECT  ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido 
- FROM `persona-ppto` as rel, presupuesto as ppto
- WHERE
- $user
- ppto.id = rel.idppto and 
- ppto.bitactivo=1 and
- $tipoalimentoPpto 
- rel.bitactivo=1 ";
+   $sql = "SELECT  ppto.id, ppto.nombre, ppto.valorini, ppto.valorpedido 
+   FROM `persona-ppto` as rel, presupuesto as ppto
+   WHERE
+   $user
+   ppto.id = rel.idppto and 
+   ppto.bitactivo=1 and
+   $tipoalimentoPpto 
+   rel.bitactivo=1 ";
 
- return queryTojson($sql);
+   return queryTojson($sql);
 };
 
 
@@ -441,12 +448,21 @@ function getGeneralSearch($arrData){
         $key = urldecode($key);
         $val = urldecode($val);
         $arrKeys = explode("[", $key);
-        $nameKey = str_replace("]", "", $arrKeys[2]);
-        $$nameKey = $val;
+        if(isset($arrKeys[2])){
+            
+            $nameKey = str_replace("]", "", $arrKeys[2]);
+            $$nameKey = $val;
+        }
     }
 
     $resultsPage = 10;
     $page = $page * $resultsPage;
+    $deliveryDate = "";
+    $creationDate = "";
+    $orderId  = "";
+    $estadov  = "";
+    $pptov   = "";
+    $secretariav    = "";
 
     if ( $orderBy == "") {
         $orderBy = " ped.id ";
@@ -554,27 +570,20 @@ function getGeneralSearch($arrData){
 function logVisitas(){
     $conexion = new Conexion();
 
-    $conexion->open();
 
-    $ip=$_SERVER['REMOTE_ADDR'];
-
-    if($ip=="181.48.149.134")
-        $ip="My office";
+    $ip="";
 
     $sql = "INSERT INTO `log-visitas` (`id`, `ip`, `date`) VALUES (NULL, '".$ip."', CURRENT_TIMESTAMP);";
 
 
-    $result = mysql_query($sql) or die('Error query');
+    $result = $conexion->mysqli->query($sql) or die('Error query');
 
     echo "Registro Alamacenado";
-
-    $conexion->close($result);
 };
 
 function savePedido($arrData){
     $conexion = new Conexion();
 
-    $conexion->open();
 
     $sql = "INSERT INTO  `tiamima_pedidos`.`h-pedido` (
     `id` ,
@@ -613,7 +622,7 @@ function savePedido($arrData){
     ,  '1'
     );";
 
-    mysql_query($sql) or die('Error query');
+    $conexion->mysqli->query($sql) or die('Error query');
 
     $sql="SELECT max(id) pedido FROM  `h-pedido` where `id-usuario`=".$arrData["id-user"];
     $pedido = queryTojson($sql, true);
@@ -649,13 +658,11 @@ function savePedido($arrData){
     , '1');";
 
 
-    $result = mysql_query($sql) or die('Error query');
+    $result = $conexion->mysqli->query($sql) or die('Error query');
 
     $row = @mysql_num_rows($result);
 
     echo $row ;
-
-    $conexion->close($result);
 };
 
 function loadPptoUser($arrData){
@@ -687,12 +694,12 @@ function loadDataOrder($arrData){
     $sql = "SELECT us.nombre, ped.idusuario,ped.fchreg, ped.valoradic, est.estado as estad, est.id as idestad, ped.evento, ped.personarecibe, ped.telfjorecibe, ped.movilrecibe, ped.fchentrega, ped.hora, ped.cantidad, ped.direccion, ped.idtalimento, ped.valorpedido, ped.idppto, ped.comentario, tip.talimento, ali.id as iditem, ali.nombre as item, ped.idalimento
     FROM pedido as ped, tipoalimento  as tip , usuario as us, alimento as ali, estados as est
     WHERE 
-        ped.id = $idOrder and
-        us.id = ped.idusuario and
-        $filterUser
-        ped.idtalimento=tip.id and
-        ped.idalimento=ali.id and
-        est.id=ped.estado";
+    ped.id = $idOrder and
+    us.id = ped.idusuario and
+    $filterUser
+    ped.idtalimento=tip.id and
+    ped.idalimento=ali.id and
+    est.id=ped.estado";
 
     return queryTojson($sql);
 };
@@ -705,15 +712,14 @@ function deleteOrder($arrData){
     $log = date("d/m/Y - G:i")." user: ".$iduser;
     $sql = "UPDATE `pedido` SET `bitactivo` =0, estado=1 WHERE `id` ='".$arrData['idOrder']."' LIMIT 1;"; 
 
-     $sql2 = "UPDATE  `presupuesto` 
-              SET  `valorpedido` = valorpedido - $vlrtotalanterior
-              WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
+    $sql2 = "UPDATE  `presupuesto` 
+    SET  `valorpedido` = valorpedido - $vlrtotalanterior
+    WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
 
     $conexion = new Conexion();
-    $conexion->open();
-    $result = mysql_query($sql) or die("Query Error ");
-    $result = mysql_query($sql2) or die("Query Error ".$sql2);
-    $conexion->close($result);
+    $result = $conexion->mysqli->query($sql) or die("Query Error ");
+    $result = $conexion->mysqli->query($sql2) or die("Query Error ".$sql2);
+
 
     saveHistoricStatus ($arrData['idOrder'], 1, "Anulado", $log, $iduser);
     response(true, "Pedido ".$arrData['idOrder']." Anulado");
@@ -735,24 +741,24 @@ function getOrdersToDashboard($arrData)
 
     if($idRol == 1){
         $filter = "and  ped.estado in (3, 6) and ped.idusuario=$user
-                   and (ped.fchentrega Between '$fechantes'  and '$fechamas')";
+        and (ped.fchentrega Between '$fechantes'  and '$fechamas')";
     }
-     
+
     $sql="SELECT   ped.estado , est.estado as descestado, sec.secretaria, ped.id, ped.idsecretaria, tali.talimento, ped.fchentrega, ped.hora, 
-        ali.nombre as alimento, ped.cantidad, ped.valorpedido, ped.idppto, ped.direccion, ped.comentario, ped.personarecibe, 
-        ppto.nombre as nomppto
-        FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
-        WHERE  
-            ped.bitactivo=1
-            and ped.idsecretaria=sec.id
-            and ped.idtalimento=tali.id
-            and ped.idalimento=ali.id
-            and ped.idppto=ppto.id
-            and ped.idusuario=us.id
-            and ped.estado=est.id
-                          
-            $filter
-        order By 1, 4 asc
+    ali.nombre as alimento, ped.cantidad, ped.valorpedido, ped.idppto, ped.direccion, ped.comentario, ped.personarecibe, 
+    ppto.nombre as nomppto
+    FROM pedido as ped, usuario as us, tipoalimento as tali, alimento as ali, presupuesto as ppto, secretaria as sec, estados as est
+    WHERE  
+    ped.bitactivo=1
+    and ped.idsecretaria=sec.id
+    and ped.idtalimento=tali.id
+    and ped.idalimento=ali.id
+    and ped.idppto=ppto.id
+    and ped.idusuario=us.id
+    and ped.estado=est.id
+
+    $filter
+    order By 1, 4 asc
     ";
 
     return queryTojson($sql);
@@ -769,23 +775,23 @@ function report1($arrData){
     }
 
     $sql = "SELECT CONCAT(ped.idalimento, '-', ali.nombre) as item,
-                   CONCAT(ped.idsecretaria, '-', sec.secretaria) as secretaria, 
+    CONCAT(ped.idsecretaria, '-', sec.secretaria) as secretaria, 
 
-                    sum(ped.cantidad) as cantidad,
+    sum(ped.cantidad) as cantidad,
 
-                    sum(ped.valorpedido)  as valorpedido
-                         
-            FROM `pedido` as ped,  secretaria as sec, alimento as ali
+    sum(ped.valorpedido)  as valorpedido
 
-            WHERE 
-                ped.idalimento = ali.id and 
-                ped.bitactivo = 1 and 
-                ped.idsecretaria = sec.id and
-                ped.fchentrega Between '$fchdesde' and '$fchhasta' 
-                $usBuscado
+    FROM `pedido` as ped,  secretaria as sec, alimento as ali
 
-            group by 1, 2
-            order by ped.idalimento, ped.idsecretaria";
+    WHERE 
+    ped.idalimento = ali.id and 
+    ped.bitactivo = 1 and 
+    ped.idsecretaria = sec.id and
+    ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+    $usBuscado
+
+    group by 1, 2
+    order by ped.idalimento, ped.idsecretaria";
 
     return queryTojson($sql);
 
@@ -800,39 +806,39 @@ function report2($arrData){
     if($idUser){
         $usBuscado="and ped.idusuario=".$idUser;
     }
-   
+
 
     $sql = "SELECT  
-            ped.id,
-            ali.nombre as alimento,
-            ali.id as ali,
-            ped.cantidad,
-            ped.valorpedido,
-            ped.idppto,
-            ped.estado,
-            est.estado as nomestado,
-            sec.secretaria,
-            sec.id as idsec,
-            ped.idusuario,
-            us.nombre as usnam,
-            ppto.idsecretaria,
-            ped.fchentrega,
-            ppto.nombre,
-            ppto.valorini
+    ped.id,
+    ali.nombre as alimento,
+    ali.id as ali,
+    ped.cantidad,
+    ped.valorpedido,
+    ped.idppto,
+    ped.estado,
+    est.estado as nomestado,
+    sec.secretaria,
+    sec.id as idsec,
+    ped.idusuario,
+    us.nombre as usnam,
+    ppto.idsecretaria,
+    ped.fchentrega,
+    ppto.nombre,
+    ppto.valorini
 
-        FROM secretaria as sec, estados as est, pedido as ped, usuario as us, presupuesto as ppto, alimento as ali
+    FROM secretaria as sec, estados as est, pedido as ped, usuario as us, presupuesto as ppto, alimento as ali
 
-        WHERE  
-            ped.fchentrega Between '$fchdesde' and '$fchhasta' 
-            and ped.idalimento=ali.id
-            and ped.idppto=ppto.id
-            and ped.idusuario=us.id
-            and  ped.estado=est.id
-            and ppto.idsecretaria=sec.id
+    WHERE  
+    ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+    and ped.idalimento=ali.id
+    and ped.idppto=ppto.id
+    and ped.idusuario=us.id
+    and  ped.estado=est.id
+    and ppto.idsecretaria=sec.id
 
-            $usBuscado
+    $usBuscado
 
-        ORDER BY 1, 2 ";
+    ORDER BY 1, 2 ";
 
     return queryTojson($sql);
 
@@ -847,35 +853,35 @@ function report3($arrData){
     if($idSec){
         $secre="and ped.idsecretaria=".$idSec;
     }
-   
+
 
     $sql = "SELECT ppto.idsecretaria, sec.secretaria, ped.idppto, ppto.nombre,
-            count(ped.id) as cantidad,
-            sum(DISTINCT ppto.valorini) as valorini, 
-             sum( ped.valorpedido+ped.valoradic) as valorped, 
-            SUM(CASE 
-            WHEN ped.estado = '5' 
-            THEN (ped.valorpedido+ped.valoradic)
-            END) as valorpag,
+    count(ped.id) as cantidad,
+    sum(DISTINCT ppto.valorini) as valorini, 
+    sum( ped.valorpedido+ped.valoradic) as valorped, 
+    SUM(CASE 
+    WHEN ped.estado = '5' 
+    THEN (ped.valorpedido+ped.valoradic)
+    END) as valorpag,
 
-            (ppto.valorini+ppto.valorNoRequerido)-ppto.valorpedido as saldo,
+    (ppto.valorini+ppto.valorNoRequerido)-ppto.valorpedido as saldo,
 
-            count(CASE 
-            WHEN ped.estado = '5' 
-            THEN (ped.id)
-            END) as cantidadpag
-             
-            FROM presupuesto as ppto, `pedido` as ped,  secretaria as sec
+    count(CASE 
+    WHEN ped.estado = '5' 
+    THEN (ped.id)
+    END) as cantidadpag
 
-            WHERE 
-            ped.`bitactivo`=1 and 
-            ped.idsecretaria=ppto.idsecretaria and
-            ped.idppto=ppto.id and
-            ppto.idsecretaria=sec.id and
-            ped.idsecretaria=sec.id and 
-            ped.fchentrega Between '$fchdesde' and '$fchhasta' 
-            $secre
-             group by ped.idsecretaria, ped.idppto, ppto.nombre";
+    FROM presupuesto as ppto, `pedido` as ped,  secretaria as sec
+
+    WHERE 
+    ped.`bitactivo`=1 and 
+    ped.idsecretaria=ppto.idsecretaria and
+    ped.idppto=ppto.id and
+    ppto.idsecretaria=sec.id and
+    ped.idsecretaria=sec.id and 
+    ped.fchentrega Between '$fchdesde' and '$fchhasta' 
+    $secre
+    group by ped.idsecretaria, ped.idppto, ppto.nombre";
 
     return queryTojson($sql);
 
@@ -888,18 +894,18 @@ function report4($arrData){
     if($idSec){
         $secre="and  ppto.idsecretaria=".$idSec;
     }
-   
+
 
     $sql = "SELECT sec.secretaria,sec.id as idsecretaria, 
-                ppto.pedido,ppto.proyecto, ppto.nombre, ppto.valorini+ppto.valorNoRequerido as valorini, 
-                (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido, prov.proveedor as nomprov 
-            FROM `presupuesto` as ppto, secretaria as sec, proveedor as prov
-            WHERE 
-            ppto.`bitactivo`=1 and
-            ppto.idproveedor=prov.id and
-            ppto.idsecretaria=sec.id
-$secre
- order by  idsecretaria, ppto.proyecto ";
+    ppto.pedido,ppto.proyecto, ppto.nombre, ppto.valorini+ppto.valorNoRequerido as valorini, 
+    (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido, prov.proveedor as nomprov 
+    FROM `presupuesto` as ppto, secretaria as sec, proveedor as prov
+    WHERE 
+    ppto.`bitactivo`=1 and
+    ppto.idproveedor=prov.id and
+    ppto.idsecretaria=sec.id
+    $secre
+    order by  idsecretaria, ppto.proyecto ";
 
     return queryTojson($sql);
 
@@ -909,10 +915,10 @@ $secre
 function buildEmail($numOrder)
 {
     $sql = "SELECT pedido.id, pedido.estado, estados.estado, usuario.nombre, usuario.mail, usuario.bitrecibemail
-            FROM pedido, estados, usuario
-            WHERE pedido.estado = estados.id
-            AND usuario.id = pedido.idusuario
-            AND pedido.id =$numOrder";
+    FROM pedido, estados, usuario
+    WHERE pedido.estado = estados.id
+    AND usuario.id = pedido.idusuario
+    AND pedido.id =$numOrder";
 
     $array = executeQuery($sql);     
 
@@ -927,12 +933,12 @@ function buildEmail($numOrder)
     }
 
     $mensaje   = 
-                "<h1>Hola ".$nombre."!</h1>".
-                "<p>El estado del pedido # ".$id." ha cambiado a <b>".$estado.".</b></p>".
-                "<br>".
-                "<p>Por favor ingresa al siguiente link para ver mas detalles: <a href='sipa.dg4apps.com'>sipa.dg4apps.com<a/></p>".
-                "<br><br><br><br>".
-                "<img width='100' src='sipa.dg4apps.com/img/logo.png'><img width='80' src='dg4apps.com/img/logo.png'>";
+    "<h1>Hola ".$nombre."!</h1>".
+    "<p>El estado del pedido # ".$id." ha cambiado a <b>".$estado.".</b></p>".
+    "<br>".
+    "<p>Por favor ingresa al siguiente link para ver mas detalles: <a href='sipa.dg4apps.com'>sipa.dg4apps.com<a/></p>".
+    "<br><br><br><br>".
+    "<img width='100' src='sipa.dg4apps.com/img/logo.png'><img width='80' src='dg4apps.com/img/logo.png'>";
 
     sendMail($mail, $mensaje);
 }
@@ -942,14 +948,14 @@ function sendMailProv($id){
     $mail = "comprasylogistica.hb@gmail.com". ",". "cquinterob@outlook.com". ",". "adriana.torresbautista@hotmail.com";
 
     $mensaje   = 
-                "<h1>Hola!</h1>".
-                "<p>El estado del pedido # ".$id." ha cambiado a <b>Aprobado</b></p>".
-                "<br>".
-                "<p>Por favor ingresa al siguiente link para ver mas detalles: <a href='sipa.dg4apps.com'>sipa.dg4apps.com<a/></p>".
-                "<br><br><br><br>".
-                "<img width='100' src='sipa.dg4apps.com/img/logo.png'><img width='80' src='dg4apps.com/img/logo.png'>";
+    "<h1>Hola!</h1>".
+    "<p>El estado del pedido # ".$id." ha cambiado a <b>Aprobado</b></p>".
+    "<br>".
+    "<p>Por favor ingresa al siguiente link para ver mas detalles: <a href='sipa.dg4apps.com'>sipa.dg4apps.com<a/></p>".
+    "<br><br><br><br>".
+    "<img width='100' src='sipa.dg4apps.com/img/logo.png'><img width='80' src='dg4apps.com/img/logo.png'>";
 
-     sendMail($mail, $mensaje);
+    sendMail($mail, $mensaje);
 }
 
 

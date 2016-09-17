@@ -1,37 +1,46 @@
-<?	
-	Class Conexion{
-		private  $servidor = "localhost" ;
-		private $usuario="root";
-		private $clave="admin";
-		private $db= "sipa";
+<?php
+Class Conexion{
+	/*
+	private $data = array(
+		'servidor' => "localhost", 
+		'usuario' => "root", 
+		'clave' => "", 
+		'db' => "sipa", 
+		);
 
-		/*	
-		private  $servidor = "mysql.hostinger.co" ;
-		private $usuario="u321971772_read";
-		private $clave="sistemas123$$";
-		private $db= "u321971772_sipa";
-		*/
+	
+	private $data = array(
+		'servidor' => "mysql.hostinger.co", 
+		'usuario' => "u321971772_read", 
+		'clave' => "sistemas123$$", 
+		'db' => "u321971772_sipa", 
+		);
+	
+*/
+	/*
+	private $data = array(
+		'servidor' => "mysql.hostinger.co", 
+		'usuario' => "u321971772_user", 
+		'clave' => "sistemas123$$", 
+		'db' => "u321971772_test", 
+		);
+	*/
+	
+	public $mysqli;
+
+	public function __construct(){
+		$this->mysqli = new mysqli($this->data['servidor'],$this->data['usuario'], $this->data['clave'], $this->data['db']);
+		if ($this->mysqli -> connect_errno) {
+			die( "Fallo la conexión a MySQL: (" . $this->mysqli -> mysqli_connect_errno() 
+				. ") " . $this->mysqli -> mysqli_connect_error());
+		}
 		
-		private $objConexion;
+		$this->mysqli->query("SET NAMES 'utf8'");
 
-		public function open(){
-			
-			$this->objConexion = mysql_connect($this->servidor,$this->usuario, $this->clave);
-			mysql_query("SET NAMES 'utf8'");
-			if(!$this->objConexion){
-				$msg = "Fallo la Conexion a la Base de Datos";
-				error_log("Error mySql: ($msg)".mysql_error($this->objConexion));
-			}
-				
-			mysql_select_db($this->db, $this->objConexion);
-			error_log("Error mySql: ".mysql_error($this->objConexion));
-
-			
-		}
-			
-		public function close($result){
-			@mysql_free_result($result);
-			mysql_close();
-		}
 	}
+
+	public function close($resultado){
+		$resultado->free();
+	}
+}
 ?>

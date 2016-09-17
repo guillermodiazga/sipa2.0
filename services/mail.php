@@ -1,4 +1,4 @@
-<?
+<?php
 //edilson_c@yahoo.es guillermodiazga@gmail.com info@ajtanques.com.co
 $cabeceras = "Content-type: text/html ". "\r\n" .
 	"From: Aj Tanques<info@ajtanques.com.co>" . "\r\n" .

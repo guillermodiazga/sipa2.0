@@ -1,45 +1,45 @@
-<? 
- $today = date("Y/m/d");
- $ipClient = $REMOTE_ADDR;
+<?php
+$today = date("Y/m/d");
+
+$ipClient = "";
 
 function queryTojson($sql, $swReturn=false){
 
     $rows = executeQuery($sql);
+    $options = "JSON_FORCE_OBJECT";
 
     if($swReturn)
         return json_encode($rows);
     else
-        print json_encode($rows);
+        echo json_encode($rows);
 };
 
 function executeQuery($sql)
 {
-   
+
     $conexion = new Conexion();
 
-    $conexion->open();
+    $dataReturn = array();
 
-    $result = mysql_query($sql) or die('Error query: '.mysql_error()." sql:".$sql);
-    $rows = array();
-    while($r = mysql_fetch_assoc($result)) {
-        $rows[] = $r;
+    $resultado = $conexion->mysqli->query($sql);
+
+    while ($rows = $resultado->fetch_assoc()) {
+        $dataReturn[] = $rows;
     }
-    
-    $conexion->close($result);
-
-    return $rows;
+    $conexion->close($resultado);
+    return $dataReturn;
 }
 
 
 //formateos
 function  fch_mysql_php($dato)
- {
-     $dia=substr($dato,8,10);
-     $mes=substr($dato,5,2);
-     $ano=substr($dato,0,4);
-     $diab=($dia."/".$mes."/".$ano);
-     return $diab;
-  }
+{
+   $dia=substr($dato,8,10);
+   $mes=substr($dato,5,2);
+   $ano=substr($dato,0,4);
+   $diab=($dia."/".$mes."/".$ano);
+   return $diab;
+}
 
 function  fch_php_mysql($consulta){
     $dia=substr($consulta,0,2);
@@ -69,7 +69,7 @@ function php_fix_raw_query() {
                 $post = '';
                 
                 while (!feof($fp))
-                $post = fread($fp, 1024);
+                    $post = fread($fp, 1024);
                 
                 fclose($fp);
             }
@@ -105,11 +105,13 @@ function php_fix_raw_query() {
             $_REQUEST[$key] = $arr[$name];
         }
     }
-            
+
     foreach ( $_GET as $key => $value ) {
-        if (is_array($arr[$key]) ) {
-            $_GET[$key] = $arr[$name];
-            $_REQUEST[$key] = $arr[$name];
+        if(isset($arr[$key])){
+            if (is_array($arr[$key]) ) {
+                $_GET[$key] = $arr[$name];
+                $_REQUEST[$key] = $arr[$name];
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-<?
+<?php
 
 include "conexion.php";
 $conexion = new Conexion();
@@ -6,10 +6,10 @@ $conexion = new Conexion();
 $conexion->open();
 $swTabla = $_GET['swTabla'];
 $query = $_GET['query'];
-$result = mysql_query($query);
-$rows = mysql_num_rows($result);
+$result = $conexion-> mysqli->query($query);
+$rows = $result->num_rows;
+$numfields = $result->field_count;
 
-$numfields = mysql_num_fields($result);
 
 if($swTabla==1){//Escribir una tabla
 	echo "<table>\n<tr>";

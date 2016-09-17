@@ -1,4 +1,4 @@
-<?
+<?php
 	include "conexion.php";
 	$conexion = new Conexion();
 	$conexion->open();
