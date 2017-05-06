@@ -121,7 +121,7 @@ function php_fix_raw_query() {
 
 function sendMail($para, $mensaje){
     $cabeceras = "Content-type: text/html ". "\r\n" .
-    "From: Admin Sipa<admin@sipa.com>" . "\r\n" .
+    "From: Admin Sipa<admin@dg4apps.com>" . "\r\n" .
     "Reply-To:  admin@dg4apps.com";
 
     $asunto    = "Notificación Sipa: ";

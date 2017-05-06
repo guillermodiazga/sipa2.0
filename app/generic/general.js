@@ -412,6 +412,12 @@ $.ajaxSetup({
         //$("#stopUser").show();
       },
       complete: function(xhr, status) {
+
+        //Session cerrada
+        if(xhr.responseJSON && xhr.responseJSON.success == 401){
+            controller.navigation.loadView('login');
+        }
+
         // hide dialog // works
         if(xhr.status == 0){
           general.stopUser.hide();

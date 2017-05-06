@@ -29,7 +29,7 @@ controller.session.checkSession = function(){
             if(getWebNotificationPermissionStatus() != 2){
                 alert("Su session esta  a punto de expirar.");
             }else{
-                createNewWebNotification("SIPA", "Su session esta  a punto de expirar.", "icon.ico", "session", 10000);
+                createNewWebNotification("SIPA", "Su session esta a punto de expirar.", "icon.ico", "session", 10000);
             }
         }
     },controller.session.timeCheck);

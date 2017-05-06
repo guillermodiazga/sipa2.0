@@ -8,7 +8,7 @@ Class Conexion{
 		'db' => "sipa", 
 		);
 
-	
+	*/
 	private $data = array(
 		'servidor' => "mysql.hostinger.co", 
 		'usuario' => "u321971772_read", 
@@ -16,7 +16,7 @@ Class Conexion{
 		'db' => "u321971772_sipa", 
 		);
 	
-*/
+
 	/*
 	private $data = array(
 		'servidor' => "mysql.hostinger.co", 

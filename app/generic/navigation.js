@@ -116,6 +116,8 @@ controller.navigation.closeSession = function () {
     $("li[class=active]").removeClass("active");
     //$("a[href='#"+localStorage.page+"'").parent().addClass("active");
     localStorage.page='main';
+
+    //Ajax to close session
 };
 
 controller.navigation.exit = function () {

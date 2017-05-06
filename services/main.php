@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-
+session_start();
 include("conexion.php");
 include("generales.php");
 date_default_timezone_set('America/Bogota');
@@ -19,10 +19,29 @@ call_user_func($function, $arrData);
 
 /*Login*/
 function login($arrData){
-    $id = $arrData["user"];
-    $pass = $arrData["pass"];
-    $sql = "SELECT * FROM  `usuario` where id = '".$id."' and password = '".$pass."'";
-    return queryTojson($sql);
+    $id    = $arrData["user"];
+    $pass  = $arrData["pass"];
+    $sql   = "SELECT * FROM  `usuario` where id = '".$id."' and password = '".$pass."'";
+    $array = executeQuery($sql);
+    $id    = $array[0]["id"];
+
+    if($id){
+        $_SESSION["id_user"] = $id;
+        $_SESSION["name"] = $array[0]["nombre"];
+        echo json_encode($array);
+    }else {
+         return response(401, "Session Cerrada");
+    }
+
+};
+
+/*Close session*/
+function closeSession($arrData){
+    // remove all session variables
+    session_unset(); 
+
+    // destroy the session 
+    session_destroy(); 
 };
 
 function response ($resp, $msg){
@@ -443,6 +462,10 @@ function getPptoUserSearch($arrData){
 
 function getGeneralSearch($arrData){
 
+    //Session is close 401 Unauthorized
+    if(!$_SESSION["id_user"]){
+        return response(401, "Session Cerrada");
+    }
 
     foreach( $arrData as $key => $val){
         $key = urldecode($key);
@@ -945,7 +968,7 @@ function buildEmail($numOrder)
 
 function sendMailProv($id){
 
-    $mail = "comprasylogistica.hb@gmail.com". ",". "cquinterob@outlook.com". ",". "adriana.torresbautista@hotmail.com";
+    $mail = "comprasylogistica.hb@gmail.com". ",". "cquinterob@outlook.com". ",". "plantaaguacatala.hb@gmail.com";
 
     $mensaje   = 
     "<h1>Hola!</h1>".
