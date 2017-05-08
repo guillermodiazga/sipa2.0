@@ -416,6 +416,7 @@ $.ajaxSetup({
         //Session cerrada
         if(xhr.responseJSON && xhr.responseJSON.success == 401){
             controller.navigation.loadView('login');
+            alert("Session Expirada").danger();
         }
 
         // hide dialog // works

@@ -118,6 +118,7 @@ controller.navigation.closeSession = function () {
     localStorage.page='main';
 
     //Ajax to close session
+    $.ajax('services/main.php?f=closeSession');
 };
 
 controller.navigation.exit = function () {

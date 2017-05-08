@@ -73,7 +73,7 @@ controller.login.initEvents = function (){
 		controller.login.loginEvent();
 
 		$("#rememberMe").click(function(){
-			if($("#rememberMe:checked")){
+			if($("#rememberMe:checked").size()){
 				localStorage.remenberMe = "true";
 			}else{
 				localStorage.remenberMe = "false";

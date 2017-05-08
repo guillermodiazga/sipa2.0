@@ -6,7 +6,7 @@ model.login = {};
 model.login.in = function(user, pass ) {
     return $.ajax('services/main.php',
         {
-           type: "GET", async: false,
+           type: "POST", async: false,
            data:{f:'login', user: user, pass: pass} ,
            contentType: "application/json"
         })

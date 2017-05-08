@@ -12,7 +12,13 @@ $arrData = php_fix_raw_query();
 $function = $arrData['f'];
 
 //Ejecutar funcion que ingresa por url
-call_user_func($function, $arrData);
+
+//Session is close return 401 Unauthorized
+if ($_SESSION["id_user"] || $function == 'login') {
+    call_user_func($function, $arrData);
+} else {
+    return response(401, "Session Cerrada");
+}
 
 
     //----------------------------------------------funciones
@@ -21,7 +27,7 @@ call_user_func($function, $arrData);
 function login($arrData){
     $id    = $arrData["user"];
     $pass  = $arrData["pass"];
-    $sql   = "SELECT * FROM  `usuario` where id = '".$id."' and password = '".$pass."'";
+    $sql   = "SELECT id,nombre,idsecretaria,mail,idrol,bitactivo FROM  `usuario` where id = '".$id."' and password = '".$pass."'";
     $array = executeQuery($sql);
     $id    = $array[0]["id"];
 
@@ -30,7 +36,7 @@ function login($arrData){
         $_SESSION["name"] = $array[0]["nombre"];
         echo json_encode($array);
     }else {
-         return response(401, "Session Cerrada");
+         return response(401, "Autenticacion invalida");
     }
 
 };
@@ -42,6 +48,8 @@ function closeSession($arrData){
 
     // destroy the session 
     session_destroy(); 
+
+    return response(200, "Session cerrada correctamente");
 };
 
 function response ($resp, $msg){
@@ -461,11 +469,6 @@ function getPptoUserSearch($arrData){
 
 
 function getGeneralSearch($arrData){
-
-    //Session is close 401 Unauthorized
-    if(!$_SESSION["id_user"]){
-        return response(401, "Session Cerrada");
-    }
 
     foreach( $arrData as $key => $val){
         $key = urldecode($key);
