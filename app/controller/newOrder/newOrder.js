@@ -125,7 +125,7 @@ controller.newOrder.loadItemsToNewOrder = function (typeOrder, callBack){
 		        	.attr("data-id", item.id)
 		        	.attr("data-value", vlrConIva)
 		        	.removeAttr("id")
-		        	.find(".img").attr("src", "img/items/" + item.id + ".png?1").end()
+		        	.find(".img").attr("src", "img/items/" + item.id + ".png?2").end()
 		        	.find(".nameItem").text(item.nombre).end()
 		        	.find(".description").text(item.descripcion).end()
 		        	.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
