@@ -204,13 +204,16 @@ function getItemsToNewOrder($arrData){
 };
 
 function getPptoUserToNewOrder($arrData){
-    $type = $arrData["type"];
-    $user = $arrData["user"];
+    $type   = $arrData["type"];
+    $user   = $arrData["user"];
     $idppto = false;
-    if(isset($arrData["idppto"])){$idppto = $arrData["idppto"];}
-    $typeFilter = "";
+    $typeFilter   = "";
     $idpptoFilter = "";
-    $userFilter = "";
+    $userFilter   = "";
+
+    if(isset($arrData["idppto"])){
+        $idppto = $arrData["idppto"];
+    }
 
     if($type != "false"){
         $typeFilter = "AND ppto.idtalimento = $type";
@@ -219,27 +222,26 @@ function getPptoUserToNewOrder($arrData){
     if($idppto){
         $idpptoFilter = "AND ppto.id = '$idppto'";
     }else{
-     $userFilter = "AND rel.idusuario = $user";
- }
+         $userFilter = "AND rel.idusuario = $user";
+     }
 
- $sql = "
+     $sql = "
+     SELECT ppto.id, ppto.nombre, ppto.valorini, 
+     (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido
+     FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
+     WHERE 
+     ppto.id = rel.idppto 
+     AND tipo.idproveedor = ppto.idproveedor
+     AND tipo.id = ppto.idtalimento
+     AND ppto.bitactivo = 1
+     AND rel.bitactivo = 1
+     $userFilter
+     $typeFilter
+     $idpptoFilter ";
 
- SELECT ppto.id, ppto.nombre, ppto.valorini, 
- (SELECT sum(valorpedido+valoradic) FROM pedido where bitactivo = 1 and ppto.id = idppto) as valorpedido
- FROM  `persona-ppto` AS rel, presupuesto AS ppto, tipoalimento AS tipo
- WHERE 
- ppto.id = rel.idppto 
- AND tipo.idproveedor = ppto.idproveedor
- AND tipo.id = ppto.idtalimento
- AND ppto.bitactivo =1
- AND rel.bitactivo =1
- $userFilter
- $typeFilter
- $idpptoFilter ";
+    error_log($sql);
 
- error_log($sql);
-
- return queryTojson($sql);
+    return queryTojson($sql);
 }; 
 
 function updateOrder($arrData){
@@ -361,10 +363,11 @@ function saveOrder($arrData){
     WHERE CONVERT(  `presupuesto`.`id` USING utf8 ) =  '$ppto' ";
 
     $conexion = new Conexion();
-    $result = $conexion->mysqli->query($sql) or die("Query Error");
-    $result1 = $conexion->mysqli->query($sql2) or die("Query Error");
+    $result   = $conexion->mysqli->query($sql) or die("Query Error");
+    $last_id  = $conexion->mysqli->insert_id;
+    $result1  = $conexion->mysqli->query($sql2) or die("Query Error");
 
-    response(true, "Pedido Guardado");
+    response(201, "Pedido " . $last_id . " Almacenado Correctamente!");
 };
 
 
