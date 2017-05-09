@@ -10,29 +10,7 @@ controller.catalogo.loadItems = function (){
 	model.catalogo.getItems("*")
 	.done(function (data) {
 		if( data.length > 0){
-	        //load data in view
-	        $("#itemList").html("");
-	        $("#txtToSearch").off().on("keyup change", function(){controller.catalogo.searchItem()}).focusin();
-	        $.each(data, function(i, item){
-	        	var vlrConIva = Math.round(parseFloat(item.valor)*((parseFloat(item.iva)/100)+1));
-	        	$("#itemListTemplate")
-	        	.clone().show()
-	        	.attr("data-id", item.id)
-	        	.attr("data-value", vlrConIva)
-	        	.removeAttr("id")
-	        	.find(".img").attr("src", "img/items/" + item.id + ".png?2").end()
-	        	.find(".nameItem").text(item.nombre).end()
-	        	.find(".description").text(item.descripcion).end()
-	        	.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
-	        	.find(".valor").text("$"+formatMoney(vlrConIva)).end()
-	        	.find(".selectItem").attr("id", item.id).end()
-	        	.find(".collapse").attr("id", "dtlle"+i).end()	
-	        	.find(".dtlle").attr("data-target", "#dtlle"+i).end()
-	        	.appendTo("#itemList");
-	        });
-	        
-	        general.zoomImg();
-
+	        controller.catalogo.showItems(data);
 	    }else{
 	    	alert("No se pudieron cargar los items").warning();
 	    }
@@ -43,6 +21,38 @@ controller.catalogo.loadItems = function (){
 	});
 
 	
+};
+
+controller.catalogo.showItems = function (data){
+	//load data in view
+    $("#itemList").html("");
+    $("#txtToSearch").off().on("keyup change", function(){controller.catalogo.searchItem()}).focusin();
+    $.each(data, function(i, item){
+    	var vlrConIva = Math.round(parseFloat(item.valor)*((parseFloat(item.iva)/100)+1));
+    	
+    	$("#itemListTemplate")
+	    	.clone().show()
+	    	.attr("data-id", item.id)
+	    	.attr("data-value", vlrConIva)
+	    	.removeAttr("id")
+	    	.find(".img").attr("src", "img/items/" + item.id + ".png?2").end()
+	    	.find(".nameItem").text(item.nombre).end()
+	    	.find(".description").text(item.descripcion).end()
+	    	.find(".vlrSinIva").text("$"+formatMoney(item.valor)).end()
+	    	.find(".valor").text("$"+formatMoney(vlrConIva)).end()
+	    	.find(".selectItem").attr("id", item.id).attr("idtalimento", item.idtalimento).end()
+	    	.find(".collapse").attr("id", "dtlle"+i).end()	
+	    	.find(".dtlle").attr("data-target", "#dtlle"+i).end()
+	    	.appendTo("#itemList");
+    });
+    
+    general.zoomImg();
+
+    $('.selectItem').click(function(){
+    	localStorage.idItem = $(this).attr("id");
+    	localStorage.idtalimento = $(this).attr("idtalimento");
+    	controller.navigation.loadView('newOrder');
+    });
 };
 
 controller.catalogo.searchItem = function(){

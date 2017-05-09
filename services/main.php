@@ -199,7 +199,10 @@ function getItemsToNewOrder($arrData){
         $type = "";
     }
 
-    $sql = "SELECT * FROM  `alimento` where bitactivo=1 $type ORDER BY  `alimento`.`id` ASC ";
+    $sql = "SELECT alimento.* FROM  alimento, tipoalimento 
+        where tipoalimento.bitactivo = 1 and alimento.idtalimento = tipoalimento.id $type 
+        ORDER BY  alimento.idtalimento, alimento.nombre ASC ";
+
     return queryTojson($sql);
 };
 
@@ -705,7 +708,7 @@ function loadPptoUser($arrData){
 };
 
 function loadCatalogo($arrData){
-    $sql="SELECT * FROM  `m-producto` ";
+    $sql="SELECT * FROM  `m-producto` where bitactivo = 1";
 
     return queryTojson($sql);
 };

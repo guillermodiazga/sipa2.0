@@ -6,9 +6,15 @@ controller.newOrder = {};
 controller.newOrder.loadDataToOrder = function() {
 	if(sessionStorage.idOrderToEdit){
 		var idOrderToEdit = sessionStorage.idOrderToEdit;
+
 		controller.newOrder.loadOrderToEdit(idOrderToEdit);
+
 		$("legend span").html("Modificar Pedido: <b>"+idOrderToEdit+"<span id='deleteOrder' class='pull-right btn btn-danger' ><i class='fa fa-trash'></i> Anular Pedido</span>");
-		$("#deleteOrder").click(function(){controller.newOrder.deleteOrder(idOrderToEdit, $("#ppto").val(), $("#formNewOrder").attr("vlrtotalanterior"))});
+		
+		$("#deleteOrder").click(function(){
+			controller.newOrder.deleteOrder(idOrderToEdit, $("#ppto").val(), $("#formNewOrder").attr("vlrtotalanterior"));
+		});
+
 		sessionStorage.idOrderToEdit = '';
 		$(".btn-default[type='reset']").click(function() {
 			controller.navigation.loadView("main");
@@ -51,7 +57,9 @@ controller.newOrder.loadOrderTypes = function (idTypeOrder){
 		        $.each(data, function(i, item){
 		        	items += "<option value='"+item.id+"'>"+item.talimento+"</option>";
 		        });
-		        $("#typeOrder").append(items);  
+
+		        $("#typeOrder").append(items).val(localStorage.idtalimento).change();  
+		        localStorage.removeItem('idtalimento');
 		    }else{
 		    	alert("No se pudieron cargar los tipos de pedido").danger();
 		    }
@@ -389,8 +397,17 @@ controller.newOrder.initEvents = function(){
 		if($(this).val() == "false"){
 			return false;
 		}
+
+		//If local storage has a item to load
+		var loadDefaultItem = function () {
+			$('#addItems').click();
+			$('.selectItem[id='+localStorage.idItem+']').click();
+			localStorage.removeItem('iditem');
+			$('.quantity').focus();
+		}
+
 		//change items list
-		controller.newOrder.loadItemsToNewOrder();
+		controller.newOrder.loadItemsToNewOrder(null, loadDefaultItem);
 		controller.newOrder.loadPptoUserToNewOrder();
 	});
 
