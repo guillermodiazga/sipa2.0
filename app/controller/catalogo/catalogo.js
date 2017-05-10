@@ -48,11 +48,16 @@ controller.catalogo.showItems = function (data){
     
     general.zoomImg();
 
-    $('.selectItem').click(function(){
-    	localStorage.idItem = $(this).attr("id");
-    	localStorage.idtalimento = $(this).attr("idtalimento");
-    	controller.navigation.loadView('newOrder');
-    });
+    if(localStorage.idrol == 1){
+        //Add event to gi to new cart
+        $('.selectItem').click(function(){
+            localStorage.idItem = $(this).attr("id");
+            localStorage.idtalimento = $(this).attr("idtalimento");
+            controller.navigation.loadView('newOrder');
+        });
+    } else {
+        $('.selectItem').remove();
+    }
 };
 
 controller.catalogo.searchItem = function(){
